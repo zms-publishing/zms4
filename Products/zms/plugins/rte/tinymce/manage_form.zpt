@@ -1,0 +1,53 @@
+<tal:block tal:replace="nothing">
+################################################################################
+###  TinyMCE
+###  please refer to http://www.tinymce.com/
+################################################################################
+</tal:block>
+
+<textarea tal:attributes="id python:'editor_%s'%request['elName']; name python:'editor_%s'%request['elName']"></textarea>
+
+<tal:block tal:condition="python:request.get('f_zmiRichtextOnSubmitEventHandler',True)">
+
+<script type="text/javascript" src="/++resource++zms_/tinymce/tinymce.min.js"></script>
+<tal:block tal:content="structure python:'<script>'"></tal:block>
+
+function zmiStandardOnSubmitEventHandler(fm) {
+	for (var id in tinyMCE.editors) {
+		tinyMCE.editors[id].save();
+	}
+}
+
+function zmiRichtextOnSubmitEventHandler(fm) {
+	for (var id in tinyMCE.editors) {
+		var elName = id.substr(id.indexOf('_')+1);
+		var el = document.getElementById('zmiRichtextEditor'+elName);
+		if ( el != null && el.style.display != 'none' && el.style.visibility != 'hidden') {
+			// Get value from editor.
+			var data = tinyMCE.editors[id].getContent();
+			// Decode HTML-Entities.
+			data = $ZMI.HTMLDecode(data);
+			// Relativate urls.
+			data = $ZMI.relativateUrls(data);
+			// Assign value to textarea.
+			$('#'+elName).val( data);
+		}
+	}
+}
+
+function zmiRichtextInit(id) {
+	$("textarea#editor_"+id).val($("textarea#"+id).val());
+	tinymce.init({
+		selector: "textarea#editor_"+id,
+		content_css:"<tal:block tal:content="python:here.getConfProperty('plugin.rte.tinymce.config.contentsCss','').split(',')">the content-css</tal:block>",
+		plugins: [
+			"searchreplace visualblocks code fullscreen",
+			"table paste"
+		]
+	});
+}
+
+<tal:block tal:content="structure python:'</script>'"></tal:block>
+
+<tal:block tal:define="dummy0 python:request.set('f_zmiRichtextOnSubmitEventHandler',False)"></tal:block>
+</tal:block>

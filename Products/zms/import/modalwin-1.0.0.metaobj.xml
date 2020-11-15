@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<dictionary>
+  <item key="key"><![CDATA[modalwin]]></item>
+  <item key="value" type="dictionary">
+    <dictionary>
+      <item key="__obj_attrs__" type="list">
+        <list>
+          <item type="dictionary">
+            <dictionary>
+              <item key="id"><![CDATA[title]]></item>
+              <item key="mandatory" type="int">0</item>
+              <item key="multilang" type="int">1</item>
+              <item key="name"><![CDATA[Title]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type"><![CDATA[string]]></item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="id"><![CDATA[text]]></item>
+              <item key="mandatory" type="int">0</item>
+              <item key="multilang" type="int">1</item>
+              <item key="name"><![CDATA[Text]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type"><![CDATA[richtext]]></item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"><![CDATA[1]]></item>
+              <item key="id"><![CDATA[showonce]]></item>
+              <item key="mandatory" type="int">0</item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Show Only Once]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type"><![CDATA[boolean]]></item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[icon-lightbulb]]></item>
+              <item key="id"><![CDATA[icon_clazz]]></item>
+              <item key="mandatory" type="int">0</item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Icon (Class)]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type"><![CDATA[constant]]></item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[<!-- modalwin.standard_html: requires bootstrap & zmi.js -->
+
+<tal:block tal:define="global
+		zmscontext options/zmscontext">
+
+<tal:block tal:condition="python:'/manage' in request.get('URL')">
+	<div class="zmspopup" title="ZMI-Preview"
+		style="margin:1em;border:1px solid silver;padding:1em;border-radius:8px;box-shadow:0 0 1em silver;">
+		<h4 tal:content="structure python:zmscontext.attr('title')">Title</h4>
+		<div tal:content="structure python:zmscontext.attr('text')">Text</div>
+	</div>
+</tal:block>
+
+
+<tal:block tal:condition="python:'/manage' not in request.get('URL')">
+<div class="zmspopup modal fade" tabindex="-1" role="dialog" tal:attributes="id python:'zms_modal_win_%s'%(zmscontext.getId())">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+			<h4 class="modal-title" tal:content="structure python:zmscontext.attr('title')">Title</h4>
+		</div>
+			<div class="modal-body" tal:content="structure python:zmscontext.attr('text')">Text</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" tal:content="structure python:zmscontext.getLangStr('BTN_CLOSE')">Close</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<tal:block tal:replace="structure string:<script>" />
+
+// ############# Cookie-Functions  ##########
+function createCookie(name, value, days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = "; expires=" + date.toGMTString();
+	} else {
+		var expires = "";
+	}
+	document.cookie = name + "=" + value + expires + "; path=/";
+}
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+	}
+	return null;
+}
+function eraseCookie(name) {
+	createCookie(name, "", -1);
+}
+// ############# /Cookie-Functions ##########
+
+// Register Ready
+$(function() {
+	var modal_id = "zms_modal_win_<tal:block tal:replace="python:zmscontext.getId()" ></tal:block>"
+	var showonce= <tal:block tal:replace="python:zmscontext.attr('showonce')" ></tal:block>
+
+	if ( !readCookie(modal_id) ) {
+		createCookie(modal_id,'true',365);
+		$('#'+modal_id).modal({});
+	} else if (showonce==0) {
+		$('#'+modal_id).modal({});
+	}
+});
+
+<tal:block tal:replace="structure string:</script>" />
+</tal:block>
+
+</tal:block>
+<!-- /modalwin.standard_html -->]]>
+              </item>
+              <item key="id"><![CDATA[standard_html]]></item>
+              <item key="mandatory" type="int">0</item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Template: Popup]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type"><![CDATA[zpt]]></item>
+            </dictionary>
+          </item>
+        </list>
+      </item>
+      <item key="access" type="dictionary">
+        <dictionary>
+          <item key="delete_custom"></item>
+          <item key="delete_deny" type="list">
+            <list>
+              <item></item>
+              <item><![CDATA[ZMSAuthor]]></item>
+              <item></item>
+              <item><![CDATA[GPOH]]></item>
+              <item><![CDATA[Mitgliederverwaltung]]></item>
+            </list>
+          </item>
+          <item key="insert_custom"><![CDATA[{$}]]></item>
+          <item key="insert_deny" type="list">
+            <list>
+              <item></item>
+              <item><![CDATA[ZMSAuthor]]></item>
+              <item></item>
+              <item><![CDATA[GPOH]]></item>
+              <item><![CDATA[Mitgliederverwaltung]]></item>
+            </list>
+          </item>
+        </dictionary>
+      </item>
+      <item key="enabled" type="int">1</item>
+      <item key="id"><![CDATA[modalwin]]></item>
+      <item key="name"><![CDATA[Popup]]></item>
+      <item key="package"></item>
+      <item key="revision"><![CDATA[1.0.0]]></item>
+      <item key="type"><![CDATA[ZMSObject]]></item>
+    </dictionary>
+  </item>
+</dictionary>

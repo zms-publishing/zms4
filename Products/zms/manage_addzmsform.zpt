@@ -1,0 +1,119 @@
+<tal:block tal:content="structure here/manage_page_header"></tal:block>
+
+<main class="container-fluid">
+
+	<tal:block tal:content="structure python:here.manage_form_title(form_title='Add ZMS')"></tal:block>
+
+	<form action="manage_addZMS" method="post">
+	<input type="hidden" name="preview" value="preview" />
+
+		<div class="form-group row">
+			<label for="folder_id" class="form-label col-sm-3 col-md-2">Id</label>
+			<div class="col-sm-9 col-md-10">
+				<input id="folder_id" class="form-control" type="text" name="folder_id:required" value="myzmsx" />
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="lang" class="form-label col-sm-3 col-md-2">Language</label>
+			<div class="col-sm-3 col-md-2">
+				<input class="form-control" name="lang:required" value="ger" />
+			</div>
+			<div class="col-sm-6 col-md-8">
+				<input class="form-control" name="lang_label:required" value="Deutsch" />
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="manage_lang" class="form-label col-sm-3 col-md-2">ZMI</label>
+			<div class="col-sm-9 col-md-10">
+				<select class="form-control" name="manage_lang:required">
+					<option value="ger">Deutsch</option>
+					<option value="eng">English</option>
+					<option value="fra">Francaise</option>
+					<option value="esp">Espanol</option>
+					<option value="ita">Italiano</option>
+					<option value="chi">Chinese</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="theme" class="form-label col-sm-3 col-md-2">Theme</label>
+			<div class="col-sm-9 col-md-10">
+				<select class="form-control" onchange="themeChange(this);" onkeyup="themeChange(this);" id="theme" name="theme:required">
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="preview" class="form-label col-sm-3 col-md-2">Preview</label>
+			<div class="col-sm-9 col-md-10">
+				<div id="preview"></div>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-3 col-md-2">Initialization</div>
+			<div class="col-sm-9 col-md-10">
+				<label><input type="radio" name="initialization:int" value="0"/> None</label>
+				<label><input type="radio" name="initialization:int" value="1" checked="checked" /> with default content</label>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-3 col-md-2">Configuration</div>
+			<div class="col-sm-9 col-md-10">
+				<label><input type="checkbox" name="zmslog:int" value="1" checked="checked"/> Add log</label>
+			</div>
+		</div>
+
+		<div class="form-group row save">
+			<div class="col-sm-12 col-md-12">
+				<button type="submit" name="btn" value="Add" class="btn btn-primary">Add</button>
+				<button type="submit" name="btn" value="Cancel" class="btn btn-default">Cancel</button>
+			</div>
+		</div>
+
+	</form>
+
+<script>
+function themeChange(el) {
+    var i = el.selectedIndex;
+    var v = el.options[i].value;
+    if (v.length == 0) {
+        img_src = "/++resource++zms_/img/spacer.gif";
+    }
+    else {
+        if (v.indexOf('-')>0) {
+            v = v.substr(0,v.indexOf('-'));
+        }
+        if (v.indexOf('.')>0) {
+            v = v.substr(0,v.indexOf('.'));
+        }
+        img_src = v+'.jpg';
+        if (v.indexOf('http://')<0) {
+            img_src = "/++resource++zms_/themes/"+img_src;
+        }
+    }
+    $("#preview").html('<'+'img style="border-radius: 4px;margin-bottom:.5em;" src="'+img_src+'" border="0" width="250" height="160" />');
+}
+
+$(function() {
+        $.get('/++resource++zms_/themes/themes.zcml',function(response) {
+                var xmlDoc = $.parseXML(response);
+                var $xml = $(xmlDoc);
+                $("source",$xml).each(function() {
+                        var location = $(this).attr("location");
+                        if (location.indexOf("://")<0) {
+                            $("#theme").append('<'+'option value="'+location+'">'+location+'<'+'/option>');
+                        }
+                    });
+                themeChange($("#theme")[0]);
+            });
+    });
+</script>
+
+</main>
+
+<tal:block tal:content="structure here/manage_page_footer"></tal:block>

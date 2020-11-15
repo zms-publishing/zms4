@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<script></script>
+<frameset rows="46,*" border="0" frameborder="0" framespacing="0">
+	<frame name="navigate" marginheight="1" scrolling="no" noresize="noresize" tal:attributes="src python:'preview_top_html?lang=%s'%request['lang']">
+	<frame name="partner" marginheight="1" tal:attributes="src python:here.getHref2IndexHtml(request)">
+</frameset>
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+</html>

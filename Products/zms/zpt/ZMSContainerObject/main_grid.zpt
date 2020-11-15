@@ -1,0 +1,31 @@
+<!-- ZMSContainerObject/main_grid -->
+
+	<tal:block tal:define="global obs options/obs">
+		<p tal:condition="python:len(obs)==0" tal:content="python:here.getZMILangStr('SEARCH_NORESULTS')">No results</p>
+		<tal:block tal:condition="python:len(obs)>0" tal:define="global
+				size python:len(obs);
+				pageSize python:10;
+				pageIndex python:request.get('pageIndex',0);
+				pageStart python:pageIndex*pageSize;
+				pageEnd python:min(pageStart+pageSize,size)">
+			<tal:block tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">zmi_pagination</tal:block>
+			<table class="table table-striped table-bordered my-3">
+			<tal:block tal:repeat="pageIndex python:range(pageEnd-pageStart)">
+			<tal:block tal:define="global ob python:obs[pageStart+pageIndex]; id python:ob.id; renderShort python:len(request.get('raw',''))>0">
+			<tr valign="top">
+				<td><input type="checkbox" name="ids:list" tal:attributes="value id; checked python:['','checked'][int(renderShort)]; onclick python:'javascript:$(\'#renderShort_%s\').toggle(\'normal\')'%id"></td>
+				<td><tal:block tal:content="python:pageStart+pageIndex+1">the page-index</tal:block>.</td>
+				<td>
+					<tal:block tal:content="structure python:ob.zmi_breadcrumbs()">zmi_breadcrumbs</tal:block>
+					<div class="zmi-container"><div class="zmi-item"><div class="center"><div tal:attributes="id python:'renderShort_%s'%id; class python:['d-none',''][int(renderShort)]" tal:content="structure python:ob.renderShort(request)">renderShort</div></div></div></div>
+				</td>
+				<td><tal:block tal:content="structure python:ob.zmi_manage_main_change(ob,request)">the info child-node</tal:block></td>
+			</tr>
+			</tal:block>
+			</tal:block>
+			</table>
+			<tal:block tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">zmi_pagination</tal:block>
+		</tal:block>
+	</tal:block>
+
+<!-- /ZMSContainerObject/main_grid -->

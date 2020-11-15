@@ -1,0 +1,28 @@
+# Zope + ZMS
+-r requirements.txt
+
+# Theming
+-e git+https://github.com/zms-publishing/Products.zms-skins.git#egg=Products.zms-skins
+
+# SQL
+mysqlclient
+Products.ZMySQLDA
+Products.ZSQLMethods
+
+# LDAP
+python-ldap
+# Need our py3 fork
+-e git+https://github.com/zms-publishing/Products.LDAPMultiPlugins#egg=Products.LDAPMultiPlugins
+# need master for py3 compatible
+-e git+https://github.com/dataflake/Products.LDAPUserFolder#egg=Products.LDAPUserFolder
+
+# TEXT
+beautifulsoup4
+lxml
+Markdown
+pyScss
+
+# PAS
+Products.PluggableAuthService
+Products.PluginRegistry
+# -e git+https://github.com/sntl-projects/Products.zmsPluggableAuthService.git#egg=Products.zmsPluggableAuthService

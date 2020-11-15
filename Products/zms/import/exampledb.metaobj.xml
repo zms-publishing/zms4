@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[com.zms.db.example]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="enabled" type="int">1</item>
+          <item key="id"><![CDATA[com.zms.db.example]]></item>
+          <item key="name"><![CDATA[com.zms.db.example]]></item>
+          <item key="package"></item>
+          <item key="revision"><![CDATA[3.0.a]]></item>
+          <item key="type"><![CDATA[ZMSPackage]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[dept]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[records]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Records]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[list]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[deptno]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[No.]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[int]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[dname]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Name]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[loc]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Location]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<!-- ZMSRecordSet/standard_html -->
+
+<div class="ZMSRecordSet main"  tal:define="global
+			zmscontext options/zmscontext;
+			meta_id zmscontext/meta_id;
+			metaObj python:zmscontext.getMetaobj(meta_id);
+			metaObjIds python:zmscontext.getMetaobjIds();
+			metaObjAttrIds python:zmscontext.getMetaobjAttrIds(metaObj['id']);
+			dummy0 python:request.set('qstart',request.get('qstart',request.SESSION.get('qstart_%s'%id,0)));
+			dummy0 python:request.set('qbatch',request.get('qbatch',request.SESSION.get('qbatch_%s'%id,3)));
+			dummy0 python:request.set('qsize',request.get('qsize',request.SESSION.get('qsize_%s'%id,20)));
+			dummy0 python:request.set('qindex',request.get('qindex',request.SESSION.get('qindex_%s'%id,-1)));
+			dummy0 python:request.set('qstart_%s'%zmscontext.id,request.get('qstart'));
+			dummy0 python:request.set('qbatch_%s'%zmscontext.id,request.get('qbatch'));
+			dummy0 python:request.SESSION.set('qsize_%s'%zmscontext.id,request.get('qsize'));
+			dummy0 python:request.SESSION.set('qindex_%s'%zmscontext.id,request.get('qindex'));
+			dummy0 python:zmscontext.recordSet_Init(request);
+			dummy0 python:zmscontext.recordSet_Filter(request);
+			dummy0 python:zmscontext.recordSet_Sort(request)">
+
+<tal:block tal:define="global
+			records python:zmscontext.attr(metaObjAttrIds[0]);
+			metaObjAttrs python:[x for x in metaObj['attrs'][1:] if 
+					x['id'] not in ['sort_id']
+					and x['custom']
+					and x['type'] in zmscontext.metaobj_manager.valid_types
+					and not x['type'] in ['password']
+					]">
+
+<form method="get" tal:condition="python:request.get('action') not in ['updateForm','insertForm']">
+	<input type="hidden" name="lang" tal:condition="python:'lang' in request" tal:attributes="value request/lang"/>
+	<input type="hidden" name="preview" tal:condition="python:'preview' in request" tal:attributes="value request/preview"/>
+	<div style="margin:1em 0 1em 0;padding:.2em;background:#DCE3F0;border-radius:4px;" tal:define="global filterIndex python:0">
+		<div class="form-group row" style="margin:.5em">
+			<div class="input-group">
+				<input type="hidden" tal:attributes="name python:'filterattr%i'%filterIndex" value="%">
+				<input class="form-control form-control-sm" type="text" tal:attributes="name python:'filtervalue%i'%filterIndex; value python:request.SESSION.get('filtervalue%i_%s'%(filterIndex,zmscontext.id),'')" />
+				<div class="input-group-append">
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_SEARCH" tal:attributes="title python:here.getZMILangStr('BTN_SEARCH')"><i class="fas fa-search"></i></button>
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_RESET" tal:attributes="title python:here.getZMILangStr('BTN_RESET')"><i class="fas fa-times"></i></button>
+				</div>
+			</div><!-- .input-group -->
+		</div><!-- .form-group -->
+	</div>
+</form>
+
+<tal:block tal:condition="python:request.get('action') not in ['updateForm','insertForm']" tal:content="structure python:zmscontext.metaobj_recordset_main_grid(metaObjAttrIds=zmscontext.getMetaobjAttrIds(meta_id),metaObjAttrs=metaObjAttrs,filtered_records=request['res'],records=request['res_abs'],actions=['select'])">
+	metaobj_recordset_main
+</tal:block>
+
+</tal:block>
+
+</div>
+
+<!-- /ZMSRecordSet/standard_html -->]]>
+                  </item>
+                  <item key="id"><![CDATA[standard_html]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Template: Departments]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[zpt]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete" type="list">
+                <list>
+                  <item><![CDATA[ZMSAdministrator]]></item>
+                  <item><![CDATA[ZMSAuthor]]></item>
+                  <item><![CDATA[ZMSEditor]]></item>
+                </list>
+              </item>
+              <item key="delete_custom"></item>
+              <item key="insert" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="insert_custom"><![CDATA[{$}]]></item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">0</item>
+          <item key="id"><![CDATA[dept]]></item>
+          <item key="name"><![CDATA[Departments]]></item>
+          <item key="package"><![CDATA[com.zms.db.example]]></item>
+          <item key="revision"><![CDATA[3.0.0]]></item>
+          <item key="type"><![CDATA[ZMSRecordSet]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[emp]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[records]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Records]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[list]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[empno]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[No.]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[int]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[ename]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Name]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[job]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                      <item><![CDATA[Analyst]]></item>
+                      <item><![CDATA[Clerk]]></item>
+                      <item><![CDATA[Manager]]></item>
+                      <item><![CDATA[President]]></item>
+                      <item><![CDATA[Salesman]]></item>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Job]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[select]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[mgr]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Manager]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[emp]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[hiredate]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Hiredate]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[date]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[sal]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Salary]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[float]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[comm]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Comm]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[float]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom" type="int">1</item>
+                  <item key="id"><![CDATA[deptno]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Department]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[dept]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<!-- ZMSRecordSet/standard_html -->
+
+<div class="ZMSRecordSet main"  tal:define="global
+			zmscontext options/zmscontext;
+			meta_id zmscontext/meta_id;
+			metaObj python:zmscontext.getMetaobj(meta_id);
+			metaObjIds python:zmscontext.getMetaobjIds();
+			metaObjAttrIds python:zmscontext.getMetaobjAttrIds(metaObj['id']);
+			dummy0 python:request.set('qstart',request.get('qstart',request.SESSION.get('qstart_%s'%id,0)));
+			dummy0 python:request.set('qbatch',request.get('qbatch',request.SESSION.get('qbatch_%s'%id,3)));
+			dummy0 python:request.set('qsize',request.get('qsize',request.SESSION.get('qsize_%s'%id,20)));
+			dummy0 python:request.set('qindex',request.get('qindex',request.SESSION.get('qindex_%s'%id,-1)));
+			dummy0 python:request.set('qstart_%s'%zmscontext.id,request.get('qstart'));
+			dummy0 python:request.set('qbatch_%s'%zmscontext.id,request.get('qbatch'));
+			dummy0 python:request.SESSION.set('qsize_%s'%zmscontext.id,request.get('qsize'));
+			dummy0 python:request.SESSION.set('qindex_%s'%zmscontext.id,request.get('qindex'));
+			dummy0 python:zmscontext.recordSet_Init(request);
+			dummy0 python:zmscontext.recordSet_Filter(request);
+			dummy0 python:zmscontext.recordSet_Sort(request)">
+
+<tal:block tal:define="global
+			records python:zmscontext.attr(metaObjAttrIds[0]);
+			metaObjAttrs python:[x for x in metaObj['attrs'][1:] if 
+					x['id'] not in ['sort_id']
+					and x['custom']
+					and x['type'] in zmscontext.metaobj_manager.valid_types
+					and not x['type'] in ['password']
+					]">
+
+<form method="get" tal:condition="python:request.get('action') not in ['updateForm','insertForm']">
+	<input type="hidden" name="lang" tal:condition="python:'lang' in request" tal:attributes="value request/lang"/>
+	<input type="hidden" name="preview" tal:condition="python:'preview' in request" tal:attributes="value request/preview"/>
+	<div style="margin:1em 0 1em 0;padding:.2em;background:#DCE3F0;border-radius:4px;" tal:define="global filterIndex python:0">
+		<div class="form-group row" style="margin:.5em">
+			<div class="input-group">
+				<input type="hidden" tal:attributes="name python:'filterattr%i'%filterIndex" value="%">
+				<input class="form-control form-control-sm" type="text" tal:attributes="name python:'filtervalue%i'%filterIndex; value python:request.SESSION.get('filtervalue%i_%s'%(filterIndex,zmscontext.id),'')" />
+				<div class="input-group-append">
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_SEARCH" tal:attributes="title python:here.getZMILangStr('BTN_SEARCH')"><i class="fas fa-search"></i></button>
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_RESET" tal:attributes="title python:here.getZMILangStr('BTN_RESET')"><i class="fas fa-times"></i></button>
+				</div>
+			</div><!-- .input-group -->
+		</div><!-- .form-group -->
+	</div>
+</form>
+
+<tal:block tal:condition="python:request.get('action') not in ['updateForm','insertForm']" tal:content="structure python:zmscontext.metaobj_recordset_main_grid(metaObjAttrIds=zmscontext.getMetaobjAttrIds(meta_id),metaObjAttrs=metaObjAttrs,filtered_records=request['res'],records=request['res_abs'],actions=['select'])">
+	metaobj_recordset_main
+</tal:block>
+
+</tal:block>
+
+</div>
+
+<!-- /ZMSRecordSet/standard_html -->]]>
+                  </item>
+                  <item key="id"><![CDATA[standard_html]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Template: Employees]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[zpt]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete" type="list">
+                <list>
+                  <item><![CDATA[ZMSAdministrator]]></item>
+                  <item><![CDATA[ZMSAuthor]]></item>
+                  <item><![CDATA[ZMSEditor]]></item>
+                </list>
+              </item>
+              <item key="delete_custom"></item>
+              <item key="insert" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="insert_custom"><![CDATA[{$}]]></item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">0</item>
+          <item key="id"><![CDATA[emp]]></item>
+          <item key="name"><![CDATA[Employees]]></item>
+          <item key="package"><![CDATA[com.zms.db.example]]></item>
+          <item key="revision"><![CDATA[3.0.a]]></item>
+          <item key="type"><![CDATA[ZMSRecordSet]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[exampleDatabase]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[titlealt]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">1</item>
+                  <item key="name"><![CDATA[Kurztitel]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[title]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">1</item>
+                  <item key="name"><![CDATA[Titel]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[dept]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Departments]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[dept]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="id"><![CDATA[emp]]></item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Employees]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[emp]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<!-- exampleDatabase.standard_html -->
+
+<tal:block tal:define="global zmscontext options/zmscontext; entities python:[]">
+	<tal:block tal:repeat="childNode python:zmscontext.getChildNodes(request)">
+		<tal:block tal:condition="python:childNode.getType()=='ZMSRecordSet'">
+			<tal:block tal:define="global dummy python:entities.append(childNode)"></tal:block>
+		</tal:block>
+	</tal:block>
+	<tal:block tal:define="global
+			entityId python:request.get('qentity',request.SESSION.get('qentity_%s'%zmscontext.meta_id.upper(),entities[0].id));
+			entity python:[x for x in entities if x.id==entityId][0];
+			dummy0 python:request.SESSION.set('qentity_%s'%zmscontext.meta_id.upper(),entityId)">
+
+		<ul class="nav nav-tabs">
+			<tal:block tal:repeat="entity entities">
+				<li tal:attributes="class python:['','active'][int(entity.id==entityId)]">
+					<a tal:attributes="href python:'?qentity=%s'%entity.id" tal:content="python:entity.getTitle(request)">the entity</a>
+				</li>
+			</tal:block>
+		</ul>
+
+		<tal:block tal:content="structure python:entity.getBodyContent(request)">the body-content</tal:block>
+	</tal:block>
+</tal:block>
+
+<!-- /exampleDatabase.standard_html -->]]>
+                  </item>
+                  <item key="id"><![CDATA[standard_html]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">1</item>
+                  <item key="name"><![CDATA[Template: Example-Database]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[zpt]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete" type="list">
+                <list>
+                  <item><![CDATA[ZMSAdministrator]]></item>
+                  <item><![CDATA[ZMSAuthor]]></item>
+                  <item><![CDATA[ZMSEditor]]></item>
+                </list>
+              </item>
+              <item key="delete_custom"></item>
+              <item key="insert" type="list">
+                <list>
+                  <item><![CDATA[ZMSAdministrator]]></item>
+                  <item><![CDATA[ZMSAuthor]]></item>
+                  <item><![CDATA[ZMSEditor]]></item>
+                </list>
+              </item>
+              <item key="insert_custom"><![CDATA[{$}]]></item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">1</item>
+          <item key="id"><![CDATA[exampleDatabase]]></item>
+          <item key="name"><![CDATA[Example-Database]]></item>
+          <item key="package"><![CDATA[com.zms.db.example]]></item>
+          <item key="revision"><![CDATA[3.0.a]]></item>
+          <item key="type"><![CDATA[ZMSDocument]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+</list>

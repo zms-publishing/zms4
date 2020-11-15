@@ -1,0 +1,301 @@
+<tal:block tal:define="
+		dummy0 python:here.zmi_page_request(here,request);
+		zmscontext python:here.getSelf();
+		standard modules/Products.zms/standard;
+		entities python:here.getEntities();
+		tables entities"
+	tal:condition="python: tables and request.get('id',None)">
+	<form tal:repeat="table python:[x for x in tables if request.get('id')==x['id']]"
+		class="form-horizontal" action="manage_changeConfiguration" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="lang" tal:attributes="value request/lang" />
+		<input type="hidden" name="id" tal:attributes="value request/id" />
+		<div class="form-group row">
+			<label class="control-label col-sm-2 text-nowrap">
+				<a tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],table['id']); title python:here.getZMILangStr('ATTR_TABLE')">
+					<i tal:condition="python:table['type']!='intersection'" class="fas fa-th-list"></i>
+					<i tal:condition="python:table['type']=='intersection'" class="fas fa-link"></i>
+					<tal:block tal:content="table/id">table-id</tal:block>
+				</a>
+			</label>
+			<div class="col-sm-10">
+				<div class="form-row align-items-center">
+					<div class="col-sm-8 form-inline text-left text-nowrap">
+						<input class="form-control form-control-sm col-6" type="text" name="label" tal:attributes="value python:table.get('label','');title python:here.getZMILangStr('ATTR_DISPLAY')" />
+						<select class="form-control form-control-sm col-6" name="type" tal:attributes="title python:here.getZMILangStr('ATTR_TYPE')">
+							<tal:block tal:repeat="type python:['','table','intersection','hidden']"
+								><option tal:attributes="value type; selected python:['','selected'][int(type==table['type'])]" tal:content="type">the type</option>
+							</tal:block>
+						</select>
+					</div>
+					<div class="col-sm-4 form-group my-3 my-md-0 p-0 controls save">
+						<button type="submit" name="btn" class="btn btn-primary btn-sm" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+						<button type="submit" name="btn" class="btn btn-secondary btn-sm" value="BTN_CLOSE" tal:content="python:here.getZMILangStr('BTN_CLOSE')">Close</button>
+					</div><!-- .controls -->
+				</div>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 control-label"><span>Interface</span></label>
+			<div class="col-sm-10">
+				<div class="single-line"><textarea title="Interface" class="form-control form-control-sm" name="interface" tal:content="python:table.get('interface','')"></textarea></div><!-- .single-line -->
+			</div><!-- .col-sm-2 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label class="col-sm-2 control-label"><span>Filter</span></label>
+			<div class="col-sm-10">
+				<div class="single-line"><textarea title="Filter" class="form-control form-control-sm" name="filter" tal:content="python:table.get('filter','')"></textarea></div><!-- .single-line -->
+			</div><!-- .col-sm-2 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('TAB_ACCESS')">Access</span></label>
+			<div class="col-sm-10">
+				<table class="table table-sm table-striped table-bordered meta-access" tal:define="global access python:table.get('access',{})">
+					<tr>
+						<td>&nbsp;</td>
+						<td tal:repeat="role python:[x for x in here.getDocumentElement().userdefined_roles() if x not in ['ZMSSubscriber','ZMSUserAdministrator']]">
+							<tal:block tal:content="python:here.getRoleName(role)">the role</tal:block>
+						</td>
+						<td style="width:100%;">&nbsp;</td>
+					</tr>
+					<tr tal:repeat="action python:['insert','update','delete','select']">
+						<td><strong tal:content="structure python:here.getZMILangStr('BTN_%s'%action.upper())">the action</strong></td>
+						<td style="text-align:center;" tal:repeat="role python:[x for x in here.getUserDefinedRoles() if x not in ['ZMSSubscriber','ZMSUserAdministrator']]">
+							<input tal:attributes="name python:'access_%s:list'%action; value role; checked python:['','checked'][int(role in access.get(action,[role]))]" type="checkbox"/>
+						</td>
+						<td style="width:100%;">&nbsp;</td>
+					</tr>
+				</table>
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<table class="table table-sm table-striped table-bordered zmi-sortable">
+		<thead>
+			<th>&nbsp;</th>
+			<th tal:content="python:'%s / %s'%(here.getZMILangStr('ATTR_ID'),here.getZMILangStr('ATTR_DESCRIPTION'))">Id / Description</th>
+			<th tal:content="python:here.getZMILangStr('ATTR_DISPLAY')">Display</th>
+			<th><i class="fas fa-th-list"></i></th>
+			<th tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</th>
+		</thead>
+		<tbody>
+			<tal:block tal:repeat="column table/columns">
+			<tr tal:attributes="class python:' '.join([[],['zmi-selected']][int(column['id']==request.get('attr_id'))])">
+				<td>
+					<select class="form-control form-control-sm zmi-sort"  tal:attributes="name python:'attr_index_%s:int'%column['id']; onchange python:'zmiFormSubmit(this,{btn:\'move_to\',id:\'%s\',\'attr_id\':\'%s\',key:\'attr\',\'pos:int\':this.selectedIndex})'%(table['id'],column['id'])">
+						<option tal:repeat="i python:range(0,len(table['columns']))" tal:attributes="selected python:['','selected'][int(i==table['columns'].index(column))]" tal:content="python:i+1">i+1</option>
+					</select>
+				</td>
+				<td class="column-description text-nowrap text-truncate">
+					<input type="hidden" name="attr_ids:list" tal:attributes="value column/id" />
+					<i class="fas fa-th-list"></i>
+					<span class="column-id" tal:content="column/id">column-id</span>
+					<span class="column-description text-info text-monospace" tal:attributes="title python:column.get('description','')" tal:content="python:standard.string_maxlen(s=column.get('description',''),maxlen=50)">column-description</span>
+					<span class="column-datatype badge badge-info" tal:content="column/datatype">column-datatype</span>
+				</td>
+				<td><input class="form-control form-control-sm zmi-sort" tal:attributes="name python:'attr_label_%s'%column['id']; value column/label" type="text"></td>
+				<td><input tal:attributes="name python:'attr_display_%s:int'%column['id']; checked python:['','checked'][int(not column.get('hide',0))]" value="1" type="checkbox"/></td>
+				<td>
+					<select class="form-control form-control-sm" tal:attributes="name python:'attr_type_%s'%column['id']" onchange="onAttrTypeChange(this)">
+						<option value=""></option>
+						<tal:block tal:repeat="type python:here.sort_list(list(here.valid_types))">
+							<option tal:attributes="value type; selected python:['','selected'][int(type in column)]" tal:content="type">the type</option>)
+						</tal:block>
+					</select>
+					<table class="table table-sm text-nowrap">
+					<tal:block tal:replace="nothing">
+					##### Blob #########################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_blob_%s'%column['id']; class python:['d-none',''][int('blob' in column)]">
+						<td>Type</td>
+						<td>
+							<select class="form-control form-control-sm" tal:attributes="name python:'attr_blob_type_%s'%column['id']">
+								<tal:block tal:repeat="value python:['','file','image']">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('blob',{}).get('type','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					<tr tal:attributes="id python:'tr_blob_%s'%column['id']; class python:['d-none',''][int('blob' in column)]">
+						<td>Path</td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_blob_path_%s'%column['id']; value python:column.get('blob',{}).get('path','')"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_blob_%s'%column['id']; class python:['d-none',''][int('blob' in column)]">
+						<td>Remote [URL]</td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_blob_remote_%s'%column['id']; value python:column.get('blob',{}).get('remote','')"/></td>
+					</tr>
+					<tal:block tal:replace="nothing">
+					##### Details ######################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_details_%s'%column['id']; class python:['d-none',''][int('details' in column)]">
+						<td>Tablename</td>
+						<td>
+							<select class="form-control form-control-sm" tal:attributes="name python:'attr_details_tablename_%s'%column['id']">
+								<option value=""></option>
+								<tal:block tal:repeat="value python:[x['id'] for x in tables]">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('details',{}).get('tablename','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					<tr tal:attributes="id python:'tr_details_%s'%column['id']; class python:['d-none',''][int('details' in column)]">
+						<td>Foreign Key</td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_details_fk_%s'%column['id']; value python:column.get('details',{}).get('fk','')"/></td>
+					</tr>
+					<tal:block tal:replace="nothing">
+					##### Fk ###########################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>A.Tablename <i class="fas fa-th"></i></td>
+						<td>
+							<select class="form-control form-control-sm zmi-tablename" tal:attributes="name python:'attr_fk_tablename_%s'%column['id']; onchange python:'zmiChangeTablename(this,[\'%s\',\'%s\'])'%('attr_fk_fieldname_%s'%column['id'],'attr_fk_displayfield_%s'%column['id'])">
+								<option value=""></option>
+								<tal:block tal:repeat="value python:[x['id'] for x in tables]">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('fk',{}).get('tablename','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>A.Fieldname</td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_fk_fieldname_%s'%column['id']; value python:column.get('fk',{}).get('fieldname','')"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>A.Displayfield</td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_fk_displayfield_%s'%column['id']; value python:column.get('fk',{}).get('displayfield','')"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>A.Lazy</td>
+						<td><input type="checkbox" tal:attributes="name python:'attr_fk_lazy_%s:int'%column['id']; checked python:['','checked'][int(column.get('fk',{}).get('lazy') in [1,True])]" value="1"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>A.Editable</td>
+						<td><input type="checkbox" tal:attributes="name python:'attr_fk_editable_%s:int'%column['id']; checked python:['','checked'][int(column.get('fk',{}).get('editable') in [1,True])]" value="1"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>B.MySQL-Set</td>
+						<td><input type="checkbox" tal:attributes="name python:'attr_fk_mysqlset_%s:int'%column['id']; checked python:['','checked'][int(column.get('fk',{}).get('mysqlset') in [1,True])]" value="1"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_fk_%s'%column['id']; class python:['d-none',''][int('fk' in column)]">
+						<td>C.Options</td>
+						<td><div class="zmi-single-line-edit"><textarea class="form-control form-control-sm" tal:attributes="name python:'attr_fk_options_%s'%column['id']" tal:content="python:'\n'.join([x[0] for x in column.get('fk',{}).get('options',[])])"></textarea></div></td>
+					</tr>
+					<tal:block tal:replace="nothing">
+					##### Multiselect ###########################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_multiselect_%s'%column['id']; class python:['d-none',''][int('multiselect' in column)]">
+						<td>A.Tablename <i class="fas fa-th"></i></td>
+						<td>
+							<select class="form-control form-control-sm zmi-tablename" tal:attributes="name python:'attr_multiselect_tablename_%s'%column['id']; onchange python:'zmiChangeTablename(this,[\'%s\'])'%('attr_multiselect_fk_%s'%column['id'])">
+								<option value=""></option>
+								<tal:block tal:repeat="value python:[x['id'] for x in tables]">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('multiselect',{}).get('tablename','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					<tr tal:attributes="id python:'tr_multiselect_%s'%column['id']; class python:['d-none',''][int('multiselect' in column)]">
+						<td>A.Foreign Key <i class="fas fa-key text-warning"></i></td>
+						<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_multiselect_fk_%s'%column['id']; value python:column.get('multiselect',{}).get('fk','')"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_multiselect_%s'%column['id']; class python:['d-none',''][int('multiselect' in column)]">
+						<td>A.Lazy</td>
+						<td><input type="checkbox" tal:attributes="name python:'attr_multiselect_lazy_%s:int'%column['id']; checked python:['','checked'][int(column.get('multiselect',{}).get('lazy') in [1,True])]" value="1"/></td>
+					</tr>
+					<tr tal:attributes="id python:'tr_multiselect_%s'%column['id']; class python:['d-none',''][int('multiselect' in column)]">
+						<td>B.MySQL-Set</td>
+						<td><input type="checkbox" tal:attributes="name python:'attr_multiselect_mysqlset_%s:int'%column['id']; checked python:['','checked'][int(column.get('multiselect',{}).get('mysqlset') in [1,True])]" value="1"/></td>
+					</tr>
+					<tal:block tal:replace="nothing">
+					##### Multimultiselect ###########################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_multimultiselect_%s'%column['id']; class python:['d-none',''][int('multimultiselect' in column)]">
+						<td>Tablename <i class="fas fa-th"></i></td>
+						<td>
+							<select class="form-control form-control-sm zmi-tablename" tal:attributes="name python:'attr_multimultiselect_tablename_%s'%column['id']; onchange python:'zmiChangeTablename(this,[\'%s\'])'%('attr_multimultiselect_fk_%s'%column['id'])">
+								<option value=""></option>
+								<tal:block tal:repeat="value python:[x['id'] for x in tables]">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('multimultiselect',{}).get('tablename','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					<tr tal:attributes="id python:'tr_multimultiselect_%s'%column['id']; class python:['d-none',''][int('multimultiselect' in column)]">
+						<td>Foreign Key</td>
+						<td><input type="text" class="form-control form-control-sm" tal:attributes="name python:'attr_multimultiselect_fk_%s'%column['id']; value python:column.get('multimultiselect',{}).get('fk','')"/></td>
+					</tr>
+					<tal:block tal:define="global
+							mmstablename python:column.get('multimultiselect',{}).get('tablename','');
+							mmsfk python:column.get('multimultiselect',{}).get('fk','');
+							mmsentity python:([x for x in here.getEntities() if x['id'].upper()==mmstablename.upper()]+[None])[0]">
+						<tr tal:condition="python:mmsfk!='' and mmsentity is not None" tal:attributes="id python:'tr_multimultiselect_%s'%column['id']; class python:['d-none',''][int('multimultiselect' in column)]">
+							<td colspan="2">Tables
+								<table class="table table-sm text-nowrap">
+								<tr>
+									<th>&nbsp;</th>
+									<th>FK&nbsp;&nbsp;&nbsp;&nbsp;</th>
+									<th>Tablename</th>
+									<th>Fieldname</th>
+									<th>Displayfield</th>
+									<th>Label</th>
+									<th>Lazy</th>
+								</tr>
+								<tal:block tal:define="global
+										ts0 python:[x for x in mmsentity['columns'] if x['id'].upper()!=mmsfk.upper()];
+										ts1 python:[{'fk':x['id']} for x in ts0];
+										ts python:column.get('multimultiselect',{}).get('tables',ts1);">
+									<tal:block tal:repeat="ti python:range(len(ts))">
+										<tr tal:define="global t python:ts[ti]">
+											<td></td>
+											<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_multimultiselect_tables_fk_%i_%s'%(ti,column['id']); value python:t.get('fk','')" size="5"/></td>
+											<td>
+												<select class="form-control form-control-sm zmi-tablename" tal:attributes="name python:'attr_multimultiselect_tables_tablename_%i_%s'%(ti,column['id']); onchange python:'zmiChangeTablename(this,[\'%s\',\'%s\'])'%('attr_multimultiselect_tables_fieldname_%i_%s'%(ti,column['id']),'attr_multimultiselect_tables_displayfield_%i_%s'%(ti,column['id']))">
+													<option value=""></option>
+													<tal:block tal:repeat="value python:[x['id'] for x in tables]">
+														<option tal:attributes="value value; selected python:['','selected'][int(t.get('tablename','').upper()==value.upper())]" tal:content="value">the value</option>
+													</tal:block>
+												</select>
+											</td>
+											<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_multimultiselect_tables_fieldname_%i_%s'%(ti,column['id']); value python:t.get('fieldname','')" size="5"/></td>
+											<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_multimultiselect_tables_displayfield_%i_%s'%(ti,column['id']); value python:t.get('displayfield','')" size="5"/></td>
+											<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'attr_multimultiselect_tables_label_%i_%s'%(ti,column['id']); value python:t.get('label','')" size="5"/></td>
+											<td style="text-align:center;"><input type="checkbox" tal:attributes="name python:'attr_multimultiselect_tables_lazy_%i_%s:int'%(ti,column['id']); checked python:['','checked'][int(t.get('lazy')==1)]" value="1"/></td>
+										</tr>
+									</tal:block>
+								</tal:block>
+								</table>
+							</td>
+						</tr>
+					</tal:block>
+					<tal:block tal:replace="nothing">
+					##### Auto ###########################################################
+					</tal:block>
+					<tr tal:attributes="id python:'tr_pk_%s'%column['id']; class python:['d-none',''][int('pk' in column or column.get('datatype') in ['date','datetime'])]">
+						<td>Auto</td>
+						<td>
+							<select class="form-control form-control-sm" tal:attributes="name python:'attr_auto_%s'%column['id']">
+								<tal:block tal:repeat="value python:['','db','insert','update']">
+									<option tal:attributes="value value; selected python:['','selected'][int(str(column.get('auto','')).upper()==value.upper())]" tal:content="value">the value</option>
+								</tal:block>
+							</select>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+			</tal:block>
+			<tr class="row_insert">
+				<td><span class="btn btn-light"><i class="fas fa-plus"></i></span></td>
+				<td><input class="form-control form-control-sm" name="attr_id" type="text"/></td>
+				<td><input class="form-control form-control-sm" name="attr_label" type="text"/></td>
+				<td><input name="attr_display:int" value="1" checked="checked" type="checkbox"/></td>
+				<td>
+					<select class="form-control form-control-sm" name="attr_type">
+						<option value=""></option>
+						<tal:block tal:repeat="type python:here.sort_list(list(here.valid_types))">
+							<option tal:attributes="value type" tal:content="type">the type</option>)
+						</tal:block>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</form>
+</tal:block>

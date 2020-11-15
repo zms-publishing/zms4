@@ -1,0 +1,74 @@
+<tal:block tal:replace="nothing">
+### Initialize request.
+</tal:block
+><tal:block tal:define="standard modules/Products.zms/standard;
+		dummy0 python:request.RESPONSE.setHeader('Content-Type', 'text/html\073charset=utf-8');
+		dummy0 python:request.set('lang',request.get('lang',here.getLanguage(request)));
+		site_active python:here.getHome().content.isActive(request);
+		done python:[]"
+
+><tal:block tal:condition="not: site_active"
+	><tal:block tal:define="global 
+		dummy0 python:standard.raiseError('NotFound','Site is not active')"
+	></tal:block
+></tal:block
+><tal:block tal:replace="nothing">
+### Avoid duplicate content under same url.
+</tal:block
+><tal:block tal:define="target python:here.getHref2IndexHtml({'lang':request['lang'],'preview':request.get('preview',None),'ZMS_INDEX_HTML':[0,1][request.get('preview',None)=='preview']},deep=here.getConfProperty('index_html.redirect.deep',0))"
+><tal:block tal:condition="python:not done and here.getDeclId({'lang':request['lang']})!=here.id and not request['URL']=='%sindex_html'%target and (request['URL'].endswith('/%s/index_html'%here.getDeclId({'lang':request['lang']})) or request['URL'].endswith('/%s/index_html'%here.id))"
+	><tal:block tal:define="
+			dummy0 python:request.set('ZMS_INDEX_HTML',1);
+			dummy0 python:request.RESPONSE.redirect(target,301);
+			dummy0 python:done.append(True)"></tal:block
+></tal:block
+></tal:block
+
+	><tal:block tal:replace="nothing">
+	### Restrict access
+	</tal:block
+	><tal:block tal:condition="python:not done and not here.hasAccess(request)"
+		><tal:block tal:replace="nothing">--- Raise unauthorized ---</tal:block
+			><tal:block tal:define="
+					dummy0 python:request.RESPONSE.unauthorized();
+					dummy0 python:done.append(True)"></tal:block
+	></tal:block
+
+	><tal:block tal:replace="nothing">
+	### Response status
+	</tal:block
+    ><tal:block tal:define="httpResponseStatus python:here.getHttpResponseStatus()" tal:on-error="nothing"
+        ><tal:block tal:condition="python:httpResponseStatus>0"
+            ><tal:block tal:define="
+                    dummy0 python:request.RESPONSE.setStatus(httpResponseStatus);
+					dummy0 python:done.append(True)"></tal:block
+        ></tal:block
+    ></tal:block
+
+><tal:block tal:condition="python:not done and getattr(here.getHome(),'standard_html',None)"
+	><tal:block tal:content="structure python:here.f_standard_html_request(here,request)">f_standard_html_request</tal:block
+	><tal:block tal:content="structure python:getattr(here,'standard_html',None)(here,request)">standard_html</tal:block
+	><tal:block tal:define="dummy0 python:done.append(True)"></tal:block
+></tal:block
+
+	><tal:block tal:replace="nothing">
+	### Display only active
+	</tal:block
+	><tal:block tal:condition="python:not done and (standard.isPreviewRequest(request) or here.getDocumentElement().isActive(request))"
+		><tal:block tal:content="structure python:here.f_standard_html_request(here,request)">f_standard_html_request</tal:block
+		><tal:block tal:condition="python:getattr(here.getHome(),'standard_html_request',None) is not None"
+			><tal:block tal:content="structure python:getattr(here,'standard_html_request',None)(here,request)">standard_html_request</tal:block
+		></tal:block
+		><tal:block tal:on-error="structure string:<!DOCTYPE html><html><body><!-- ERROR index_zpt.f_standard_html_header-->" tal:content="structure python:here.f_standard_html_header(here,request)">f_standard_html_header</tal:block
+		><tal:block tal:condition="python:standard.isPreviewRequest(request) or here.isActive(request)"
+			><tal:block tal:content="structure python:here.zmi_body_content(here,request)">zmi_body_content</tal:block
+		></tal:block
+		><tal:block tal:condition="not:python:standard.isPreviewRequest(request) or here.isActive(request)"
+			><p class="standard" tal:content="python:here.getLangStr('MSG_INACTIVE',request['lang'])">Message inactive</p
+			><tal:block tal:define="dummy0 python:request.RESPONSE.setStatus(503)"></tal:block
+		></tal:block
+		><tal:block tal:on-error="structure string:<!-- ERROR index_zpt.f_standard_html_footer --></body></html>" tal:content="structure python:here.f_standard_html_footer(here,request)">f_standard_html_footer</tal:block
+		><tal:block tal:define="dummy0 python:done.append(True)"></tal:block
+	></tal:block
+
+></tal:block>

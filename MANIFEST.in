@@ -1,0 +1,33 @@
+include *.txt
+include AUTHORS
+include CHANGES
+recursive-include Products *.cmd
+recursive-include Products *.conf
+recursive-include Products *.css
+recursive-include Products *.eot
+recursive-include Products *.gif
+recursive-include Products *.html
+recursive-include Products *.ico
+recursive-include Products *.jpg
+recursive-include Products *.js
+recursive-include Products *.json
+recursive-include Products *.map
+recursive-include Products *.md
+recursive-include Products *.otf
+recursive-include Products *.png
+recursive-include Products *.py
+recursive-include Products *.svg
+recursive-include Products *.swf
+recursive-include Products *.ttf
+recursive-include Products *.txt
+recursive-include Products *.woff
+recursive-include Products *.woff2
+recursive-include Products *.xml
+recursive-include Products *.zcml
+recursive-include Products *.zip
+recursive-include Products *.zpt
+recursive-include Products *.scss
+recursive-include selenium_tests *.py
+recursive-include selenium_tests *.txt
+recursive-include test_output *.keep
+recursive-include tests *.py

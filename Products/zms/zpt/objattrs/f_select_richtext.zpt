@@ -1,0 +1,88 @@
+<!-- BO objattrs/f_select_richtext -->
+
+<tal:block tal:define="global
+				elName options/elName;
+				rteTextFormats python:[x for x in here.getTextFormats(request) if x.getRichedit()];
+				htmlTextFormats python:[x for x in here.getTextFormats(request) if x.getTag()=='' and x.getSubTag()=='' and x.getAttrs()==''];
+				dummy0 python:request.set('richedit_fmt',(rteTextFormats+[None])[0]);
+				dummy0 python:request.set('htmledit_fmt',(htmlTextFormats+[None])[0]);
+				dummy0 python:request.set('fmName',options['fmName']);
+				dummy0 python:request.set('elName',options['elName']);">
+
+<tal:block tal:condition="python:request.get('f_zmiRichtextEditor',True)">
+
+<style>
+	.form-richtext select#format {
+		max-width: 180px;
+	}
+	.form-richtext .float-left {
+		margin-right:.5em;
+		margin-bottom:.1em;
+	}
+	.form-richtext span.btn {
+		padding-left:.6em;
+		padding-right:.6em;
+	}
+	.form-richtext textarea {
+		margin-top:.3em;
+	}
+	@media (max-height:600px) {
+		textarea {
+			max-height:12em;
+		}
+	}
+</style>
+
+<tal:block tal:content="structure python:'<script>'"></tal:block>
+
+/** 
+ * Toggle richtext-editor.
+ */
+function zmiRichtextEditorToggle( elName, newFormat) {
+	if (newFormat) {
+		$('#format').val(newFormat);
+	}
+	$('#zmiStandardEditor'+elName).toggle();
+	$('#zmiRichtextEditor'+elName).toggle();
+}
+
+$ZMI.registerReady(function() {
+	var format = $('#format').val();
+	var wysiwyg = typeof format=='undefined' || format=='<tal:block tal:on-error="string:undefined" tal:content="structure python:rteTextFormats[0].getId()"></tal:block>';
+	if(wysiwyg) {
+		$('div[id^="zmiStandardEditor"]').hide();
+	}
+	else {
+		$('div[id^="zmiRichtextEditor"]').hide();
+	}
+});
+
+<tal:block tal:content="structure python:'</script>'"></tal:block>
+
+</tal:block>
+
+<div tal:attributes="id python:'zmiStandardEditor%s'%elName" tal:content="structure python:here.zmi_select_richtext_standard(here,request,options)">zmi_select_richtext_standard</div>
+<div tal:attributes="id python:'zmiRichtextEditor%s'%elName" tal:content="structure python:here.zmi_select_richtext_wysiwyg(here,request,options)">zmi_select_richtext_wysiwyg</div>
+
+<tal:block tal:define="global metaObjAttrId python:'resources';">
+	<tal:block tal:condition="python:metaObjAttrId in here.getMetaobjAttrIds(request.get('ZMS_INSERT',here.meta_id))" tal:define="global
+			dummy0 python:request.set('ZMS_HIDE_ELEMENTS',request.get('ZMS_HIDE_ELEMENTS',[])+[metaObjAttrId])">
+			<tal:block tal:define="global
+					metaObjAttr python:here.getMetaobjAttr(request.get('ZMS_INSERT',here.meta_id),metaObjAttrId);
+					elLabel python:here.getObjAttrLabel(metaObjAttr)">
+						<div class="form-group row"  tal:attributes="id python:'tr_%s'%(elName)">
+							<label tal:attributes="for elName; class python:' '.join(['col-sm-2 control-label']+[[],['mandatory']][int(metaObjAttr.get('mandatory'))])">
+								<span tal:content="elLabel">the label</span>
+							</label>
+							<div class="col-sm-10">
+								<input class="btn btn-file" type="file" tal:attributes="name python:'resource_%s'%elName"/>
+							</div><!-- .col-lg-10 -->
+						</div><!-- .form-group -->
+			</tal:block>
+	</tal:block>
+</tal:block>
+
+<tal:block tal:define="dummy0 python:request.set('f_zmiRichtextEditor',False)"></tal:block>
+</tal:block>
+
+<!-- EO objattrs/f_select_richtext -->

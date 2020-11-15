@@ -1,0 +1,66 @@
+<!-- ZMS CUSTOM FOOTER -->
+<script>
+
+	$('img[src*="UserFolder"]').replaceWith('<i data-title="Access Control List" class="icon icon-group"></i>');
+	$('img[src*="PluggableAuthService"]').replaceWith('<i data-title="Pluggable Auth Service" class="icon icon-group"></i>');
+	$('img[src*="/p_/User_icon"]').replaceWith('<i data-title="User" class="icon icon-user"></i>');
+	$('img[src*="TemporaryFolder"]').replaceWith('<i data-title="Folder" class="icon icon-folder-open-alt">&nbsp;</i>');
+	$('img[alt="Filesystem Directory View"]').replaceWith('<i data-title="Filesystem Directory View" class="icon icon-folder-close">&nbsp;</i>');
+	$('img[src*="Folder"]').replaceWith('<i data-title="Folder" class="icon icon-folder-close-alt">&nbsp;</i>');
+	$('img[src*="zpt.gif"]').replaceWith('<i data-title="Page Template" class="icon icon-file-text-alt">&nbsp;</i>');
+	$('img[src*="fspt.gif"]').replaceWith('<i data-title="Filesystem Page Template" class="icon icon-file-text-alt">&nbsp;</i>');
+	$('img[src*="exclamation.gif"]').replaceWith('<i data-title="Error" class="icon icon-exclamation">&nbsp;</i>');
+	$('img[src*="Script"]').replaceWith('<i data-title="Script (Python)" class="icon icon-terminal"></i>');
+	$('img[src*="ExternalMethod"]').replaceWith('<i data-title="External Python Method" class="icon icon-external-link-sign">&nbsp;</i>');
+	$('img[src*="dtml"]').replaceWith('<i data-title="DTML" class="icon icon-file-alt">&nbsp;</i>');
+	$('img[src*="File"]').replaceWith('<i data-title="File Object" class="icon icon-file">&nbsp;</i>');
+	$('img[src*="Mail"]').replaceWith('<i data-title="Mail Folder" class="icon icon-envelope">&nbsp;</i>');
+	$('img[src*="Image"]').replaceWith('<i data-title="Image" class="icon icon-picture">&nbsp;</i>');
+	$('img[src*="Control"]').replaceWith('<i data-title="Control Panel" class="icon icon-cogs">&nbsp;</i>');
+	$('img[src*="Database"]').replaceWith('<i data-title="Database" class="icon icon-table"></i>');
+	$('img[src*="ZSQLiteDA"]').replaceWith('<i data-title="Database" class="icon icon-table"></i>');
+	$('img[src*="ZMySQLDA"]').replaceWith('<i data-title="MySQL-Database Adapter" class="icon icon-table"></i>');
+	$('img[src*="Product"]').replaceWith('<i data-title="Installed Product" class="icon icon-gift"></i>');
+	$('img[src*="ZSQL"]').replaceWith('<i data-title="ZSQL-Method" class="icon icon-puzzle-piece"></i>');
+	$('img[src*="/p_/pl"]').replaceWith('<i data-title="Expand..." class="icon icon-expand-alt"></i>');
+	$('img[src*="/p_/mi"]').replaceWith('<i data-title="Collapse..." class="icon icon-collapse-alt"></i>');
+	$('img[src*="/p_/davlocked"]').replaceWith('<i data-title="WebDAV" class="icon icon-retweet"></i>');
+	$('img[src*="DebugManager"]').replaceWith('<i data-title="Debug Manager" class="icon icon-bug"></i>');
+	$('img[src*="SiteErrorLog"]').replaceWith('<i data-title="Site Error Log" class="icon icon-bug"></i>');
+	$('img[src*="ZMS.png"]').replaceWith('<i data-title="ZMS Root" class="icon icon-home">&nbsp;</i>');
+	$('img[src*="ZMSObject.png"]').replaceWith('<i data-title="ZMS Content" class="icon icon-file-alt">&nbsp;</i>');
+	$('img[src*="Monster"]').replaceWith('<i data-title="Virtual Host Monster" class="icon icon-road">&nbsp;</i>');
+	$('img[src*="ZCatalog"]').replaceWith('<i data-title="ZCatalog" class="icon icon-search">&nbsp;</i>');
+	$('img[src*="idmgr.gif"]').replaceWith('<i data-title="Browser Session Manager" class="icon icon-bookmark-empty">&nbsp;</i>');
+	$('img[src*="datamgr.gif"]').replaceWith('<i data-title="Session Data Manager" class="icon icon-bookmark">&nbsp;</i>');
+	
+	
+// ALL THE OTHER ICONS
+	$('img[src*="misc_"]').replaceWith('<i class="icon icon-circle-blank">&nbsp;</i>');
+	$('img[src*="zms_"]').replaceWith('<i class="icon icon-circle-blank">&nbsp;</i>');
+
+
+// SHOW MENU TOGGLE ONLY ON LIST PAGES
+	if ($('.nav a[href="manage_findForm"]').length > 0 ) {
+		$('#toggle_menu').show();
+	} else {
+		$('#toggle_menu').hide();
+	}
+// HELP ICON
+	$('a[href*="HelpSys"]').empty() 
+		.append('<i class="icon icon-question-sign"></i>') 
+		.css('border-color','transparent');
+
+// HILIGHT ZMS IN ADD-LIST
+	// var $select = $('#nodeid_ > div.zope_actions.pull-right > form > div > select');
+	// if ($select.children(':selected').val() === 'manage_addProduct/zms/manage_addzmsform') {
+	// 	$select.css('color', '#9DDDFF');
+	// 	$select.css('border-color', '#9DDDFF');  
+	// 	$select.next('input').css('color', '#9DDDFF');
+	// 	$select.next('input').css('border-color', '#9DDDFF');
+	// }
+
+</script>
+
+</body>
+</html>

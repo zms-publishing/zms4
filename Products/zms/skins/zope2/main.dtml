@@ -1,0 +1,305 @@
+<dtml-var manage_page_header>
+<dtml-var manage_tabs>
+
+<script type="text/javascript">
+<!--
+
+isSelected = false;
+
+function toggleSelect() {
+	if (isSelected == false) {
+		for (i = 0; i < document.objectItems.length; i++)
+			document.objectItems.elements[i].checked = true ;
+			$('td.main-icon').addClass('checked')
+			isSelected = true;
+			document.objectItems.selectButton.value = "Deselect All";
+			return isSelected;
+	}
+	else {
+		for (i = 0; i < document.objectItems.length; i++)
+			document.objectItems.elements[i].checked = false ;
+			$('td.main-icon').removeClass('checked')
+			isSelected = false;
+			document.objectItems.selectButton.value = "Select All";
+			return isSelected;
+	}
+}
+
+//-->
+</script>
+
+<!-- ZMS CUSTOM: Add object widget -->
+
+<dtml-if filtered_meta_types>
+	<div class="zope_actions pull-right">
+		<form class="form-inline" action="<dtml-var "REQUEST.URL1" html_quote>/" method="get">
+			<dtml-if "_.len(filtered_meta_types) > 1">
+				<div class="form-group">
+					<select class="form-control" name=":action"
+						onChange="location.href='<dtml-var "REQUEST.URL1" html_quote>/'+this.options[this.selectedIndex].value">
+						<option value="manage_workspace" disabled="disabled">Select type to add...</option>
+						<dtml-in filtered_meta_types mapping sort=name>
+							<dtml-if action>
+								<option value="&dtml.html_quote-action;"<dtml-if "name=='ZMS'"> selected="selected"</dtml-if>>&dtml-name;</option>
+							</dtml-if>
+						</dtml-in>
+					</select>
+					<input class="form-control" type="submit" name="submit" value=" Add " />
+				</div>
+			<dtml-else>
+				<dtml-in filtered_meta_types mapping sort=name>
+					<input type="hidden" name=":method" value="&dtml.html_quote-action;" />
+					<input class="form-element" type="submit" name="submit" value="Add &dtml-name;" />
+				</dtml-in>
+			</dtml-if>
+		</form>
+	</div>
+</dtml-if>
+<!-- /ZMS CUSTOM: Add object widget -->
+
+<dtml-if objectItems>
+	<form class="row form_main" action="<dtml-var "REQUEST.URL1" html_quote>/" name="objectItems" method="post">
+		<dtml-let hasOrderSupport="_.getattr(this().aq_explicit, 'has_order_support', 0)">
+			<dtml-unless skey>
+				<dtml-if hasOrderSupport>
+					<dtml-call expr="REQUEST.set('skey', getDefaultSorting()[0])">
+					<dtml-call expr="REQUEST.set('rkey', getDefaultSorting()[1])">
+				<dtml-else>
+					<dtml-call expr="REQUEST.set('skey', 'id')">
+				</dtml-if>
+			</dtml-unless>
+			<dtml-unless rkey><dtml-call expr="REQUEST.set('rkey', '')"></dtml-unless>
+
+			<table class="table main-table table-striped">
+				<tr class="list-header">
+					<td width="15">&nbsp;</td>
+					<td width="2%" title="Sort Objects by Type" 
+						style="text-align:center;overflow: hidden;white-space: nowrap;"
+						><a href="./manage_main?skey=meta_type<dtml-if
+							"skey == 'meta_type' and not rkey">&amp;rkey=meta_type</dtml-if>"
+							><dtml-if "skey == 'meta_type' or rkey == 'meta_type'"
+							><i class="icon icon-sort-by-attributes meta_type sortkey">&nbsp;
+						</i><dtml-else><i class="icon icon-sort-by-attributes">&nbsp;</i></dtml-if></a>
+					</td>
+					<td class="main-title" width="*" title="Sort Objects by Name"><a
+						href="./manage_main?skey=id<dtml-if
+						"skey == 'id' and not rkey">&amp;rkey=id</dtml-if>"
+						><dtml-if "skey == 'id' or rkey == 'id'"
+						><strong class="sortkey">Name</strong><dtml-else>Name</dtml-if></a>
+						&nbsp;&nbsp;<input title="Filter Name by Input String" 
+							style="padding:0 1em;background:none;border:none;box-shadow:none;"
+							id="tablefilter" type="text" name="tablefilter"></input>
+					</td>
+					<td class="main-size" width="15%" title="Sort Objects by Size"><a
+						href="./manage_main?skey=get_size<dtml-if
+						"skey == 'get_size' and not rkey">&amp;rkey=get_size</dtml-if>"
+						><dtml-if "skey == 'get_size' or rkey == 'get_size'"
+						><strong class="sortkey">Size</strong><dtml-else>Size</dtml-if></a>
+					</td>
+					<td class="main-time" width="19%" title="Sort Objects by Modification Time"><a
+						href="./manage_main?skey=bobobase_modification_time<dtml-if
+						"skey == 'bobobase_modification_time' and not rkey"
+						>&amp;rkey=bobobase_modification_time</dtml-if>"
+						><dtml-if "skey == 'bobobase_modification_time' or rkey == 'bobobase_modification_time'"
+						><strong class="sortkey">Last Modified</strong><dtml-else>Last Modified</dtml-if></a>
+					</td>
+					<dtml-if hasOrderSupport>
+						<td class="main-position" width="10%" title="Sort Objects by Position"><a
+							href="./manage_main?skey=position"
+							><dtml-if "skey == 'position'"
+							><strong class="sortkey">Position</strong><dtml-else>Position</dtml-if></a>
+						</td>
+					</dtml-if>
+				</tr>
+
+				<dtml-in objectItems sort_expr="skey+'/cmp/asc'" reverse_expr="rkey">
+					<dtml-if sequence-odd
+						><tr class="list-item row-normal &dtml-meta_type;"
+					><dtml-else
+						><tr class="list-item row-hilite &dtml-meta_type;"
+					></dtml-if>
+						<td>&nbsp;</td>
+						<td class="main-icon &dtml-meta_type;" title="Click for Item Selection"
+							><input type="checkbox" name="ids:list" value="&dtml-sequence-key;"
+							/><span title="&dtml-meta_type;"><dtml-if om_icons
+							><dtml-in om_icons mapping
+								><img src="&dtml-BASEPATH1;/&dtml.url_quote-path;"
+									alt="&dtml.missing-alt;"
+									title="&dtml.missing-title;" border="0" width="16" height="16"
+								/></dtml-in
+							><dtml-else
+								><dtml-if icon
+									><img src="&dtml-BASEPATH1;/&dtml-icon;"
+										alt="&dtml-meta_type;"
+										title="&dtml-meta_type;" border="0"
+								/><dtml-else
+									>&nbsp;
+								</dtml-if
+							></span></dtml-if>
+						</td>
+
+						<td class="main-title">
+							<div class="list-item">
+								<a title="&dtml-meta_type;"
+									href="&dtml.url_quote-sequence-key;/manage_workspace"
+									>&dtml-sequence-key; <dtml-if title>(&dtml-title;)</dtml-if>
+								</a>
+								<dtml-try>
+									<dtml-if "wl_isLocked()==1">
+										<img src="/p_/davlocked" />
+									</dtml-if>
+								<dtml-except>
+								</dtml-try>
+							</div>
+						</td>
+
+						<dtml-with sequence-key>
+							<td class="main-size">
+								<dtml-try>
+									<dtml-if get_size>
+										<dtml-let ob_size=get_size>
+											<dtml-if "ob_size < 1024">
+												1 Kb
+											<dtml-elif "ob_size > 1048576">
+												<dtml-var "ob_size / 1048576.0" fmt="%0.02f"> Mb
+											<dtml-else>
+												<dtml-var "_.int(ob_size / 1024)"> Kb
+											</dtml-if>
+										</dtml-let>
+									<dtml-else>
+										&nbsp;
+									</dtml-if>
+								<dtml-except>
+									&nbsp;
+								</dtml-try>
+							</td>
+
+							<td class="main-time">
+								<dtml-var bobobase_modification_time fmt="%Y-%m-%d %H:%M">
+							</td>
+						</dtml-with>
+
+						<dtml-if hasOrderSupport>
+							<td class="main-position">
+								<dtml-if "skey == 'position'">
+									<dtml-var sequence-number>
+								<dtml-else>
+									...
+								</dtml-if>
+							</td>
+						</dtml-if>
+					</tr>
+				</dtml-in>
+			</table>
+
+
+			<div class="controls form-inline form-group">
+				<dtml-unless dontAllowCopyAndPaste>
+					<input class="form-control" type="submit" name="manage_renameForm:method" value="Rename" />
+					<dtml-if "_.SecurityCheckPermission('Delete objects',this())">
+						<input class="form-control" type="submit" name="manage_cutObjects:method" value="Cut" />
+					</dtml-if>
+					<input class="form-control" type="submit" name="manage_copyObjects:method" value="Copy" />
+					<dtml-if cb_dataValid>
+						<input class="form-control" type="submit" name="manage_pasteObjects:method" value="Paste" />
+					</dtml-if>
+				</dtml-unless>
+				<dtml-if "_.SecurityCheckPermission('Delete objects',this())">
+					<input class="form-control" type="submit" name="manage_delObjects:method" value="Delete" />
+				</dtml-if>
+				<dtml-if "_.SecurityCheckPermission('Import/Export objects', this())">
+					<input class="form-control" type="submit" name="manage_importExportForm:method" value="Import/Export" />
+				</dtml-if>
+				<script type="text/javascript">
+					<!--
+					if (document.forms[0]) {
+					  document.write('<input class="form-control" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
+					  }
+					//-->
+				</script>
+			</div>
+
+				<dtml-if "hasOrderSupport and _.SecurityCheckPermission( 'Manage properties', this() )">
+					<tr>
+						<td align="left" valign="top" width="16"></td>
+						<td align="left" valign="top">
+							<div class="form-element">
+								<dtml-if expr="skey == 'position' and _.len(objectItems) > 1">
+									<input class="form-element" type="submit" name="manage_move_objects_up:method" value="Up" />
+									/
+									<input class="form-control" type="submit" name="manage_move_objects_down:method" value="Down" />
+									by
+									<select name="delta:int">
+										<dtml-in "_.range(1,_.min(5,_.len(objectIds())))">
+											<option>&dtml-sequence-item;</option>
+										</dtml-in>
+										<dtml-in "_.range(5,_.len(objectIds()),5)">
+											<option>&dtml-sequence-item;</option>
+										</dtml-in>
+									</select>
+									<input class="form-element" type="submit" name="manage_move_objects_to_top:method" value="Top" />
+									<input class="form-element" type="submit" name="manage_move_objects_to_bottom:method" value="Bottom" />
+								</dtml-if>
+								<dtml-unless expr="(skey, rkey and 1 or 0) == getDefaultSorting()">
+									<input type="hidden" name="key" value="&dtml-skey;" />
+									<input type="hidden" name="reverse" value="&dtml-rkey;" />
+									<input class="form-element" type="submit" name="manage_set_default_sorting:method" value="Set View as Default" />
+								</dtml-unless>
+							</div>
+						</td>
+					</tr>
+				</dtml-if>
+			</table>
+		</dtml-let>
+</form>
+
+	<dtml-else>
+
+	<form class="form_main" action="<dtml-var "REQUEST.URL1" html_quote>/" name="objectItems" method="post">
+		<p>There are currently no items in <em>&dtml-title_or_id;</p
+		<div class="controls form-inline form-group">
+			<dtml-unless dontAllowCopyAndPaste>
+				<dtml-if cb_dataValid>
+					<input class="form-element" type="submit" name="manage_pasteObjects:method" value="Paste" />
+				</dtml-if>
+			</dtml-unless>
+			<dtml-if "_.SecurityCheckPermission('Import/Export objects', this())">
+				<input class="form-element" type="submit" name="manage_importExportForm:method" value="Import/Export" />
+			</dtml-if>
+		</div>
+	</form>
+
+	</dtml-if>
+
+
+
+<dtml-if update_menu>
+<script type="text/javascript">
+<!--
+	window.parent.update_menu();
+//-->
+</script>
+</dtml-if>
+
+
+<script type="text/javascript">
+<!--
+	$(function() {
+		$('td.main-icon span').on('click', function(){
+			$(this).parent().toggleClass('checked');
+			$(this).parent().children('input').click();
+		});
+
+		$('td.main-icon span').tooltip({'placement':'top'});
+
+		$('#tablefilter').keyup( function (e) {
+			var tablefilter = $(this).val();
+			console.log('You pressed ' + tablefilter);
+			$('table').find("tr.list-item").hide();
+			$('table').find("tr.list-item td.main-title a:contains(" + tablefilter+ ")").closest('tr.list-item').show();
+		});
+		$(document).keypress(function() {$('#tablefilter').focus()})
+	});
+//-->
+</script>
+<dtml-var manage_page_footer>

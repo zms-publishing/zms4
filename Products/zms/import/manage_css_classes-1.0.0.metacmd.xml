@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[from Products.PythonScripts.standard import html_quote
+
+# README ++++++++++++++++++++++++++++++++++++++
+# This ZMS action adds a list of strings to the ZMS multidict attribute named
+# internal_dict. The list values are rendered into the body.zmi element as
+# additional CSS classes. This allows special GUI modifications of any
+# individual ZMS object # correspondting to the selected class values.
+# The example code uses the list of ZMS roles for specific class names.
+# You can change the code to user # an other name list fitting to your needs.
+# Hint: You can use the function get_css_classes() to add the css classes to
+# the third view templates (standard_html)
+# +++++++++++++++++++++++++++++++++++++++++++++
+
+def get_css_classes(ob):
+	internal_dict = ob.attr('internal_dict')
+	css_classes = internal_dict.get('css_classes',[])
+	return (css_classes)
+
+def set_css_classes(ob,css_classes):
+	internal_dict = ob.attr('internal_dict')
+	internal_dict['css_classes'] = css_classes
+	ob.setObjStateModified(ob.REQUEST)
+	ob.setObjProperty('internal_dict',internal_dict)
+	ob.onChangeObj(ob.REQUEST)
+	# Workflow: Auto-Commit
+	ob.commitObj(ob.REQUEST)
+	# return ob.attr('internal_dict')['css_classes']
+	return True
+
+
+def manage_css_classes(self):
+	request = self.REQUEST
+	html = ''
+	html += '<!DOCTYPE html>'
+	html += '<html lang="en">'
+	html += self.zmi_html_head(self,request)
+	html += '<body class="%s">'%(' '.join(['zmi',request['lang'],'transition',self.meta_id]))
+	html += self.zmi_body_header(self,request,options=[{'action':'#','label':'CSS Classes'}])
+	html += '<div id="zmi-tab">'
+	html += self.zmi_breadcrumbs(self,request)
+	html += '<form class="form-horizontal" method="post" enctype="multipart/form-data">'
+	html += '<input type="hidden" name="form_id" value="manage_css_classes"/>'
+	html += '<input type="hidden" name="lang" value="%s"/>'%request['lang']
+	html += '<legend>Add Special CSS Classes:</legend>'
+
+	# --- Insert css_classes.
+	# ---------------------------------
+	if request.form.get('btn')==self.getZMILangStr('BTN_INSERT'):
+		message = []
+		css_classes = request.get('css_classes',[])
+		if css_classes:
+			set_css_classes(self,css_classes)
+			message.append('CSS classes added: %s'%(css_classes))
+		else:
+			set_css_classes(self,[])
+			message.append('No CSS classes added, existing CSS classes removed')
+		request.response.redirect(self.url_append_params('%s/manage_main'%self.absolute_url(),{'lang':request['lang'],'manage_tabs_message':'<br/>'.join(message)}))
+
+	# --- Display initial insert form.
+	# ---------------------------------
+	else:
+
+		# GENERATE CSS LIST (Example Code)
+		css_classes = self.getRootElement().getSecurityRoles().keys()
+		css_classes.extend(['ZMSAdministrator','ZMSEditor','ZMSAuthor','ZMSSubscriber','ZMSUserAdministrator'])
+		css_classes = [[str(r)+'_special',str(r)+'_special'] for x in css_classes]
+		# /GENERATE CSS LIST
+
+		html += '<div class="form-group row">'
+		html += '<div class="col-sm-12">'
+		html += self.zmi_input_multiselect(self,name='css_classes',value=get_css_classes(self),lang_str='CSS Classes',options=css_classes)
+		html += '</div>'
+		html += '</div><!-- .form-group -->'
+		html += '<div class="form-row">'
+		html += '<div class="controls save">'
+		html += '<button type="submit" name="btn" class="btn btn-primary" value="%s">%s</button> '%(self.getZMILangStr('BTN_INSERT'),self.getZMILangStr('BTN_INSERT'))
+		html += '<button type="submit" name="btn" class="btn btn-secondary" value="%s">%s</button> '%(self.getZMILangStr('BTN_CANCEL'),self.getZMILangStr('BTN_CANCEL'))
+		html += '</div><!-- .controls.save -->'
+		html += '</div><!-- .form-group -->'
+
+	# ---------------------------------
+
+	html += '</form><!-- .form-horizontal -->'
+	html += '</div><!-- #zmi-tab -->'
+	html += self.zmi_body_footer(self,request)
+	html += '</body>'
+	html += '</html>'
+
+	return html]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[icon-css3 text-primary]]></item>
+      <item key="id"><![CDATA[manage_css_classes]]></item>
+      <item key="meta_type"><![CDATA[External Method]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSTextarea]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[CSS Specials]]></item>
+      <item key="revision"><![CDATA[1.0.0]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[ZMSAdministrator]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[Add special CSS classes]]></item>
+    </dictionary>
+  </item>
+</list>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+  <item key="custom"/>
+  <item key="data"><![CDATA[<dtml-comment>
+################################################################################
+# Execute
+################################################################################
+</dtml-comment>
+<dtml-if process>
+
+ <!-- # Init counter: -->
+ <dtml-unless count>
+  <dtml-call expr="REQUEST.set('count',0)">
+ </dtml-unless>
+
+ <!-- # Search and replace: -->
+ <dtml-in "REQUEST.form.get('ids',[])">
+  <dtml-let key=sequence-item>
+   <dtml-if "key in getObjAttrs().keys()">
+    <dtml-call "setObjStateModified(REQUEST)">
+    <dtml-call "setReqProperty(key,REQUEST)">
+    <dtml-call "onChangeObj(REQUEST)">
+    <dtml-call "REQUEST.set('count',REQUEST['count']+1)">
+   </dtml-if>
+  </dtml-let>
+ </dtml-in>
+
+ <!-- # Recurse child-objects: -->
+ <dtml-in "getChildNodes(REQUEST)">
+  <dtml-call manage_pushMetadata>
+ </dtml-in>
+
+ <!-- # Return with message: -->
+ <dtml-call expr="REQUEST.set('message','Pushed metadata to %i objects.'%REQUEST['count'])">
+ <dtml-return message>
+
+<dtml-comment>
+################################################################################
+# Process execution
+################################################################################
+</dtml-comment>
+<dtml-elif "REQUEST.get('btn','') == 'Push'">
+
+ <dtml-var manage_page_header>
+ </head>
+ <dtml-var "manage_tabs(_,_,my_manage_options=[{'label':'Push metadata...','action':''}])">
+
+  <div class="form-text">
+    <dtml-var "manage_pushMetadata(_,_,process=1)"> (<dtml-var "','.join(REQUEST.get('ids',[]))">)<br/><br/>
+    [<a href="<dtml-var absolute_url>/manage_main?lang=<dtml-var lang>"><dtml-var "getZMILangStr('BACK')">...</a>]
+  </div>
+
+ <dtml-var manage_page_footer>
+
+<dtml-comment>
+################################################################################
+# Process cancellation
+################################################################################
+</dtml-comment>
+<dtml-elif "REQUEST.get('btn','') == getZMILangStr('BTN_CANCEL')">
+
+ <dtml-call "RESPONSE.redirect('%s/manage_main?lang=%s'%(absolute_url(),lang))">
+
+<dtml-comment>
+################################################################################
+# Form
+################################################################################
+</dtml-comment>
+<dtml-else>
+
+ <dtml-var manage_page_header>
+ </head>
+ <dtml-var "manage_tabs(_,_,my_manage_options=[{'label':'Push metadata...','action':''}])">
+
+  <div class="form-text">You can push meta-attributes to the descendant objects.</div>
+  <form name="form0">
+   <input type="hidden" name="preview" value="preview">
+   <input type="hidden" name="lang" value="<dtml-var lang>">
+   <table cellspacing="1" cellpadding="1" border="0" width="100%">
+   <colgroup>
+    <col width="20"/>
+    <col width="20%"/>
+    <col width="80%"/>
+   </colgroup>
+
+  <dtml-in "metaobj_manager.getMetadictAttrs()"
+   ><dtml-let metadictAttrId=sequence-item metadictAttr="metaobj_manager.getMetadictAttr(metadictAttrId)"
+    ><dtml-if metadictAttr
+    ><dtml-if "metadictAttrId in getObjAttrs().keys() and metadictAttrId not in ['title','titlealt'] and metadictAttr['type'] not in ['image','file']"
+     ><tr valign="top"
+      ><td><input class="form-element" type="checkbox" name="ids:list" value="<dtml-var metadictAttrId>"/></td
+      ><td class="form-label"><dtml-var "getZMILangStr(metadictAttr['name'])"></td
+      ><td class="form-element"><dtml-var "getObjInput(metadictAttrId,REQUEST)"></td
+     ></tr
+    ></dtml-if
+    ></dtml-if
+   ></dtml-let
+  ></dtml-in>
+
+   <tr>
+    <td></td>
+    <td></td>
+    <td>
+     <input class="ui-button ui-state-default ui-corner-all" type="submit" name="btn" value="Push">
+     <input class="ui-button ui-state-default ui-corner-all" type="submit" name="btn" value="<dtml-var "getZMILangStr('BTN_CANCEL')">">
+    </td>
+   </tr>
+   </table>
+  </form>
+
+ <dtml-var manage_page_footer>
+
+<dtml-comment>
+################################################################################
+</dtml-comment>
+
+</dtml-if>]]>
+  </item>
+  <item key="description"/>
+  <item key="execution" type="int">0</item>
+  <item key="id"><![CDATA[manage_pushMetadata]]></item>
+  <item key="meta_type"><![CDATA[DTML Method]]></item>
+  <item key="meta_types" type="list">
+    <list>
+      <item><![CDATA[ZMSDocument]]></item>
+      <item><![CDATA[ZMSFolder]]></item>
+      <item><![CDATA[ZMS]]></item>
+    </list>
+  </item>
+  <item key="name"><![CDATA[Push metadata...]]></item>
+  <item key="roles" type="list">
+    <list>
+      <item><![CDATA[ZMSAdministrator]]></item>
+      <item><![CDATA[ZMSAuthor]]></item>
+      <item><![CDATA[ZMSEditor]]></item>
+    </list>
+  </item>
+</dictionary>

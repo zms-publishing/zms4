@@ -1,0 +1,3 @@
+<title tal:condition="python:request.get('op','') in ['search']" tal:content="python:'%s - [%s]'%(here.getLangStr('SEARCH_HEADER',request['lang']),here.getTitle(request))">the title</title>
+<title tal:condition="python:request.get('op','') in ['sitemap']" tal:content="python:'Sitemap - [%s]'%here.getTitle(request)">the title</title>
+<title tal:condition="python:request.get('op','') in ['search','sitemap']" tal:content="python:here.getTitle(request)">the title</title>

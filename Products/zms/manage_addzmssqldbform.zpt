@@ -1,0 +1,51 @@
+<tal:block tal:define="global
+		dummy0 python:request.set('ZMS_INSERT','ZMSSqlDb');
+		dummy0 python:request.set('fmName',request.get('fmName','form0'));
+		dummy0 python:here.zmi_page_request(here,request)">
+	<form class="form-horizontal form-insert" id="form0" name="form0" tal:attributes="action python:'%s/manage_addZMSSqlDb'%request['URL1'][len(request['BASE0']):]" method="post" enctype="multipart/form-data">
+		<input type="hidden" id="lang" name="lang" tal:attributes="value python:request['lang']" />
+		<input type="hidden" id="preview" name="preview" tal:attributes="value python:request['preview']" />
+		<input type="hidden" name="form_id" tal:attributes="value python:DateTime().timeTime()" />
+		<input type="hidden" name="id_prefix" tal:attributes="value python:request['id_prefix']" />
+		<input type="hidden" name="_sort_id:int" tal:attributes="value python:request['_sort_id']" />
+		<input type="hidden" name="ZMS_INSERT" tal:attributes="value python:request['ZMS_INSERT']" />
+		<div class="form-group row"  id="tr_connection_id">
+			<label for="connection_id" class="col-lg-2 control-label mandatory">
+				<span>Connection ID</span>
+			</label>
+			<div class="col-lg-10">
+				<div class="btn-group">
+					<select class="form-control" id="connection_id" name="connection_id">
+						<option value="" disabled="disabled" tal:content="python:here.getLangStr('ACTION_SELECT')%'Connection ID'"></option>
+						<tal:block tal:repeat="SQLConnectionID python:here.SQLConnectionIDs()">
+							<option tal:attributes="value python:SQLConnectionID[1]">
+								<i class="fas fa-database"></i>
+								<tal:block tal:content="python:SQLConnectionID[1]">SQLConnectionID</tal:block>
+							</option>
+						</tal:block>
+					</select>
+				</div><!-- .btn-group -->
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row"  id="tr_charset">
+			<label for="charset" class="col-lg-2 control-label mandatory">
+				<span>Charset</span>
+			</label>
+			<div class="col-lg-10">
+				<select class="form-control" name="charset">
+					<tal:block tal:repeat="charset python:here.enumManager.getValues('charset')">
+						<option tal:attributes="value python:charset[0]; selected python:['','selected'][int(charset[0]=='utf-8')]" tal:content="python:charset[1]">the charset</option>
+					</tal:block>
+				</select>
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row"  id="tr_model">
+			<label for="model" class="col-lg-2 control-label mandatory">
+				<span>Model</span>
+			</label>
+			<div class="col-lg-10">
+				<textarea class="form-control" name="model" tal:content="python:here.toXmlString([])">the model</textarea>
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+	</form><!-- .form-horizontal -->
+</tal:block>

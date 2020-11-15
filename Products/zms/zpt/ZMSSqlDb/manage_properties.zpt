@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='properties')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<script>
+</script>
+
+<form class="form-horizontal" name="form0" action="manage_changeProperties" method="post" onsubmit="return onImportFormSubmit(this)" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+	<div class="card">
+	<div class="card-header btn-collapse">
+		<a class="btn card-toggle pull-left" data-toggle="collapse" href="#TAB_PROPERTIES">
+			<i class="fas fa-caret-down"></i> <tal:block tal:content="python:here.getZMILangStr('TAB_PROPERTIES')">Properties</tal:block>
+		</a>
+	</div><!-- .card-header -->
+	<div id="TAB_PROPERTIES" class="collapse container show">
+		<div class="card-body">
+		<div class="form-group row">
+			<label class="col-sm-3 col-md-2 control-label mandatory" for="connection_id"><span>Connection Id</span></label>
+			<div class="col-sm-9 col-md-10">
+				<div class="btn-group">
+					<input type="hidden" id="connection_id" name="connection_id" tal:attributes="value python:getattr(here,'connection_id','')"/>
+					<button type="button" class="btn btn-secondary" tal:attributes="onclick python:'var url=$(\'span\',this).attr(\'data-url\')\073if(typeof url!=\'undefined\')window.open(url+\'/manage_main\')'">
+						<tal:block tal:repeat="SQLConnectionID python:[x for x in here.SQLConnectionIDs() if getattr(here,'connection_id','')==x[1]]">
+							<span tal:attributes="data-url python:getattr(here,SQLConnectionID[1]).absolute_url()">
+								<i class="fas fa-database"></i>
+								<tal:block tal:content="python:SQLConnectionID[1]">SQLConnectionID</tal:block>
+							</span>
+						</tal:block>
+					</button>
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<div class="dropdown-menu" role="menu">
+						<tal:block tal:repeat="SQLConnectionID python:here.SQLConnectionIDs()">
+								<a class="dropdown-item" href="javascript:;" tal:attributes="onclick python:'javascript:$(\'#connection_id\').val(\'%s\')\073$(\'button:first\',$(this).parents(\'.btn-group\')).html($(this).html())'%SQLConnectionID[1]">
+									<span tal:attributes="data-url python:getattr(here,SQLConnectionID[1]).absolute_url()">
+										<i class="fas fa-database"></i>
+										<tal:block tal:content="python:SQLConnectionID[1]">SQLConnectionID</tal:block>
+									</span>
+								</a>
+						</tal:block>
+					</div>
+				</div><!-- .btn-group -->
+			</div>
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label class="col-sm-3 col-md-2 control-label mandatory" for="charset"><span>Charset</span></label>
+			<div class="col-sm-9 col-md-10">
+				<tal:block tal:content="structure python:here.getSelect(fmName='form0',elName='charset',value=getattr(here,'charset','utf-8'),inputtype='select',lang_str='Charset',required=1,optpl=here.enumManager.getValues('charset'))">select</tal:block>
+			</div>
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label class="col-sm-3 col-md-2 control-label mandatory" for="model"><span>Model</span></label>
+			<div class="col-sm-9 col-md-10" tal:define="ob python:here.getModelContainer()" tal:on-error="python:standard.writeError(here,'can\'t get ACE Editor')">
+				<!-- ACE Editor -->
+				<tal:block tal:content="structure python:here.zmi_ace_editor(here,request,name='model',ob=here.getModelContainer())">ACE Editor</tal:block>
+				<!-- /ACE Editor -->
+			</div>
+		</div><!-- .form-group -->
+		<div class="form-row">
+			<div class="controls save">
+				<button type="submit" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+			</div>
+		</div>
+		</div><!-- .card-body -->
+	</div><!-- .collapse -->
+	</div><!-- .card -->
+</form>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

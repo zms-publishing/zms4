@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='filter config')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[{'label':'TAB_FILTER','action':'manage_main'}])">zmi_breadcrumbs</tal:block>
+
+<style>
+	.filterProcess,
+	.filterDelimiter,
+	.filterProcessFile {
+		background-color:#D0FFD0;
+		border:1px navy solid;
+		border-radius:4px;
+		margin:.1em;
+		max-width:30vw;
+		width:20rem;
+		text-align:center;
+		padding:.3rem;
+		overflow:hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.filterDelimiter {
+		background-color:#D0D0FF;
+	}
+	.filterProcessFile {
+		text-align:left;
+		background-color:white;
+		border:1px #CCC solid;
+		padding: .3rem .75rem;
+		width:auto;
+	}
+	.filterProcesses .layoutTable {
+		margin-bottom:1rem;
+	}
+	.layoutTable tr {
+		background: transparent !important;
+	}
+	.layoutTable th, .layoutTable td {
+		padding:0;
+		vertical-align:top;
+		border:0 !important;
+		text-align:center;
+	}
+	.layoutTable td {
+		padding:0 !important;
+	}
+	.layoutTable td hr {
+		margin:1rem 0;
+		width:5rem;
+		border-top:1px solid #888;
+		padding:0;
+	}
+	.zmi .modal .modal-dialog {
+		min-width:600px;
+		width:90vw !important;
+		max-width: 90vw !important;
+	}
+	@media (min-width: 1200px) {
+		.zmi div:not(#zmiModalupdateEntity) .modal-dialog {
+			max-width: 90vw !important;
+		}
+	}
+	.filterProcesses i.fa-long-arrow-alt-down {
+		color: #0088cc80;
+	}
+
+</style>
+
+<script>
+
+/**
+ * Export xml.
+ */
+function zmiExportBtnClick(sender) {
+	var fm = $(sender).parents("form")[0];
+	var href = fm.action+'?lang='+getZMILang()+'&btn=BTN_EXPORT';
+	$('input[name="ids:list"]:checked').each(function(){
+			href += '&'+$(this).attr("name")+'='+$(this).val();
+		});
+	window.open(href);
+	return false;
+}
+
+/**
+ * Delete object.
+ */
+function zmiDeleteObjBtnClick(sender,d) {
+	if (confirm(getZMILangStr('MSG_CONFIRM_DELOBJ'))) {
+		zmiFormSubmit(sender,d);
+	}
+}
+
+/**
+ * Submit form with given parameters.
+ */
+function zmiFormSubmit(sender,d) {
+	var $fm = $(sender).closest("form");
+	var html = '';
+	for (var i in d) {
+		$('input[name="' + i + '"]',$fm).remove();
+		html += '<input type="hidden" name="' + i + '" value="' + d[i] +'"/>';
+	}
+	$fm
+		.append(html)
+		.submit();
+}
+
+$(function(){
+		zmiModal('#updateFilter',{title:getZMILangStr('TAB_PROPERTIES')+': '+getZMILangStr('ATTR_FILTER'),minWidth:800,remove:true});
+		zmiModal('#updateProcess',{title:getZMILangStr('TAB_PROPERTIES')+': '+getZMILangStr('ATTR_PROCESSES'),minWidth:800,remove:true});
+	});
+
+</script>
+
+<tal:block tal:define="global
+		action python:'manage_changeFilter';
+		filterIds python:here.getFilterIds();
+		filters python:[here.getFilter(x) for x in filterIds];
+		processIds python:here.getProcessIds();
+		processes python:[here.getProcess(x) for x in processIds];
+		filterFormats python:[ ['import', 'Import' ], ['export', 'Export' ], ['XML', 'XML-Export' ], ['XHTML', 'XHTML-Export' ]]+ [[],['myXML',standard.operator_getattr(here,'getObjToXml_DocElmnt',here).title_or_id()]][int(standard.operator_getattr(here,'getObjToXml_DocElmnt',None) is not None)]">
+
+<div class="d-none">
+	<div id="importConf" class="inner">
+		<form class="form-horizontal" name="importConfForm" tal:attributes="action action" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang">
+			<div class="form-group row">
+				<label for="file" class="col-md-3 control-label">
+					<i class="fas fa-folder far fa-folder"></i>
+					<span tal:content="python:here.getZMILangStr('ATTR_FILE')">File</span>
+				</label>
+				<div class="col-md-9"><input class="btn btn-file" name="file" type="file" /></div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label for="or" class="col-md-3 control-label"><span tal:content="python:here.getZMILangStr('OR')">Or</span></label>
+				<div class="col-md-9">
+					<select class="form-control" id="init" name="init" onfocus="zmiExpandConfFiles(this,'.filter.')" onmouseover="zmiExpandConfFiles(this,'.filter.')">
+						<option value="" tal:content="python:'--- %s ---'%here.getZMILangStr('BTN_INIT')">--- Init... ---</option>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group container controls">
+				<button type="submit" name="btn" class="btn btn-primary" value="BTN_IMPORT" tal:content="python:here.getZMILangStr('BTN_IMPORT')">Import</button>
+			</div><!-- .form-group -->
+		</form>
+	</div><!-- .inner -->
+</div><!-- #importConf -->
+
+<div class="d-none" tal:condition="python:request.get('id') in filterIds">
+	<div id="updateFilter" class="inner" tal:define="global filter python:here.getFilter(request['id'])">
+		<form class="form-horizontal" action="manage_changeFilter" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+			<input type="hidden" name="id" tal:attributes="value request/id"/>
+				<div class="form-group row inpId">
+					<label for="inpId" class="col-md-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+					<div class="col-md-3"><input class="form-control" type="text" id="inpId" name="inpId" tal:attributes="value filter/id"/></div>
+					<label for="inpName" class="col-md-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_DISPLAY')">Display</span></label>
+					<div class="col-md-3"><input class="form-control" type="text" id="inpName" name="inpName" tal:attributes="value filter/name"/></div>
+					<div class="col-md-2">
+						<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+					</div><!-- .controls.save -->
+				</div><!-- .form-row -->
+				<div class="form-group row inpFormat">
+					<label for="inpFormat" class="col-md-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_FORMAT')">Format</span></label>
+					<div class="col-md-3">
+						<select class="form-control" id="inpFormat" name="inpFormat">
+						<tal:block tal:repeat="format filterFormats">
+							<option tal:attributes="value python:format[0]; selected python:['','selected'][int(format[0]==filter.get('format'))]" tal:content="python:format[1]">the format</option>
+						</tal:block>
+						</select>
+					</div>
+					<label for="inpContentType" class="col-md-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</span></label>
+					<div class="col-md-3">
+						<select class="form-control" id="inpContentType" name="inpContentType">
+							<tal:block tal:repeat="content_type python:here.enumManager.getValues('content_type')">
+								<option tal:attributes="value python:content_type[0]; selected python:['','selected'][int(content_type[0]==filter.get('content_type'))]" tal:content="python:content_type[1]">the content-type</option>
+							</tal:block>
+						</select>
+					</div>
+				</div><!-- .form-group -->
+				<div class="form-group row inpRoles">
+					<label for="inpDescription" class="col-md-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_ROLES')">Roles</span></label>
+					<div class="col-md-3">
+						<select class="form-control" id="inpRoles" name="inpRoles:list" multiple="multiple">
+							<tal:block tal:repeat="role python:here.userdefined_roles()"><tal:block tal:define="global lang_key python:'ROLE_%s'%role.upper(); lang_str python:here.getZMILangStr(lang_key)">
+								<option tal:attributes="value role; selected python:['','selected'][int(role in filter.get('roles',[]))]" tal:content="python:[lang_str,role][int(lang_key==lang_str)]">the role</option>
+							</tal:block></tal:block>
+						</select>
+					</div>
+					<label for="inpDescription" class="col-md-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_OBJECTS')">Objects</span></label>
+					<div class="col-md-3">
+						<select class="form-control" id="inpMetaTypes" name="inpMetaTypes:list" multiple="multiple">
+							<tal:block tal:repeat="meta_id python:here.getMetaobjIds(sort=True)">
+								<option tal:attributes="value meta_id; selected python:['','selected'][int(meta_id in filter.get('meta_types',[]))]" tal:content="python:here.display_type(request,meta_id)">the meta-type</option>
+							</tal:block>
+						</select>
+					</div>
+				</div><!-- .form-group -->
+				<div class="form-group row inpDescription">
+					<label for="inpDescription" class="col-md-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_DESCRIPTION')">Description</span></label>
+					<div class="col-md-10"><textarea class="form-control" name="inpDescription" tal:content="python:filter.get('description','')">the description</textarea></div>
+				</div><!-- .form-group -->
+			<legend tal:content="python:here.getZMILangStr('ATTR_PROCESS')">Process</legend>
+			<table class="table table-sm table-striped zmi-sortable">
+			<tbody tal:define="global filterProcesses python:here.getFilterProcesses(filter['id'])">
+			<tr tal:repeat="index python:range(len(filterProcesses))">
+			<tal:block tal:define="global filterProcess python:filterProcesses[index]; process python:here.getProcess(filterProcess['id'])">
+				<td class="meta-sort">
+					<div class="input-group">
+						<select class="zmi-sort" tal:attributes="onchange python:'zmiFormSubmit(this,{btn:\'move_to\',id:\'%s\',\'index:int\':%i,key:\'attr\',\'pos:int\':this.selectedIndex})'%(filter['id'],index)">
+							<option tal:repeat="i python:range(0,len(filterProcesses))" tal:attributes="selected python:['','selected'][int(i==index)]" tal:content="python:i+1">i+1</option>
+						</select>
+						<div class="input-group-append">
+							<a class="btn btn-secondary" href="javascript:;" 
+								tal:attributes="onclick python:'javascript:zmiDeleteObjBtnClick(this,{btn:\'BTN_DELETE\',id:\'%s\',\'index:int\':%i,key:\'attr\'})'%(filter['id'],index); title python:here.getZMILangStr('BTN_DELETE')"
+								><i class="fas fa-times"></i></a>
+							</div>
+							
+					</div>
+				</td>
+				<td>
+					<select class="form-control form-control" tal:attributes="name python:'newFilterProcessId_%i'%index">
+						<tal:block tal:repeat="process python:[here.getProcess(x) for x in processIds]">
+							<option tal:attributes="value process/id; selected python:['','selected'][int(filterProcess['id']==process['id'])]" tal:content="process/name">the process</option>
+						</tal:block>
+					</select>
+				</td>
+				<td>
+					<tal:block tal:condition="python:process.get('type','process') in ['DTML Method','External Method','Script (Python)'] or process.get('command','').find('{trans}')>=0">
+							<code style="display:inline-block;margin-right:1em;">{trans}</code>
+							<input style="display:inline-block;" class="btn btn-file" type="file" tal:attributes="name python:'newFilterProcessFile_%i'%index" />
+						<tal:block tal:condition="python:filterProcess.get('file_filename',None)">
+							<input type="checkbox" checked="checked"/>
+							<a tal:attributes="href filterProcess/file_href; title python:'%s (%s)'%(filterProcess.get('file_filename',None),filterProcess.get('file_content_type',None))" 
+								target="_blank" tal:content="filterProcess/file_filename">FILENAME
+							</a>
+						</tal:block>
+					</tal:block>
+				</td>
+			</tal:block>
+			</tr>
+			<tr class="row_insert">
+				<td class="text-right"><span class="btn"><i class="fas fa-plus"></i></span></td>
+				<td>
+					<select class="form-control form-control" tal:attributes="name python:'newFilterProcessId_%i'%len(filterProcesses)">
+						<option value="" tal:content="python:'--- %s ---'%here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr('ATTR_TYPE')">--- Select type ---</option>
+						<tal:block tal:repeat="process python:[here.getProcess(x) for x in processIds]">
+							<option tal:attributes="value process/id" tal:content="process/name">the process</option>
+						</tal:block>
+					</select>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			</tbody>
+			</table><!-- .table -->
+		</form>
+	</div><!-- .inner -->
+</div><!-- #updateFilter -->
+
+<div class="d-none" tal:condition="python:request.get('id') in processIds">
+	<div id="updateProcess" class="inner" tal:define="process python:here.getProcess(request['id'])">
+		<form class="form-horizontal" action="manage_changeProcess" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+			<input type="hidden" name="id" tal:attributes="value request/id"/>
+			<div class="form-group row inpId">
+				<label for="inpId" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="inpId" name="inpId" tal:attributes="value process/id"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row inpName">
+				<label for="inpName" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_DISPLAY')">Display</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="inpName" name="inpName" tal:attributes="value process/name"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row Type">
+				<label for="inpType" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</span></label>
+				<div class="col-md-9">
+					<input type="hidden" name="inpType" tal:attributes="value process/type"/>
+					<input class="form-control" type="text" tal:attributes="value process/type" disabled="disabled"/>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+				</div><!-- .controls.save -->
+			</div><!-- .form-row -->
+			<div class="form-group row inpCommand">
+				<div class="col-md-12"><textarea class="form-control zmi-code" id="inpCommand" name="inpCommand" tal:content="process/command" cols="80" rows="25">the command</textarea></div>
+			</div><!-- .form-group -->
+
+<tal:block tal:replace="nothing">
+			<!-- ACE Editor -->
+			<div class="form-group row inpCommand">
+				<div class="col-md-12">
+					<input type="hidden" name="el_method" tal:attributes="value process/id" />
+					<tal:block tal:content="structure python:here.zmi_ace_editor(here,request,name='inpCommand',ob=process,text=process.get('command',''))">ACE Editor</tal:block>
+				</div>
+			</div><!-- .form-group -->
+			<!-- /ACE Editor -->
+</tal:block>
+
+</form>
+	</div><!-- .inner -->
+</div><!-- #updateProcess -->
+
+<div class="d-none">
+	<div id="insertFilter" class="inner">
+		<form class="form-horizontal" name="insertObjForm" action="manage_changeFilter" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+			<input type="hidden" name="key" value="obj"/>
+			<div class="form-group row newId">
+				<label for="newId" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="newId" name="newId"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row newName">
+				<label for="newName" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_DISPLAY')">Display</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="newName" name="newName"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row inpFormat">
+				<label for="inpFormat" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_FORMAT')">Format</span></label>
+				<div class="col-md-9">
+					<select class="form-control" id="newFormat" name="newFormat">
+					<tal:block tal:repeat="format filterFormats">
+						<option tal:attributes="value python:format[0]" tal:content="python:format[1]">the format</option>
+					</tal:block>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group row inpContentType">
+				<label for="inpContentType" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</span></label>
+				<div class="col-md-9">
+					<select class="form-control" id="newContentType" name="newContentType">
+						<tal:block tal:repeat="content_type python:here.enumManager.getValues('content_type')">
+							<option tal:attributes="value python:content_type[0]" tal:content="python:content_type[1]">the content-type</option>
+						</tal:block>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_INSERT" tal:content="python:here.getZMILangStr('BTN_INSERT')">Insert</button>
+				</div>
+			</div><!-- .form-row -->
+		</form>
+	</div><!-- .inner -->
+</div><!-- #insertFilter -->
+
+<div class="d-none">
+	<div id="insertProcess" class="inner">
+		<form class="form-horizontal" name="insertObjForm" action="manage_changeProcess" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+			<div class="form-group row newId">
+				<label for="newId" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="newId" name="newId"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row newName">
+				<label for="newName" class="col-md-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_DISPLAY')">Display</span></label>
+				<div class="col-md-9"><input class="form-control" type="text" id="newName" name="newName"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row newType">
+				<label for="newType" class="col-md-3 control-label"><span tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</span></label>
+				<div class="col-md-9">
+					<select class="form-control" name="newType">
+						<tal:block tal:repeat="meta_type python:['External Method','process','Script (Python)']">
+							<option tal:attributes="value meta_type" tal:content="python:meta_type.capitalize()">the meta_type</option>
+						</tal:block>
+						<option value="" tal:content="python:here.getZMILangStr('ATTR_NONE')">the meta_type</option>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_INSERT" tal:content="python:here.getZMILangStr('BTN_INSERT')">Insert</button>
+				</div>
+			</div><!-- .form-row -->
+		</form>
+	</div><!-- .inner -->
+</div><!-- #insertProcess -->
+
+<form class="form-horizontal card" tal:attributes="action action" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend tal:content="python:here.getZMILangStr('ATTR_FILTER')">Filter</legend>
+	<p class="well well-small d-none" tal:content="structure python:here.getZMILangStr('MSG_FILTER')">well</p>
+	<table class="table table-sm table-striped table-bordered zmi-sortable mb-0">
+		<thead>
+			<tr>
+				<th class="meta-sort text-center">
+					<div class="btn-group">
+						<span class="btn btn-secondary" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))" onclick="zmiToggleSelectionButtonClick(this)"><i class="fas fa-check-square"></i></span>
+					</div>
+				</th>
+				<th>
+					<div class="btn-group">
+						<span class="btn btn-primary" tal:attributes="title python:here.getZMILangStr('BTN_INSERT')+'...'" onclick="zmiModal('#insertFilter',{title:$(this).attr('title')})"><i class="fas fa-plus"></i></span>
+						<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_DELETE')+'...'" onclick="zmiDeleteObjBtnClick(this,{btn:'BTN_DELETE',key:'obj'})"><i class="fas fa-times"></i></span>
+						<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_IMPORT')+'...'" onclick="zmiModal('#importConf',{title:$(this).attr('title')})"><i class="fas fa-upload"></i></span>
+						<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_EXPORT')+'...'" onclick="zmiExportBtnClick(this)"><i class="fas fa-download"></i></span>
+					</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="filterId filterIds">
+			<tal:block tal:define="global filter python:here.getFilter(filterId)">
+				<td class="meta-sort text-center">
+					<input type="checkbox" name="ids:list" tal:attributes="value filterId">
+				</td>
+				<td>
+					<a href="javascript:;" onclick="$('i',this).toggleClass('fa-chevron-right fa-chevron-down');$(this).siblings('.filterProcesses').toggle('normal');"><i class="fas fa-chevron-right"></i></a>
+					<a tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],filterId); title python:here.getZMILangStr('BTN_EDIT')+'...'">
+						<i class="fas fa-filter"></i>
+						<tal:block tal:content="filter/name">the filter-name</tal:block>
+					</a>
+					<div class="filterProcesses" style="display:none">
+						<table class="layoutTable">
+						<tr><td><div class="filterDelimiter">
+							<tal:block tal:condition="python:filter['format']=='import'">
+								<i tal:attributes="class python:standard.getFileTypeIconCSS(filter['content_type']); title filter/content_type"></i>
+								<i class="fas fa-arrow-up',extra='title=\042Import\042"></i>
+							</tal:block>
+							<tal:block tal:condition="python:filter['format']!='import'">
+								<tal:block tal:content="filter/format">the format</tal:block>
+							</tal:block>
+						</div><i class="fas fa-long-arrow-alt-down center"></i></td></tr>
+						<tr tal:repeat="filterProcess python:here.getFilterProcesses(filterId)">
+							<tal:block tal:define="global process python:here.getProcess(filterProcess['id'])">
+								<td><div class="filterProcess" tal:content="process/name">the process-name</div><i class="fas fa-long-arrow-alt-down center"></i></td>
+								<tal:block tal:condition="python:filterProcess.get('file_filename')">
+									<td><hr/></td>
+									<td><div class="filterProcessFile">
+										<i tal:attributes="class python:standard.getFileTypeIconCSS(filterProcess['file_filename']); title python:filterProcess['file_content_type']"></i>&nbsp;
+										<a tal:attributes="href filterProcess/file_href; title python:'%s (%s)'%(filterProcess['file_filename'], filterProcess['file_content_type'])" 
+											target="_blank" tal:content="filterProcess/file_filename">FILENAME
+										</a>
+									</div></td>
+								</tal:block>
+							</tal:block>
+						</tr>
+						<tr><td><div class="filterDelimiter">
+							<tal:block tal:condition="python:filter['format']=='import'">
+								<i tal:attributes="class python:standard.getFileTypeIconCSS('text/xml')"></i>
+								<i class="fas fa-file-import',extra='title=\042Import\042"></i>
+							</tal:block>
+							<tal:block tal:condition="python:filter['format']!='import'">
+								<i tal:attributes="class python:standard.getFileTypeIconCSS(filter['content_type'])"></i>
+								<i class="fas fa-file-export',extra='title=\042Export\042"></i>
+							</tal:block>
+							<tal:block tal:content="filter/content_type"></tal:block>
+						</div></td></tr>
+						</table><!-- .layoutTable -->
+					</div><!-- .filterProcesses -->
+				</td>
+			</tal:block>
+			</tr>
+		</tbody>
+	</table>
+</form>
+
+<form class="form-horizontal card" action="manage_changeProcess" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend tal:content="python:here.getZMILangStr('ATTR_PROCESSES')">Processes</legend>
+	<table class="table table-sm table-striped table-bordered zmi-sortable mb-0">
+		<thead>
+		<tr>
+			<th class="meta-sort text-center">
+				<div class="btn-group">
+					<span class="btn btn-secondary" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))" onclick="zmiToggleSelectionButtonClick(this)"><i class="fas fa-check-square"></i></span>
+				</div>
+			</th>
+			<th>
+				<div class="btn-group">
+					<span class="btn btn-primary" tal:attributes="title python:here.getZMILangStr('BTN_INSERT')+'...'" onclick="zmiModal('#insertProcess',{title:$(this).attr('title')})"><i class="fas fa-plus"></i></span>
+					<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_DELETE')+'...'" onclick="zmiDeleteObjBtnClick(this,{btn:'BTN_DELETE',key:'obj'})"><i class="fas fa-times"></i></span>
+					<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_IMPORT')+'...'" onclick="zmiModal('#importConf',{title:$(this).attr('title')})"><i class="fas fa-upload"></i></span>
+					<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_EXPORT')+'...'" onclick="zmiExportBtnClick(this)"><i class="fas fa-download"></i></span>
+				</div>
+			</th>
+			<th tal:content="python:here.getZMILangStr('ATTR_COMMANDLINE')">Commandline</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="processId processIds">
+			<tal:block tal:define="process python:here.getProcess(processId)">
+				<td class="meta-sort text-center">
+					<input type="checkbox" name="ids:list" tal:attributes="value processId">
+				</td>
+				<td>
+					<a tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],processId); title python:here.getZMILangStr('BTN_EDIT')+'...'">
+						<tal:block tal:condition="python:standard.operator_getattr(here,process['id'],None) is not None"><i tal:on-error="nothing" tal:attributes="class python:getattr(here,process['id']).zmi_icon"></i></tal:block>
+						<tal:block tal:condition="python:standard.operator_getattr(here,process['id'],None) is None"><i class="fas fa-cog"></i></tal:block>
+						<b class="ml-2 processId" tal:content="process/id">the id</b>
+					</a>
+					<span class="processName text-muted ml-2" tal:content="python:'%s'%(process.get('name','Name Missing!'))">the name</span>
+				</td>
+				<td><code tal:content="python:standard.string_maxlen(process['command'],50)">the command</code></td>
+			</tal:block>
+			</tr>
+		</tbody>
+	</table>
+</form>
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<tal:block tal:define="global
+		headCStyleSheet python:getattr(here.getHome(),'headCStyleSheet',None);
+		headCSS python:getattr(here.getHome(),'headCSS',headCStyleSheet);
+		">
+	<tal:block tal:condition="not:python:headCSS is None">
+		<tal:block tal:content="structure python:headCSS(here,request)">head-css</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:headCSS is None" tal:define="global stylesheets python:here.getStylesheets()">
+		<tal:block tal:repeat="i python:range(len(stylesheets))">
+			<link type="text/css" tal:attributes="
+				rel python:' '.join([]
+						+[[],['alternate']][int(i>0)]
+						+['stylesheet']
+					);
+				href python:stylesheets[i].absolute_url().replace(request['BASE0'],'');
+				"/>
+		</tal:block>
+	</tal:block>
+</tal:block>

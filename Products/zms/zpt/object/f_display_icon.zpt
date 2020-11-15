@@ -1,0 +1,1 @@
+<tal:block tal:content="structure python:here.display_icon(request)">display_icon</tal:block>

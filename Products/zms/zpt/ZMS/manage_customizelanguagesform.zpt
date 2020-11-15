@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='languages config')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[{'label':'TAB_LANGUAGES','action':'manage_customizeLanguagesForm'}])">zmi_breadcrumbs</tal:block>
+
+<script>
+
+/**
+ * Export xml.
+ */
+function zmiExportBtnClick(sender) {
+	var fm = $(sender).parents("form")[0];
+	var href = fm.action+'?lang='+getZMILang()+'&btn=BTN_EXPORT';
+	$('input[name="ids:list"]:checked',fm).each(function(){
+			href += '&'+$(this).attr("name")+'='+$(this).val();
+		});
+	window.open(href);
+	return false;
+}
+
+/**
+ * Delete object.
+ */
+function zmiDeleteObjBtnClick(sender,d) {
+	if (confirm(getZMILangStr('MSG_CONFIRM_DELOBJ'))) {
+		zmiFormSubmit(sender,d);
+	}
+}
+
+/**
+ * Submit form with given parameters.
+ */
+function zmiFormSubmit(sender,d) {
+	var $fm = $(sender).closest("form");
+	var html = '';
+	for (var i in d) {
+		$('input[name="' + i + '"]',$fm).remove();
+		html += '<input type="hidden" name="' + i + '" value="' + d[i] +'"/>';
+	}
+	$fm
+		.append(html)
+		.submit();
+}
+
+</script>
+
+<tal:block tal:define="global langIds python:here.getLangIds(sort=True)">
+
+<form class="form-horizontal card" id="changeLanguagesForm" action="manage_changeLanguages" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend>
+		<span class="has_tooltip" 
+			data-toggle="tooltip" data-placement="left" title="Tooltip"
+			tal:attributes="title python:here.getZMILangStr('TIP_MULTILANG')"
+			tal:content="python:here.getZMILangStr('TAB_LANGUAGES')">
+			Languages
+		</span>
+	</legend>
+	<table class="table table-sm table-striped table-bordered">
+	<thead>
+	<tr>
+		<th></th>
+		<th title="ISO-639/2" tal:content="python:here.getZMILangStr('ATTR_ID')">Id</th>
+		<th tal:content="python:here.getZMILangStr('ATTR_LANG')">Language</th>
+		<th tal:content="python:here.getZMILangStr('ATTR_PARENT')">Parent</th>
+		<th>Interface</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tal:block tal:define="global langStack python:[]">
+		<tal:block tal:repeat="langNode python:here.getLangTree()">
+			<tal:block tal:define="global sk python:langNode[0]; si python:langNode[1]; langId sk; langObj python:here.getLang(langId)">
+				<tal:block tal:condition="python:si['parent'] in langStack and not langStack[-1]==si['parent']">
+					<tal:block tal:repeat="i python:range(len(langStack)-langStack.index(si['parent'])-1)">
+						<tal:block tal:define="dummy python:langStack.remove(langStack[-1])"></tal:block>
+					</tal:block>
+				</tal:block>
+				<tal:block tal:condition="not:python:si['parent'] in langStack and not langStack[-1]==si['parent']">
+					<tal:block tal:define="dummy python:langStack.append(si['parent'])"></tal:block>
+				</tal:block>
+				<tr tal:attributes="id python:'lang%s'%'_'.join(langStack+[langId])">
+					<td class="text-center"><input type="checkbox" name="ids:list" tal:attributes="value python:langId" tal:condition="python:langId!=here.getPrimaryLanguage()"></td>
+					<td><tal:block tal:content="langId">langId</tal:block></td>
+					<td><input class="form-control form-control-sm" type="text" tal:attributes="name python:'%s_label'%langId; value python:langObj['label']"></td>
+					<td>
+						<select class="form-control form-control-sm" tal:attributes="name python:'%s_parent'%langId">
+							<option value="" tal:content="python:'%s (*)'%here.getZMILangStr('ATTR_PRIMARY')">primary (*)</option>
+							<option tal:repeat="lang python:[x for x in langIds if x!=langId]" tal:attributes="value lang; selected python:['','selected'][int(langObj.get('parent')==lang)]" tal:content="python:here.getLanguageLabel(lang)">lang</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control form-control-sm" tal:attributes="name python:'%s_manage'%langId">
+							<option tal:repeat="manage_lang python:here.get_manage_langs()" tal:attributes="value manage_lang; selected python:['','selected'][int(langObj.get('manage')==manage_lang)]" tal:content="python:here.getLangStr('LANG',manage_lang)">manage_lang</option>
+						</select>
+					</td>
+				</tr>
+			</tal:block>
+		</tal:block>
+	</tal:block>
+	<tr class="row_insert">
+		<td class="text-center"><i class="fas fa-plus"></i></td>
+		<td class="language_id"><input class="form-control form-control-sm" type="text" name="language_id" /></td>
+		<td class="language_label"><input class="form-control form-control-sm" type="text" name="language_label" /></td>
+		<td class="language_parent">
+			<select class="form-control form-control-sm" name="language_parent">
+				<option tal:repeat="lang langIds" tal:attributes="value lang" tal:content="python:here.getLanguageLabel(lang)">lang</option>
+			</select>
+		</td>
+		<td>
+			<select class="form-control form-control-sm" name="language_manage">
+				<option tal:repeat="manage_lang python:here.get_manage_langs()" tal:attributes="value manage_lang" tal:content="python:here.getLangStr('LANG',manage_lang)">manage_lang</option>
+			</select>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+	<div class="controls save">
+		<button name="btn" type="submit" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+		<button name="btn" type="submit" class="btn btn-secondary" value="BTN_DELETE" tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</button>
+	</div>
+</form>
+
+<form class="form-horizontal card" id="changeLangDictForm" action="manage_changeLangDictProperties" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend>
+		<span class="has_tooltip"
+		data-toggle="tooltip" data-placement="right" title="Tooltip"
+		tal:attributes="title python:here.getZMILangStr('TIP_MULTILANGDICT')"
+		tal:content="python:here.getZMILangStr('ATTR_DICTIONARY')">
+			Dictionary
+		</span>
+	</legend>
+	<table class="table table-sm table-striped table-bordered table-hover">
+	<thead>
+	<tr>
+		<th class="text-center">
+			<div class="btn-group">
+				<span class="btn btn-secondary" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))" onclick="zmiToggleSelectionButtonClick(this)"><i class="fas fa-check-square"></i></span>
+			</div>
+		</th>
+		<th colspan="2" tal:attributes="colspan python:1+len(langIds)">
+			<div class="btn-group">
+				<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_IMPORT')+'...'" onclick="zmiModal('#importLangDict',{title:$(this).attr('title')})"><i class="fas fa-upload"></i></span>
+				<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_EXPORT')+'...'" onclick="zmiExportBtnClick(this)"><i class="fas fa-download"></i></span>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th></th>
+		<th tal:content="python:here.getZMILangStr('ATTR_KEY')">Key</th>
+		<th tal:repeat="langId langIds" tal:content="python:here.getLanguageLabel(langId)">Language-Label</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr tal:repeat="langDict python:here.getLangDict()">
+		<td class="text-center"><input type="checkbox" name="ids:list" tal:attributes="value python:langDict['key']; disabled python:['','disabled'][int(len(langDict.get('acquired',[]))>0)]"/></td>
+		<td tal:attributes="title python:'getLangStr(\'%s\',lang)'%langDict['key']" tal:content="python:langDict['key']">Key</td>
+		<td tal:repeat="langId langIds"><div class="single-line"><textarea class="form-control form-control-sm" tal:attributes="name python:'%s_value_%s'%(langDict['key'],langId); disabled python:['','disabled'][int(langId in langDict.get('acquired',[]))]" tal:content="python:langDict.get(langId,'')"></textarea></div></td>
+	</tr>
+	<tr class="row_insert">
+		<td class="text-center"><i class="fas fa-plus"></i></td>
+		<td><input class="form-control form-control-sm" type="text" name="_key" /></td>
+		<td tal:repeat="langId langIds"><div class="single-line"><textarea class="form-control form-control-sm" tal:attributes="name python:'_value_%s'%(langId)"></textarea></div></td>
+	</tr>
+	</tbody>
+	</table>
+	<div class="controls save">
+		<button name="btn" type="submit" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+		<button name="btn" type="submit" class="btn btn-secondary" value="BTN_DELETE" tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</button>
+	</div>
+</form>
+
+<div id="importLangDict" class="d-none">
+<form class="form-horizontal" action="manage_changeLangDictProperties" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<div class="form-row">
+		<label class="col-lg-2 control-label" for="file"><i class="fas fa-folder-open"></i> <tal:block tal:content="python:here.getZMILangStr('ATTR_FILE')">File</tal:block></label>
+		<div class="col-lg-10">
+			<input class="btn btn-file" name="file" type="file" />
+		</div><!-- .col-lg-10 -->
+	</div><!-- .form-group -->
+	<div class="form-row">
+		<label class="col-lg-2 control-label" for="file" tal:content="python:here.getZMILangStr('OR')">or</label>
+		<div class="col-lg-10">
+			<select class="form-control form-control-sm" id="init" name="init" onfocus="zmiExpandConfFiles(this,'.langdict.')" onmouseover="zmiExpandConfFiles(this,'.langdict.')">
+				<option value="">--- <tal:block tal:content="python:here.getZMILangStr('BTN_INIT')">Init</tal:block>... ---</option>
+			</select>
+		</div><!-- .col-lg-10 -->
+	</div><!-- .form-group -->
+	<div class="controls save">
+		<button name="btn" type="submit" class="btn btn-primary" value="BTN_IMPORT" tal:content="python:here.getZMILangStr('BTN_IMPORT')">Import</button>
+	</div>
+</form>
+</div><!-- #importLangDict -->
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

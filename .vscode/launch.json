@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python3: Zope-ZMS4",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/dev/workspace/zopefoundation/Zope/src/Zope2/Startup/serve.py",
+            // "module": "Zope2.Startup.serve",
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "args": [
+                "-d",
+                "-v",
+                "/home/zope/instance/zms4_dev/etc/zope.ini"
+            ],
+            "env": {
+                "PYTHONUNBUFFERED":"1",
+                "CONFIG_FILE": "/home/zope/instance/zms4_dev/etc/zope.ini",
+                "INSTANCE_HOME": "/home/zope/instance/zms4_dev",
+                "CLIENT_HOME": "/home/zope/instance/zms4_dev",
+                "PYTHON": "/home/zope/vpy37/bin/python",
+                "SOFTWARE_HOME": "/home/zope/vpy37/bin/"
+            },
+        },
+        {
+            "name":"Python3: Current File",
+            "type":"python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+        }
+    ]
+}

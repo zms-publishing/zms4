@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="data-path python:here.getRootElement().getRefObjPath(here);data-root python:here.getRootElement().getHome().id;data-client python:here.getHome().id;id python:'zmsid_%s'%(here.id);class python:here.zmi_body_class(id='properties')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+<tal:block tal:condition="python:here.meta_id=='ZMSTrashcan'"
+	><tal:block tal:define="garbage_collection python:here.run_garbage_collection()" 
+/></tal:block>
+
+<form class="form-container" tal:define="global 
+			id_prefix    python:['e',''][int(here.meta_id=='ZMSTrashcan')];
+			childNodes   python:here.getObjChildren(id_prefix,request);
+			pageelements python:[x for x in childNodes if not x.isPage()];
+			pages        python:[x for x in childNodes if x.isPage()];
+			nodelists    python:[['pageelements',pageelements],['pages',pages]]">
+	<input type="hidden" id="lang" name="lang" tal:attributes="value python:request['lang']" />
+	<input type="hidden" id="preview" name="preview" tal:attributes="value python:request['preview']" />
+	<input type="hidden" id="_sort_id" name="_sort_id:int" value="" />
+	<input type="hidden" id="custom" name="custom" value="" />
+	<input type="hidden" id="id_prefix" name="id_prefix" tal:attributes="value id_prefix" />
+	<ul class="zmi-container">
+		<li class="zmi-item zmi-selectable pageelement" tal:define="global childNode python:here" tal:attributes="id python:'zmi_item_'">
+			<div tal:attributes="class python:'center%s'%([' inactive',''][childNode.isActive(request)])"
+				tal:content="structure python:childNode.renderShort(request,True)">
+				<h1>
+					the title><br/>
+					<small>the description</small>
+				</h1>
+			</div><!-- .center -->
+			<div class="right">
+				<div class="zmi-action btn-group dropleft">
+					<span class="d-none zmi-sort-id">0</span>
+					<button class="btn split-left">
+						<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
+						<tal:block tal:content="python:childNode.display_type(request)">the child-node</tal:block>
+					</button>
+					<button class="btn split-right dropdown-toggle" data-toggle="dropdown">
+						<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
+					</button>
+				</div><!-- .btn-group -->
+				<div class="zmi-manage-main-change" tal:on-error="string: ERROR here.zmi_manage_main_change(childNode,request)" tal:content="structure python:here.zmi_manage_main_change(childNode,request)">
+					the info child-node
+				</div>
+			</div><!-- .right -->
+		</li>
+	</ul><!-- .zmi-container -->
+	<tal:block tal:repeat="nodelist nodelists">
+		<ul tal:attributes="class python:' '.join(['zmi-container','zmi-sortable',nodelist[0]])" tal:condition="python:len(nodelist[1])>0">
+			<tal:block tal:repeat="childNode python:nodelist[1]">
+				<li tal:attributes="id python:'zmi_item_%s'%childNode.id; class python:' '.join([childNode.meta_id,'zmi-item','zmi-selectable',nodelist[0][:-1]]
+						+[[],['is-new']][int(childNode.inObjStates(['STATE_NEW'],request))]
+						+[[],['is-modified']][int(childNode.inObjStates(['STATE_MODIFIED'],request))]
+						+[[],['is-deleted']][int(childNode.inObjStates(['STATE_DELETED'],request))])">
+					<div tal:attributes="class python:'center%s'%([' inactive',''][childNode.isActive(request)])"
+						tal:content="structure python:childNode.renderShort(request)">
+						the rendered child-node
+					</div><!-- .center -->
+					<div class="right">
+						<div class="zmi-action btn-group dropleft">
+							<span class="d-none zmi-sort-id" tal:content="python:childNode.getSortId()">the sort-id</span>
+							<button class="btn btn-secondary split-left">
+								<i tal:attributes="class python:childNode.zmi_icon()"></i>
+								<tal:block tal:content="python:childNode.display_type(request)">the child-node</tal:block>
+							</button>
+							<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown">
+								<i tal:attributes="class python:childNode.zmi_icon()"></i>
+							</button>
+						</div><!-- .btn-group -->
+						<span class="zmi-ids">
+							<input type="checkbox" name="ids:list" tal:attributes="value python:childNode.id"/>
+						</span>
+						<div class="zmi-manage-main-change" tal:content="structure python:childNode.zmi_manage_main_change(childNode,request)">
+							the info child-node
+						</div>
+					</div><!-- .right -->
+				</li><!-- .zmi-item -->
+			</tal:block>
+		</ul><!-- .zmi-container.zmi-sortable -->
+	</tal:block>
+
+	<ul class="zmi-container zmi-sortable portalClients" tal:condition="python:len(here.getPortalClients())>0 and here.getLevel()==0">
+		<tal:block tal:repeat="childNode python:here.getPortalClients()">
+			<li class="zmi-item zmi-selectable" tal:attributes="id python:'zmi_item_%s'%childNode.getHome().id">
+				<div class="center">
+					<div class="contentEditable portalClient" tal:attributes="data-absolute-url python:childNode.absolute_url()[len(request['BASE0']):]">
+						<div class="portalClientId zmi-manage-main-change" tal:content="structure python:childNode.getHome().id">
+							the home-id
+						</div>
+						<tal:block tal:content="structure python:childNode.renderShort(request)">
+							the rendered child-node
+						</tal:block>
+					</div><!-- .contentEditable -->
+				</div><!-- .center -->
+				<div class="right">
+					<!-- context menu useful? -->
+				</div><!-- .right -->
+			</li>
+		</tal:block>
+	</ul><!-- .zmi-container -->
+
+</form>
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

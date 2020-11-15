@@ -1,0 +1,78 @@
+<tal:block tal:replace="nothing">
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++- Links
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+</tal:block>
+<tal:block tal:define="global refByObjs python:here.getRefByObjs()"
+	><a class="zmi-state text-info" 
+		tal:condition="refByObjs" tal:attributes="href python:'%s/manage_RefForm?lang=%s'%(here.absolute_url(),request['lang'])"
+		><i class="icon-link" tal:attributes="title python:here.getZMILangStr('MSG_REFERENCEDBY')%''+' %i %s'%(len(refByObjs),here.getZMILangStr('ATTR_OBJECTS'))"></i></a>
+</tal:block
+><tal:block tal:replace="nothing">
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++- Language
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+</tal:block>
+<tal:block tal:condition="python:len(here.getLangIds())>1"
+	><tal:block tal:condition="python:here.attr('change_uid')" tal:define="global
+			coverage python:here.getDCCoverage(request);
+			seq_lang python:coverage[coverage.find('.')+1:];
+			seq_desc_langs python:here.getDescendantLanguages(seq_lang)"
+		><tal:block tal:condition="python:len(seq_desc_langs)>1 and coverage.find('global')>=0"
+			><tal:block tal:condition="python:seq_lang!=request['lang']"
+				><span class="zmi-state zmi-state-info" tal:condition="python:here.isModifiedInParentLanguage(request['lang'],request)"
+					><i class="icon-globe fas fa-globe" tal:attributes="title python:'local: %s: %s (%s)'%(here.getZMILangStr('ATTR_LANG'),seq_lang,here.getZMILangStr('STATE_MODIFIED'))"></i
+				></span
+				><span class="zmi-state zmi-state-info" tal:condition="not:python:here.isModifiedInParentLanguage(request['lang'],request)"
+					><i class="icon-globe fas fa-globe" tal:attributes="title python:'local: %s: %s'%(here.getZMILangStr('ATTR_LANG'),seq_lang)"></i
+				></span
+			></tal:block
+			><tal:block tal:condition="not:python:seq_lang!=request['lang']"
+				><span class="zmi-state zmi-state-info"><i class="icon-globe fas fa-globe" tal:attributes="title python:'global: %s: %s'%(here.getZMILangStr('ATTR_LANG'),', '.join(seq_desc_langs))"></i></span
+			></tal:block
+		></tal:block
+	></tal:block
+	><tal:block tal:condition="not:python:here.attr('change_uid')"
+		><span class="zmi-state zmi-state-warning"><i class="icon-globe fas fa-globe" tal:attributes="title python:here.getZMILangStr('STATE_TRANSLATE')"></i></span
+	></tal:block
+></tal:block
+><tal:block tal:replace="nothing">
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++- Workflow
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+</tal:block
+><tal:block tal:condition="python:not here.getAutocommit() and not request.get('ZMS_VERSION')"
+	><tal:block tal:define="global wfStates python:here.getWfStates(request); work_uid python:here.attr('work_uid'); work_dt python:here.attr('work_dt'); objStates python:here.filteredObjStates(request)"
+		><tal:block tal:condition="python:work_uid and work_dt" tal:repeat="wfState wfStates"
+			><tal:block tal:define="
+					wfActivity python:here.getWfActivity(wfState);
+					clazz python:wfActivity.get('icon_clazz','').split(' ');
+					text_clazz python:[x for x in clazz if x.find('icon') < 0];
+					icon_clazz python:[x for x in clazz if x.find('icon') >= 0];
+					title python:'%s %s %s (%s)'%(wfActivity['name'],here.getZMILangStr('BY'),work_uid,here.getLangFmtDate(work_dt))"
+				><span class="zmi-state" tal:condition="python:wfActivity.get('icon_clazz')" tal:attributes="class python:' '.join(['zmi-state']+text_clazz); title title"><i tal:attributes="class python:' '.join(icon_clazz)"></i></span
+			></tal:block
+		></tal:block
+		><span class="zmi-state zmi-state-success" tal:condition="python:'STATE_NEW' in objStates"><i class="fas far-plus-square"></i>&nbsp;<tal:block tal:content="python:here.getZMILangStr('STATE_NEW')"></tal:block></span
+		><span class="zmi-state zmi-state-info" tal:condition="python:'STATE_MODIFIED' in objStates"><i class="fas fa-pencil-alt"></i>&nbsp;<tal:block tal:content="python:here.getZMILangStr('STATE_MODIFIED')"></tal:block></span
+		><span class="zmi-state zmi-state-default" tal:condition="python:len(wfStates)>0 and here.isVersionContainer() and here.hasObjModifiedChildren(request)"><i class="fas fa-edit"></i>&nbsp;<tal:block tal:content="python:here.getZMILangStr('STATE_MODIFIED')"></tal:block></span
+		><span class="zmi-state zmi-state-danger" tal:condition="python:'STATE_DELETED' in objStates"><i class="fas fa-trash"></i>&nbsp;<tal:block tal:content="python:here.getZMILangStr('STATE_DELETED')"></tal:block></span
+	></tal:block
+></tal:block
+><tal:block tal:replace="nothing">
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++- Version Info
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+</tal:block
+><tal:block tal:condition="python:here.getHistory()"
+	><tal:block tal:content="python:here.getVersionNr()">v.#.#.#</tal:block
+	><tal:block tal:condition="python:request.get('ZMS_VERSION_%s'%id,'').find(str(here.version_live_id))>=0" tal:content="python:'- %s'%here.getZMILangStr('TAB_LIVE')"></tal:block
+	><tal:block tal:condition="python:request.get('ZMS_VERSION_%s'%id,'').find(str(here.version_work_id))>=0" tal:content="python:'- %s'%here.getZMILangStr('TAB_PREVIEW')"></tal:block
+></tal:block
+><tal:block tal:replace="nothing">
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++- Custom
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+</tal:block
+><tal:block tal:content="structure python:here.attr('version_object_state')">attr(version_object_state)</tal:block
+><tal:block tal:on-error="python:''" tal:content="structure python:here.my_version_object_state(here,request)">my_version_object_state</tal:block>

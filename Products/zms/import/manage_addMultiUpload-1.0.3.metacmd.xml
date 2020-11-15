@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+def manage_addMultiUpload(self):
+	# import Products.zms.standard
+	request = self.REQUEST
+	html = ''
+	html += '<!DOCTYPE html>'
+	html += '<html lang="en">'
+	html += self.zmi_html_head(self,request)
+	# html += '<link href="%s/kartik-v.bootstrap-fileinput.fileinput.css" media="all" rel="stylesheet" type="text/css" />'%self.metaobj_manager.absolute_url()
+	html += '<body class="%s">'%(' '.join(['zmi',request['lang'],'transition',self.meta_id]))
+	html += self.zmi_body_header(self,request,options=[{'action':'#','label':'Multi-Upload...'}])
+	html += '<div id="zmi-tab">'
+	html += self.zmi_breadcrumbs(self,request)
+
+	html += '<form class="form-horizontal" method="post" enctype="multipart/form-data">'
+	html += '<input type="hidden" name="form_id" value="manage_addMultiUpload" />'
+	html += '<input type="hidden" name="lang" value="%s" />'%request['lang']
+	html += '<div class="alert" style="min-height:500px">'
+	html += '<legend>Multi-File-Upload</legend>'
+	html += self.zmi_form_section_begin(self,request)
+
+	# --- Import
+	# ---------------------------------
+	if request.form.get('btn')==self.getZMILangStr('BTN_IMPORT'):
+		id_prefix = 'e'
+		msg = []
+		files = request.get('file',[])
+		if not type(files) is list: files = [files]
+		c = 0
+		for file in files:
+			c += 1
+			blob = self.FileFromData(file,file.filename)
+			data = blob.getData()
+			content_type = blob.getContentType()
+			##################
+			# HTML/TEXT
+			##################
+			if content_type == 'text/html':
+				newobj = self.manage_addZMSCustom('ZMSTextarea',{ 'id_prefix':id_prefix, 'text':file, 'format':'plain_html', },request)
+				text = data
+				# Post-Process HTML
+				i = text.lower().find('<body')
+				if i >= 0:
+					text = text[i:]
+					text = text[text.find('>')+1:]
+					i = text.lower().find('</body')
+					if i >= 0:
+						text = text[:i]
+					newobj.setObjStateModified(request)
+					newobj.setObjProperty('text',text,forced=True)
+					newobj.onChangeObj(request)
+			##################
+			# IMAGE
+			##################
+			elif content_type.startswith('image/'):
+				request.set('generate_preview_imghires_%s'%request.get('lang','ger'),True)
+				newobj = self.manage_addZMSCustom('ZMSGraphic',{'id_prefix':id_prefix, 'img_attrs_spec':'alt=\042'+str(file.filename)+'\042', 'imghires':blob, },request)
+			##################
+			# OTHER FILE
+			##################
+			else:
+				newobj = self.manage_addZMSCustom('ZMSFile',{ 'id_prefix':id_prefix, 'title':file.filename, 'titlealt':file.filename, 'file':blob, 'align':'LEFT', },request)
+
+			msg.append(self.getZMILangStr('MSG_IMPORTED')%('%s (%s)'%(file.filename,content_type))+' [%i/%i]'%(c,len(files)))
+
+		msg.append('<br/>')
+		html += '<div class="alert alert-success">%s</div><!-- .alert.alert-success -->'%('<br/>')
+		request.response.redirect(self.url_append_params('%s/manage_main'%self.absolute_url(),{'lang':request['lang'],'manage_tabs_message':'<br/>'.join(msg)}))
+
+	# --- Display initial import form.
+	# ---------------------------------
+	else:
+
+		html += '<div class="form-group row" style="margin:15px 0;">'
+		html += '<label for="file" class="mandatory"><span>%<i class="far fa-folder"></i> %s</span></label>'%( self.getZMILangStr('ATTR_FILE') )
+		html += '<div class="form-control" style="padding:0;height:auto;min-height:34px">'
+		html += '<input style="margin:6px 12px" name="file" type="file" class="file" multiple="true" data-show-upload="false" data-show-caption="true" />'
+		html += '</div>'
+		html += '</div><!-- .form-group -->'
+
+		html += """
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="%s">%s</button>
+					<button type="submit" name="btn" class="btn btn-white" value="%s">%s</button>
+				</div>
+			</div><!-- .form-group -->
+			"""%(self.getZMILangStr('BTN_IMPORT'),self.getZMILangStr('BTN_IMPORT'),self.getZMILangStr('BTN_CANCEL'),self.getZMILangStr('BTN_CANCEL'))
+
+	# ---------------------------------
+
+	html += '</form><!-- .form-horizontal -->'
+	html += '</div><!-- .card -->'
+	html += '</div><!-- #zmi-tab -->'
+	html += self.zmi_body_footer(self,request)
+	# html += '<script src="%s/kartik-v.bootstrap-fileinput.fileinput.js" type="text/javascript"></script>'%self.metaobj_manager.absolute_url()
+	html +='</body></html>'
+	return html]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[icon-upload text-primary]]></item>
+      <item key="id"><![CDATA[manage_addMultiUpload]]></item>
+      <item key="meta_type"><![CDATA[External Method]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+          <item><![CDATA[LgGalleria]]></item>
+          <item><![CDATA[gallery]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[Multi-Upload]]></item>
+      <item key="revision"><![CDATA[1.0.3]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[ZMSAdministrator]]></item>
+          <item><![CDATA[ZMSAuthor]]></item>
+          <item><![CDATA[ZMSEditor]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[Upload via Multi-Selection of Files]]></item>
+    </dictionary>
+  </item>
+</list>

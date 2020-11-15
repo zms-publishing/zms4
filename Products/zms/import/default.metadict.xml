@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSFile]]></item>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSLinkElement]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMSSysFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[titlealt]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">1</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Title.Alt]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[string]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSFile]]></item>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSLinkElement]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMSSysFolder]]></item>
+          <item><![CDATA[ZMSTeaserElement]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[title]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">1</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Title]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[string]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[levelnfc]]></item>
+      <item key="keys" type="list">
+        <list>
+          <item><![CDATA[##]]></item>
+          <item><![CDATA[return [(x,context.getZMILangStr('OPT_L_%i'%x)) for x in range(3)]]]></item>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">0</item>
+      <item key="name">Level</item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type">select</item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSFile]]></item>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSLinkElement]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMSSysFolder]]></item>
+          <item><![CDATA[ZMSTable]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_dc_description]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Description]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[text]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_dc_subject]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Subject]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[text]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_dc_type]]></item>
+      <item key="keys" type="list">
+        <list>
+          <item><![CDATA[Home]]></item>
+          <item><![CDATA[Artikel]]></item>
+          <item><![CDATA[Forum]]></item>
+          <item><![CDATA[News]]></item>
+          <item><![CDATA[Resource]]></item>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Type]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[select]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMSDocument]]></item>
+          <item><![CDATA[ZMSLinkElement]]></item>
+          <item><![CDATA[ZMSFolder]]></item>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_dc_creator]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[DC.Creator]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[string]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_logo]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">1</item>
+      <item key="name"><![CDATA[Logo]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[image]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_navigation]]></item>
+      <item key="keys" type="list">
+        <list>
+          <item><![CDATA[1]]></item>
+          <item><![CDATA[2]]></item>
+          <item><![CDATA[3]]></item>
+          <item><![CDATA[4]]></item>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">0</item>
+      <item key="name"><![CDATA[Navigation]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[select]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="acquired" type="int">0</item>
+      <item key="custom"></item>
+      <item key="default"><![CDATA[0]]></item>
+      <item key="dst_meta_types" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="id"><![CDATA[attr_dc_accessrights_restricted]]></item>
+      <item key="keys" type="list">
+        <list>
+        </list>
+      </item>
+      <item key="mandatory" type="int">0</item>
+      <item key="multilang" type="int">0</item>
+      <item key="name"><![CDATA[Restricted]]></item>
+      <item key="repetitive" type="int">0</item>
+      <item key="type"><![CDATA[boolean]]></item>
+    </dictionary>
+  </item>
+</list>

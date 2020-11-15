@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>Zope on &dtml-BASE0;</title>
+</head>
+	<frameset cols="220,*">
+		<frame src="<dtml-var "REQUEST.URL1" html_quote>/manage_menu" name="manage_menu"
+			marginwidth="2" marginheight="2" scrolling="auto"/>
+		<frame src="<dtml-var "REQUEST.URL1" html_quote>/manage_workspace" name="manage_main"
+			marginwidth="2" marginheight="2" scrolling="auto"/>
+	</frameset>
+
+	<noframes>
+		Management interfaces require the use of a <B>frames-capable</B> web browser.
+	</noframes>
+</html>
+

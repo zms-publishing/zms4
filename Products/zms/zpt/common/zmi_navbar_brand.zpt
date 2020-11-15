@@ -1,0 +1,10 @@
+<a tal:condition="python:here.getConfProperty('ZMS.branding','ZMS4') in ['ZMS4','']"
+		class="navbar-brand"
+		href="#" onclick="window.open('http://www.zms-publishing.com');"
+		title="ZMS4 - Python-based Content Management System for Science, Technology and Medicine, &#169; 2000-2020 HOFFMANN+LIEBENBERG"
+	><span class="product">ZMS4</span><span class="slogan d-none d-lg-inline">Python-based Content Management System for Science, Technology and Medicine</span>
+</a>
+<span tal:condition="python:here.getConfProperty('ZMS.branding','ZMS4')!='ZMS4'"
+		class="navbar-brand"
+	><span tal:replace="structure python:here.getConfProperty('ZMS.branding','Custom Brand')">Custom Brand</span>
+</span>

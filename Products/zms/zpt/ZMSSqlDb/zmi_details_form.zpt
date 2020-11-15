@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='intersection_form')">
+
+<tal:block tal:define="global
+	rowid python:request.get('qindex',-1);
+	dummy0 python:request.set('rowid',rowid);
+	row python:{request['qentitypk']:request['qentitypkval']};
+	metaObjAttr python:here.getEntityColumn(request['qentity'],request['qcolumn'],row);
+	entity python:here.getEntity(metaObjAttr['details']['tablename']);
+	primary_key python:here.getEntityPK(entity['id']);
+	request_form_inherit python:['qcolumn','qentitypk','qentitypkval',metaObjAttr['details']['fk']];
+	res metaObjAttr/value">
+
+	<a href="javascript:;" onclick="$('.zmi_details_form').toggle()" title="Show SQL Code">
+		&middot;
+	</a>
+	<code tal:attributes="style python:['','display:none'][len(metaObjAttr.get('error',''))==0]" class="zmi_details_form">
+		<tal:block tal:content="python:metaObjAttr['valuesql'].replace('\n','<br>')"></tal:block>
+		<tal:block tal:content="python:metaObjAttr.get('error','').replace('\n','<br>')"></tal:block>
+	</code>
+
+<tal:block tal:condition="python:request.get('action') in ['insert','update','delete'] and request.get('btn')!=here.getZMILangStr('BTN_CANCEL')">
+	<tal:block tal:define="global
+		message python:[];
+		values python:{}">
+	<tal:block tal:repeat="column python:entity['columns']">
+		<tal:block tal:define="dummy0 python:here.operator_setitem(values,['','blob_'][int('blob' in column)]+column['id'],request.get(column['id'].lower(),None))"></tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request.get('action') in ['insert']">
+		recordSet_Insert=<tal:block tal:content="python:here.recordSet_Insert(tablename=entity['id'],values=values)"
+			tal:define="global dummy0 python:message.append(here.getZMILangStr('MSG_INSERTED')%here.getZMILangStr('ATTR_RECORD'))"></tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request.get('action') in ['update']">
+		recordSet_Update=<tal:block tal:content="python:here.recordSet_Update(tablename=entity['id'],rowid=rowid,values=values)"
+			tal:define="global dummy0 python:message.append(here.getZMILangStr('MSG_CHANGED'))"></tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request.get('action') in ['delete']">
+		recordSet_Delete=<tal:block tal:content="python:here.recordSet_Delete(tablename=entity['id'],rowid=rowid)"
+			tal:define="global dummy0 python:message.append(here.getZMILangStr('MSG_DELETED')%1)"></tal:block>
+	</tal:block>
+	<span id="manage_tabs_message" tal:content="structure python:'\n'.join(message)">the message</span>
+	</tal:block>
+</tal:block>
+
+<tal:block tal:condition="python:request.get('action')=='updateForm'">
+	<tal:block tal:content="structure python:here.manage_zmi_input_form(
+			entity=entity,
+			action='update',
+			qindex=request['qindex'],
+			rowid=request['rowid'],
+			row=[x for x in res if str(here.operator_getitem(x,primary_key,ignorecase=True))==str(request['rowid'])][0],
+			request_form_inherit=request_form_inherit)">
+		metaobj_recordset_input_fields
+	</tal:block>
+</tal:block>
+<tal:block tal:condition="python:request.get('action')=='insertForm'" tal:content="structure python:here.manage_zmi_input_form(
+			entity=entity,
+			action='insert',
+			qindex=-1,
+			rowid=-1,
+			row={metaObjAttr['details']['fk']:request['qentitypkval']},
+			request_form_inherit=request_form_inherit)">
+	metaobj_recordset_input_fields
+</tal:block>
+
+<tal:block tal:content="structure python:'<script>'"></tal:block>
+$ZMI.registerReady(function() {
+	var manage_tabs_message = $("#manage_tabs_message").html();
+	if (typeof manage_tabs_message != "undefined") {
+		window.parent.zmiIframeClose('<tal:block tal:content="request/qcolumn"></tal:block>',manage_tabs_message);
+	}
+	});
+<tal:block tal:content="structure python:'</script>'"></tal:block>
+
+</tal:block>
+
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!-- objattrs/zmi_input_multiselect -->
+
+<tal:block tal:define="standard modules/Products.zms/standard;"
+	><select multiple="multiple"
+		tal:attributes="
+			name python:'%s:list'%options['name'];
+			class python:' '.join(['zmi-select']+options.get('css',[]));"
+		tal:define="
+			value python:[str(x) for x in standard.nvl(options.get('value'),[])];
+			opts python:here.sort_list(options.get('options',[]),1);">
+		<tal:block tal:repeat="opt opts"
+			><option tal:attributes="value python:opt[0]; selected python:['','selected'][str(opt[0]) in value]" 
+				tal:content="structure python:opt[1]">the label</option
+		></tal:block>
+	</select>
+</tal:block>
+
+<!-- /objattrs/zmi_input_multiselect --> 

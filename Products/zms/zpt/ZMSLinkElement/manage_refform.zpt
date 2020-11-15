@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='ref')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<tal:block tal:define="global
+		dummy0 python:here.synchronizeRefByObjs();
+		refByObjs python:here.getRefByObjs()">
+
+<form tal:condition="python:refByObjs" class="card form-horizontal">
+	<legend tal:content="structure python:'%s:'%(here.getZMILangStr('MSG_REFERENCEDBY')%('<em>%s</em>'%here.getTitlealt(request)))">titlealt referenced by:</legend>
+	<div class="card-body">
+		<ol>
+			<li tal:repeat="refByObj refByObjs">
+				<tal:block tal:define="global target python:here.getLinkObj(refByObj,request)">
+					<tal:block tal:condition="python:target" tal:content="structure python:target.zmi_breadcrumbs()">zmi_breadcrumbs</tal:block>
+					<tal:block tal:condition="python:not target" tal:content="refByObj">refByObj</tal:block>
+				</tal:block >
+			</li>
+		</ol>
+	</div>
+</form>
+<div tal:condition="python:not refByObjs" 
+	class="alert alert-warning" 
+	tal:content="structure python:'%s!'%(here.getZMILangStr('MSG_NOREFERENCES')%('<em>%s</em>'%here.getTitlealt(request)))">
+	titlealt referenced by:
+</div>
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

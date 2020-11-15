@@ -1,0 +1,10 @@
+<!-- BO plugins/fileupload/input_file/input.zpt -->
+<div class="custom-file new">
+	<input class="custom-file-input" type="file" size="25" value=""
+		onchange="$(this).next().html($(this).val().replace(/^.*(\\|\/|\:)/, ''));"
+		tal:attributes="id options/elName; name options/elName; maxlength python:options.get('elMaxLength','')" />
+	<label class="custom-file-label" tal:attributes="for options/elName" 
+		tal:content="python:here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr('ATTR_FILE')">Choose file
+	</label>
+</div>
+<!-- EO plugins/fileupload/input_file/input.zpt -->

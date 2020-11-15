@@ -1,0 +1,61 @@
+.ZMSTable.table {
+	border: 1px solid #CCC;
+}
+.ZMSTable.table caption {
+	background-color:#43C9D5;
+	color:#fff;
+	font-weight:bold;
+}
+.ZMSTable.table th {
+	background-color:#f8f8f8!important;
+}
+.ZMSTable.table td {
+	background-color:#fff!important;
+}
+
+
+
+
+/* LATEST */
+
+.ZMSGraphic div,
+.ZMSGraphic img {
+  max-width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+}
+.ZMSGraphic .graphic {
+	text-align:left !important
+}
+
+.ZMSFile,
+.ZMSLinkContainer {
+  border:1px solid silver;
+  padding: 1em;
+  border-radius:4px;
+  background:#eee
+}
+.ZMSLinkContainer .title {
+  margin-bottom:.5em;
+}
+.ZMSGraphic .text,
+.ZMSLinkContainer .description,
+.ZMSFile .description {
+  font-size:80%;
+  font-style:italic;
+}
+.ZMSGraphic .text {
+  margin-top:1em;
+}
+.ZMSTeaserElement .title a {
+  font-weight:bold;
+  color:#ffffff;
+  text-decoration:none;
+  background:#999;
+  display:block;
+  padding:.5em 1em;
+  margin: 0 -1em -.5em;
+}
+.ZMSTeaserElement a {
+  color:#03A9F4;
+}

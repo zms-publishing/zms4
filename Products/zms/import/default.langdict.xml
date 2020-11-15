@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<list>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Kurztitel]]></item>
+<item key="eng"><![CDATA[Short title]]></item>
+<item key="key"><![CDATA[DC.Title.Alt]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Titel]]></item>
+<item key="eng"><![CDATA[Title]]></item>
+<item key="key"><![CDATA[DC.Title]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Zusammenfassung]]></item>
+<item key="eng"><![CDATA[Description]]></item>
+<item key="key"><![CDATA[DC.Description]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Schlagworte]]></item>
+<item key="eng"><![CDATA[Subject]]></item>
+<item key="key"><![CDATA[DC.Subject]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Typ]]></item>
+<item key="eng"><![CDATA[Type]]></item>
+<item key="key"><![CDATA[DC.Type]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="ger"><![CDATA[Autor]]></item>
+<item key="eng"><![CDATA[Creator]]></item>
+<item key="key"><![CDATA[DC.Creator]]></item>
+</dictionary>
+</item>
+</list>

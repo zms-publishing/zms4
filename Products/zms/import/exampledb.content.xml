@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ZMSCustom meta_id="exampleDatabase">
+<active><lang>1</lang></active>
+<titlealt><lang>Database</lang></titlealt>
+<title><lang>Example-Database</lang></title>
+<ZMSCustom id_fix="dept" id_prefix="dept" meta_id="dept">
+<deptno type="int">0</deptno>
+<active>
+<lang type="int">1</lang></active>
+<records><list>
+<item><dictionary>
+<item key="deptno" type="int">40</item>
+<item key="dname"><![CDATA[Operations]]></item>
+<item key="loc"><![CDATA[Boston]]></item></dictionary>
+</item>
+<item><dictionary>
+<item key="deptno" type="int">30</item>
+<item key="dname"><![CDATA[Sales]]></item>
+<item key="loc"><![CDATA[Chicago]]></item></dictionary>
+</item>
+<item><dictionary>
+<item key="deptno" type="int">20</item>
+<item key="dname"><![CDATA[Research]]></item>
+<item key="loc"><![CDATA[Dallas]]></item></dictionary>
+</item>
+<item><dictionary>
+<item key="deptno" type="int">10</item>
+<item key="dname"><![CDATA[Accounting]]></item>
+<item key="loc"><![CDATA[New York]]></item></dictionary>
+</item></list>
+</records></ZMSCustom>
+<ZMSCustom id_fix="emp" id_prefix="emp" meta_id="emp">
+<active>
+<lang type="float">1</lang></active>
+<comm><![CDATA[0.0]]></comm>
+<records><list>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">10</item>
+<item key="empno" type="int">7934</item>
+<item key="ename"><![CDATA[Miller]]></item>
+<item key="hiredate" type="date">1982/1/23</item>
+<item key="job"><![CDATA[Clerk]]></item>
+<item key="mgr" type="int">7782</item>
+<item key="sal" type="float">1300.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7900</item>
+<item key="ename"><![CDATA[James]]></item>
+<item key="hiredate" type="date">1981/12/3</item>
+<item key="job"><![CDATA[Clerk]]></item>
+<item key="mgr" type="int">7698</item>
+<item key="sal" type="float">950.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">20</item>
+<item key="empno" type="int">7876</item>
+<item key="ename"><![CDATA[Adams]]></item>
+<item key="hiredate" type="date">1987/5/23</item>
+<item key="job"><![CDATA[Clerk]]></item>
+<item key="mgr" type="int">7788</item>
+<item key="sal" type="float">1100.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7844</item>
+<item key="ename"><![CDATA[Turner]]></item>
+<item key="hiredate" type="date">1981/9/8</item>
+<item key="job"><![CDATA[Salesman]]></item>
+<item key="mgr" type="int">7698</item>
+<item key="sal" type="float">1500.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"><![CDATA[500.0]]></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7521</item>
+<item key="ename"><![CDATA[Ward]]></item>
+<item key="hiredate" type="date">1981/2/22</item>
+<item key="job"><![CDATA[Salesman]]></item>
+<item key="mgr" type="int">7698</item>
+<item key="sal" type="float">1250.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"><![CDATA[300.0]]></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7499</item>
+<item key="ename"><![CDATA[Allen]]></item>
+<item key="hiredate" type="date">1981/2/20</item>
+<item key="job"><![CDATA[Salesman]]></item>
+<item key="mgr" type="int">7698</item>
+<item key="sal" type="float">1600.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"><![CDATA[1400.0]]></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7654</item>
+<item key="ename"><![CDATA[Martin]]></item>
+<item key="hiredate" type="date">1981/9/28</item>
+<item key="job"><![CDATA[Salesman]]></item>
+<item key="mgr" type="int">7698</item>
+<item key="sal" type="float">1250.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">10</item>
+<item key="empno" type="int">7782</item>
+<item key="ename"><![CDATA[Clark]]></item>
+<item key="hiredate" type="date">1981/6/9</item>
+<item key="job"><![CDATA[Manager]]></item>
+<item key="mgr" type="int">7839</item>
+<item key="sal" type="float">2450.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">30</item>
+<item key="empno" type="int">7698</item>
+<item key="ename"><![CDATA[Blake]]></item>
+<item key="hiredate" type="date">1981/5/1</item>
+<item key="job"><![CDATA[Manager]]></item>
+<item key="mgr" type="int">7839</item>
+<item key="sal" type="float">2850.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">20</item>
+<item key="empno" type="int">7369</item>
+<item key="ename"><![CDATA[Smith]]></item>
+<item key="hiredate" type="date">1980/12/17</item>
+<item key="job"><![CDATA[Clerk]]></item>
+<item key="mgr" type="int">7902</item>
+<item key="sal" type="float">800.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">20</item>
+<item key="empno" type="int">7788</item>
+<item key="ename"><![CDATA[Scott]]></item>
+<item key="hiredate" type="date">1987/4/19</item>
+<item key="job"><![CDATA[Analyst]]></item>
+<item key="mgr" type="int">7566</item>
+<item key="sal" type="float">3000.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">20</item>
+<item key="empno" type="int">7902</item>
+<item key="ename"><![CDATA[Ford]]></item>
+<item key="hiredate" type="date">1981/12/3</item>
+<item key="job"><![CDATA[Analyst]]></item>
+<item key="mgr" type="int">7566</item>
+<item key="sal" type="float">3000.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">20</item>
+<item key="empno" type="int">7566</item>
+<item key="ename"><![CDATA[Jones]]></item>
+<item key="hiredate" type="date">1981/4/2</item>
+<item key="job"><![CDATA[Manager]]></item>
+<item key="mgr" type="int">7839</item>
+<item key="sal" type="float">2975.0</item></dictionary>
+</item>
+<item><dictionary>
+<item key="comm"></item>
+<item key="deptno" type="int">10</item>
+<item key="empno" type="int">7839</item>
+<item key="ename"><![CDATA[King]]></item>
+<item key="hiredate" type="date">1981/11/17</item>
+<item key="job"><![CDATA[President]]></item>
+<item key="mgr"></item>
+<item key="sal" type="float">5000.0</item></dictionary>
+</item></list>
+</records>
+<empno type="int">0</empno>
+<sal><![CDATA[0.0]]></sal></ZMSCustom>
+</ZMSCustom>

@@ -1,0 +1,150 @@
+<tal:block tal:define="
+	dummy0 python:request.set('ZMI_LIBS_JS',request.get('ZMI_LIBS_JS',[])+
+		['/++resource++zms_/jquery/diff/diff_match_patch.js'
+		,'/++resource++zms_/jquery/diff/jquery.pretty-text-diff.min.js'
+		,'/++resource++zms_/ZMSRepositoryManager/manage_main_diff.js'
+		]);
+	standard modules/Products.zms/standard;
+	provider_diffs python:[(x,here.getDiffs(x,here.get_ignore_orphans())) for x in here.getRepositoryProviders()];
+	provider_diffs_count python:sum([len(x[1]) for x in provider_diffs]+[0])">
+
+	<tal:block tal:condition="not:provider_diffs_count">
+		<div class="form-group filelist row" tal:repeat="provider python:here.getRepositoryProviders()">
+			<label class="col-sm-2 control-label zms-component">
+				<a tal:attributes="href python:'%s/manage_main?lang=%s'%(provider.absolute_url(),request['lang'])" target="_blank"><tal:block tal:content="python:provider.id">the provider</tal:block></a>
+			</label>
+			<div class="col-sm-10" tal:define="
+					local_files python:list(here.localFiles(provider).values());
+					ids python:standard.distinct_list([x['id'] for x in local_files]);
+					ids_sorting python:ids.sort();">
+				<div tal:repeat="id ids">
+					<i class="fas fa-check-circle text-success"></i>
+					<a tal:attributes="href python:'%s/manage_%s?lang=%s&id=%s'%(provider.absolute_url(), id=='__metas__' and 'metas' or 'main',request['lang'],id)" target="_blank">
+						<tal:block tal:repeat="icon python:[x['__icon__'] for x in local_files if x['id']==id and '__icon__' in x and x['__icon__']]">
+							<i tal:attributes="class icon"></i>
+						</tal:block>
+						<tal:block tal:content="id">id</tal:block>
+					</a>
+					<tal:block tal:repeat="desc python:[x['__description__'] for x in local_files if x['id']==id and '__description__' in x and x['__description__']]">
+						( <tal:block tal:content="desc">the description</tal:block> )
+					</tal:block>
+				</div>
+			</div>
+		</div>
+	</tal:block>
+
+	<tal:block tal:condition="provider_diffs_count"
+	><tal:block tal:repeat="provider_diff provider_diffs"
+	><tal:block
+		tal:define="zmscontext python:here.getSelf();
+			provider python:provider_diff[0];
+			local_files python:list(here.localFiles(provider).values());
+			diffs python:provider_diff[1];
+			ids python:standard.distinct_list([x[2] for x in diffs]);
+			ids_sorting python:ids.sort();"
+	><div class="form-group row" tal:condition="ids">
+		<label class="col-sm-2 control-label zms-component">
+			<a tal:attributes="href python:'%s/manage_main?lang=%s'%(provider.absolute_url(),request['lang'])" target="_blank"
+				tal:content="python:provider.id">the provider_diff
+			</a>
+		</label>
+		<div class="col-sm-10">
+			<table class="table repo-diff-files">
+			<tal:block tal:repeat="id ids">
+				<tr>
+					<td class="meta-ids"><input type="checkbox" name="ids:list" tal:attributes="value python:'%s:%s'%(provider.id,id)" checked="checked"></td>
+					<td>
+						<a tal:attributes="href python:'%s/manage_%s?lang=%s&id=%s'%(provider.absolute_url(), id=='__metas__' and 'metas' or 'main',request['lang'],id)" target="_blank"> 
+							<tal:block tal:repeat="icon python:[x['__icon__'] for x in local_files if x['id']==id and '__icon__' in x and x['__icon__']]">
+								<i tal:attributes="class icon"></i>
+							</tal:block>
+							<strong tal:content="id">the id</strong>
+						</a>
+						<tal:block tal:repeat="desc python:[x['__description__'] for x in local_files if x['id']==id and '__description__' in x and x['__description__']]">
+							( <tal:block tal:content="desc">the description</tal:block> )
+						</tal:block>
+					</td>
+					<td>
+					<div style="white-space: nowrap;" 
+						tal:repeat="diff python:[x for x in diffs if x[2]==id]">
+						<tal:block 
+							tal:on-error="structure python:'<code><i class=\042fa fa-exclamation-triangle\042></i> PROCESSING-ERROR: %s</code>'%(diff[0])"
+							tal:define="
+								filename python:diff[0];
+								mt python:diff[1];
+								l python:diff[3];
+								r python:diff[4];
+								ld python:[l.get('data'),''][l.get('data') is None];
+								rd python:[r.get('data'),''][r.get('data') is None];
+								is_new python:len(ld)==0 and len(rd)>0;
+								is_modified python:len(ld)>0 and len(rd)>0;
+								is_removed python:len(ld)>0 and len(rd)==0;
+								filestate python:is_new and 'new' or (is_modified and 'modified' or (is_removed and 'removed' or ''));
+								filestate_css python:{'new':'success','modified':'warning','removed':'danger','':'info'}[filestate];">
+							<i tal:condition="python:l and l.get('data') is None" class="fa fa-exclamation-triangle text-danger" title="not found!"></i>
+							<span title="State"
+								tal:condition="not:python:l and l.get('data') is None"
+								tal:attributes="class python:'state alert-%s'%(filestate_css);
+									title python:'State: %s'%(filestate)">&nbsp;
+							</span>
+							<a href="#" tal:attributes="onclick python:'javascript:focus_anchorid(\'#%s\');;return false'%(here.id_quote(filename))" 
+								tal:content="python:filename">the filename
+							</a>
+						</tal:block>
+					</div>
+					</td>
+				</tr>
+			</tal:block>
+			</table>
+		</div><!-- .col-sm-10 -->
+	</div><!-- .form-group -->
+	</tal:block>
+	</tal:block>
+
+	<div id="repo-changesets">
+		<tal:block tal:repeat="provider_diff provider_diffs"
+			><tal:block tal:define="provider python:provider_diff[0]; diffs python:provider_diff[1];"
+				><tal:block tal:repeat="diff diffs"
+					><tal:block tal:define="
+							filename python:diff[0];
+							mt python:diff[1];
+							l python:diff[3];
+							r python:diff[4];
+							ld python:[l.get('data'),''][l.get('data') is None];
+							rd python:[r.get('data'),''][r.get('data') is None];
+							is_modified python:len(ld)>0 and len(rd)>0;
+							is_text python:mt.startswith('text/') or mt in ['application/javascript'];
+							lversion python: same_type(l.get('version',[0,0,0]),[0]) and '.'.join(str(i) for i in l.get('version',[0,0,0])) or l.get('version','0.0.0');
+							rversion python: same_type(r.get('version',[0,0,0]),[0]) and '.'.join(str(i) for i in r.get('version',[0,0,0])) or r.get('version','0.0.0');
+							is_incoming python:is_modified and ( lversion < rversion );"
+						><table class="repo-changeset table table-borderless" tal:condition="is_modified" tal:attributes="id python:here.id_quote(filename)">
+							<tr>
+								<td>
+									<span class="file_name">
+										<strong class="text-primary" tal:content="python:here.get_conf_basepath(provider.id+'/'+filename)"></strong>
+										<em class="text-muted" tal:content="python:'(%s)'%(mt)"></em>
+									</span>
+									<small class="file_details d-block" style="cursor:help"
+										tal:attributes="title python:is_incoming and 'Should be Loaded from Filesystem' or 'Should be Saved to Filesystem'">
+										<tal:block tal:condition="l" tal:content="python:'ZODB: %s - %i Bytes'%(lversion,len(ld))"></tal:block>
+										<i tal:condition="python:here.get_update_direction()=='Saving'" class="icon-arrow-right fas fa-arrow-right"></i>
+										<i tal:condition="python:here.get_update_direction()=='Loading'" class="icon-arrow-left fas fa-arrow-left"></i>
+										<tal:block tal:condition="r" tal:content="python:'Repository: %s - %i Bytes'%(rversion,len(rd))"></tal:block>
+									</small>
+								</td>
+							</tr>
+							<tr>
+								<td class="prettyTextDiff">
+									<pre class="diff"></pre>
+									<pre class="changed repository" tal:condition="is_text" tal:content="rd"></pre>
+									<pre class="original local" tal:condition="is_text" tal:content="ld"></pre>
+								</td>
+							</tr>
+						</table>
+					</tal:block>
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</div>
+</tal:block>
+</tal:block>

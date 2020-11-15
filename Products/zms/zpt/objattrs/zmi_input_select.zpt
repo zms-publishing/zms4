@@ -1,0 +1,17 @@
+<!-- objattrs/zmi_input_select -->
+
+<tal:block tal:define="global 
+		name      options/name;
+		lang_str  options/lang_str;
+		value     python:options.get('value');
+		opts      python:options.get('options',[]);
+		mandatory python:options.get('mandatory',False);">
+<select class="form-control" tal:attributes="name name;id name">
+	<option value="" tal:condition="not:mandatory">----- <tal:block tal:content="python:here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr(lang_str)">Select option</tal:block> -----</option>
+	<tal:block tal:repeat="opt opts">
+		<option tal:attributes="value python:opt[0]; selected python:['','selected'][int(str(opt[0])==str(value))]" tal:content="structure python:opt[1]">the label</option>
+	</tal:block>
+</select>
+</tal:block>
+
+<!-- /objattrs/zmi_input_select --> 

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+<item type="dictionary"><dictionary>
+<item key="attrs"/>
+<item key="btn" type="image">
+<data width="20" height="20" content_type="image/gif" filename="icon_bulletlist.gif" type="image">47494638396114001400b30000040204fc02fc3432341c22140c0e04242a245452542c221c141214ed006412004c0000779b02fe0000ff0000ff0000ff21f90401000001002c000000001400140000042930c849abbd38ebcdbbff20374c40596e8520996785b08871042c80aa34bb11a41efec0a070481c4600003b</data></item>
+<item key="display"><![CDATA[Insert Bullet]]></item>
+<item key="id"><![CDATA[insert_bullet]]></item>
+<item key="js"><![CDATA[function zmiRicheditInsertBullet() 
+{
+    var doc = document;
+    var fm = doc.forms['<dtml-var fmName>'];
+    var input = fm.elements['<dtml-var elName>'];
+    input.focus();
+    var insTab = '\t';
+    var insText = '\t* ';
+    /* internet explorer */
+    if( typeof doc.selection != 'undefined') {
+      var range = doc.selection.createRange();
+      // Move start of selection to start of line
+      var i = 0;
+      while ( true) {
+        var l = range.text.length;
+        range.moveStart('character',-1);
+        if ( range.text.length == l) {
+          break;
+        }
+        i += (range.text.length - l) + 1;
+        if ( range.text.substring( 0, i).indexOf( '\n') >= 0) {
+          range.moveStart('character',1);
+          break;
+        }
+      }
+      // Move end of selection to end of line
+      var i = 0;
+      while ( true) {
+        var l = range.text.length;
+        range.moveEnd('character',1);
+        if ( range.text.length == l) {
+          break;
+        }
+        if ( range.text.substring( l+i).lastIndexOf( '\n') >= 0) {
+          range.moveEnd('character',-1);
+          break;
+        }
+        i += 1;
+      }
+      // Insert tabs
+      var splitRange = range.text.split('\n');
+      var newText = "";
+      for ( var i = 0; i < splitRange.length; i++) {
+        if ( splitRange[i].indexOf( insText) >= 0 && splitRange[i].indexOf( insTab) == 0) {
+          newText += insTab + splitRange[i] + '\n';
+        }
+        else {
+          newText += insText + splitRange[i] + '\n';
+        }
+      }
+      // Insert text
+      range.text = newText;
+    }
+    /* newer gecko-based browsers */
+    else if( typeof input.selectionStart != 'undefined') {
+      // Move start of selection to start of line
+      var start = input.selectionStart;
+      while ( start > 0 && input.value.charAt( start) != '\n') {
+        start = start - 1;
+      }
+      if ( input.value.charAt( start) == '\n') {
+        start = start + 1;
+      }
+      // Move end of selection to end of line
+      var end = input.selectionEnd;
+      while ( end < input.value.length && input.value.charAt( end) != '\n') {
+        end = end + 1;
+      }
+      if ( input.value.charAt( end) == '\n') {
+        end = end - 1;
+      }
+      // Insert tabs
+      var splitRange = input.value.substr(start, end-start+1).split('\n');
+      var newText = "";
+      for ( var i = 0; i < splitRange.length; i++) {
+        if ( splitRange[i].indexOf( insText) >= 0 && splitRange[i].indexOf( insTab) == 0) {
+          newText += insTab + splitRange[i] + '\n';
+        }
+        else {
+          newText += insText + splitRange[i] + '\n';
+        }
+      }
+      newText = newText.substring( 0, newText.length - 1);
+      // Insert text
+      input.value = input.value.substr(0, start) + newText + input.value.substr(end+1);
+      // cursor-position
+      input.selectionStart = start;
+      input.selectionEnd = start + newText.length;
+    }
+}]]></item>
+<item key="tag"/>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="attrs"/>
+<item key="btn" type="image">
+<data width="20" height="20" content_type="image/gif" filename="icon_numlist.gif" type="image">47494638396114001400b30000040204fc02fc3432341c22140c0e04242a245452542c221c141214ed006412004c0000779b02fe0000ff0000ff0000ff21f90401000001002c000000001400140000042730c849abbd38ebcdbbff1ed00d142072855062886922c6319d5bba724445837cefffc0a0d01201003b</data></item>
+<item key="display"><![CDATA[Insert Enumeration]]></item>
+<item key="id"><![CDATA[insert_enumeration]]></item>
+<item key="js"><![CDATA[function zmiRicheditInsertEnummeration() 
+{
+    var doc = document;
+    var fm = doc.forms['<dtml-var fmName>'];
+    var input = fm.elements['<dtml-var elName>'];
+    input.focus();
+    var insTab = '\t';
+    var insText = '\t# ';
+    /* internet explorer */
+    if( typeof doc.selection != 'undefined') {
+      var range = doc.selection.createRange();
+      // Move start of selection to start of line
+      var i = 0;
+      while ( true) {
+        var l = range.text.length;
+        range.moveStart('character',-1);
+        if ( range.text.length == l) {
+          break;
+        }
+        i += (range.text.length - l) + 1;
+        if ( range.text.substring( 0, i).indexOf( '\n') >= 0) {
+          range.moveStart('character',1);
+          break;
+        }
+      }
+      // Move end of selection to end of line
+      var i = 0;
+      while ( true) {
+        var l = range.text.length;
+        range.moveEnd('character',1);
+        if ( range.text.length == l) {
+          break;
+        }
+        if ( range.text.substring( l+i).lastIndexOf( '\n') >= 0) {
+          range.moveEnd('character',-1);
+          break;
+        }
+        i += 1;
+      }
+      // Insert tabs
+      var splitRange = range.text.split('\n');
+      var newText = "";
+      for ( var i = 0; i < splitRange.length; i++) {
+        if ( splitRange[i].indexOf( insText) >= 0 && splitRange[i].indexOf( insTab) == 0) {
+          newText += insTab + splitRange[i] + '\n';
+        }
+        else {
+          newText += insText + splitRange[i] + '\n';
+        }
+      }
+      // Insert text
+      range.text = newText;
+    }
+    /* newer gecko-based browsers */
+    else if( typeof input.selectionStart != 'undefined') {
+      // Move start of selection to start of line
+      var start = input.selectionStart;
+      while ( start > 0 && input.value.charAt( start) != '\n') {
+        start = start - 1;
+      }
+      if ( input.value.charAt( start) == '\n') {
+        start = start + 1;
+      }
+      // Move end of selection to end of line
+      var end = input.selectionEnd;
+      while ( end < input.value.length && input.value.charAt( end) != '\n') {
+        end = end + 1;
+      }
+      if ( input.value.charAt( end) == '\n') {
+        end = end - 1;
+      }
+      // Insert tabs
+      var splitRange = input.value.substr(start, end-start+1).split('\n');
+      var newText = "";
+      for ( var i = 0; i < splitRange.length; i++) {
+        if ( splitRange[i].indexOf( insText) >= 0 && splitRange[i].indexOf( insTab) == 0) {
+          newText += insTab + splitRange[i] + '\n';
+        }
+        else {
+          newText += insText + splitRange[i] + '\n';
+        }
+      }
+      newText = newText.substring( 0, newText.length - 1);
+      // Insert text
+      input.value = input.value.substr(0, start) + newText + input.value.substr(end+1);
+      // cursor-position
+      input.selectionStart = start;
+      input.selectionEnd = start + newText.length;
+    }
+}]]></item>
+<item key="tag"/>
+</dictionary>
+</item>
+</list>

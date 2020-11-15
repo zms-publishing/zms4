@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dictionary>
+<item key="data"><![CDATA[<dtml-call "REQUEST.set('count',0)">
+<dtml-in "getTreeNodes(REQUEST)">
+ <dtml-call "setObjStateModified(REQUEST)">
+ <dtml-call "setObjProperty('active',1,REQUEST['lang'])">
+ <dtml-call "onChangeObj(REQUEST,forced=1)">
+ <dtml-call "REQUEST.set('count',REQUEST['count']+1)">
+</dtml-in>
+<dtml-return "'%i Objects activated!'%REQUEST['count']">]]></item>
+<item key="description"></item>
+<item key="execution" type="int">1</item>
+<item key="icon_clazz"><![CDATA[icon-globe text-primary]]></item>
+<item key="id"><![CDATA[manage_activateLanguage]]></item>
+<item key="meta_type"><![CDATA[DTML Method]]></item>
+<item key="meta_types" type="list"><list>
+<item><![CDATA[ZMSDocument]]></item>
+<item><![CDATA[ZMSFolder]]></item>
+<item><![CDATA[ZMS]]></item>
+</list>
+</item>
+<item key="name"><![CDATA[Activate language!]]></item>
+<item key="roles" type="list"><list>
+<item><![CDATA[ZMSAdministrator]]></item>
+</list>
+</item>
+</dictionary>

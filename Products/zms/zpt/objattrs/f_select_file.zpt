@@ -1,0 +1,70 @@
+<tal:block tal:define="global
+		standard modules/Products.zms/standard;
+		fmName options/fmName;
+		elName options/elName;
+		key options/key;
+		value options/value;">
+
+	<tal:block tal:condition="python:request.get('f_zmiBlobJs',True)">
+		<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/objattrs/zmi.blob.js"></script> 
+		<tal:block tal:define="dummy0 python:request.set('f_zmiBlobJs',False)"></tal:block>
+	</tal:block>
+
+	<div class="zmi-file d-flex align-items-center" tal:attributes="id python:'zmi-file-%s'%elName">
+		<input type="hidden" tal:attributes="name python:'exists_%s'%elName; value python:request.get('ZMS_INSERT',None) is None and value not in [None,'']" />
+		<input type="hidden" tal:attributes="name python:'del_%s'%elName" value="0" />
+
+	<div class="col-10 row">
+
+		<div class="zmi-input-file btn-group mr-3"
+			tal:define="has_file python:value is not None and here.operator_gettype(value) is not str;
+				allowed_ext python:request.set('ZMS_ALLOWED_EXTENSIONS',['jpg', 'jpeg', 'png', 'gif']);
+				filename python:has_file and value.getFilename() or 'None';
+				href python:has_file and value.getHref(request) or 'None';
+				size python:has_file and here.getDataSizeStr(value.get_size()) or 'None';
+				title python:has_file and '%s %s'%(filename,size) or 'No File Uploaded'">
+
+			<div class="custom-file"
+					tal:condition="python:request['lang'] in here.getLanguages(request)"
+					tal:attributes="class python:'custom-file%s'%(has_file and '' or ' new');
+						title title;
+						id python:'filename_%s'%elName;
+						data-filename filename;
+						data-href href;
+						data-size size;">
+				<input class="custom-file-input" type="file" value=""
+					onchange="$(this).next().html($(this).val().replace(/^.*(\\|\/|\:)/, ''));$(this).next().addClass('new_file');$(this).parent().nextAll().css('visibility','hidden');"
+					tal:attributes="id options/elName; name options/elName; maxlength python:options.get('elMaxLength','')" />
+				<label class="custom-file-label"
+					tal:attributes="for options/elName;class python:'custom-file-label%s'%(has_file and ' has_file' or '')"
+					tal:content="python:has_file and title or here.getZMILangStr('ACTION_SELECT')%(here.getZMILangStr('ATTR_FILE'))">
+					Choose File
+				</label>
+			</div>
+
+			<tal:block tal:condition="has_file">
+				<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" target="_blank"
+						tal:condition="has_file"
+						tal:attributes="id python:'download_btn_%s'%elName;href href"
+						tal:content="structure python:'%s %s'%('<i class=\042fas fa-download\042></i>',here.getZMILangStr('BTN_DOWNLOAD'))">Download</a>
+					<a class="dropdown-item" tal:attributes="id python:'delete_btn_%s'%elName"><i class="fas fa-trash"></i><tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block></a>
+					<a class="dropdown-item" tal:attributes="id python:'undo_btn_%s'%elName"><i class="fas fa-undo"></i><tal:block tal:content="python:here.getZMILangStr('BTN_UNDO')">Undo</tal:block></a>
+
+				</div><!-- .dropdown-menu -->
+			</tal:block>
+		</div>
+	</div>
+
+	<div class="col-2">
+		<div class="zmi-file-info" tal:condition="not:python:value is not None and here.operator_gettype(value) is not str">
+			<a tal:attributes="id python:'filename_%s'%elName" target="_blank" tal:content="python:''">the filename</a>
+			<span class="size" tal:attributes="id python:'size_%s'%elName" tal:content="python:''">the size</span>
+		</div><!-- .zmi-file-info -->
+	</div><!-- .col-2 -->
+
+	</div><!-- .zmi-file -->
+</tal:block>

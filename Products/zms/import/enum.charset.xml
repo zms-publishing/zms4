@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dictionary>
+<item key="utf-8">Unicode (Utf8)</item>
+<item key="ascii">Ascii</item>
+<item key="latin-1">Western Europe (Latin1)</item>
+<item key="latin-2">Eastern Europe (Latin2)</item>
+<item key="latin-3">Southern Europe (Latin3)</item>
+<item key="latin-4">Northern Europe (Latin4)</item>
+<item key="ISO-8859-6">Arabic</item>
+<item key="ISO-8859-7">Greek</item>
+<item key="ISO-8859-8">Hebrew</item>
+<item key="latin-5">Turkish (Latin5)</item>
+<item key="GB2312">Chinese (GB2312)</item>
+<item key="KOI8-R">Cyrillic (KOI8-R)</item>
+<item key="windows-1252">Windows-1252</item>
+<item key="windows-1256">Windows-1256 (Farsi)</item>
+</dictionary>

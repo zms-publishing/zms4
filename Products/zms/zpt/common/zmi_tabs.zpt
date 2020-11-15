@@ -1,0 +1,25 @@
+<!-- common/zmi_tabs -->
+
+<div class="collapse navbar-collapse row" id="tabs_items">
+	<ul class="nav nav-tabs" tal:define="global
+			current python:request['URL'].split('/')[-1];
+			options options/options;
+			actions python:[x.get('alias',x['action']) for x in options];
+			active python:[
+				(x==current and not here.id+'/'+current in actions) or
+				(x==here.id+'/'+current) or
+				(current not in actions and current.startswith(x)) for x in actions];
+				noactive python:len([x for x in active if x])<1;
+		"><tal:block tal:repeat="i python:range(len(options))"
+			><tal:block tal:define="option python:options[i]"
+				><li class="nav-item" tal:attributes="data-action python:option['action']"><a tal:attributes="
+						href python:here.url_append_params('%s/%s?lang=%s'%(here.getSelf().absolute_url(),option['action'],request['lang']),option.get('params',{}));
+						class python:' '.join(['nav-link']+[['','active'][int(active[i] or (i==0 and noactive))]])"
+					tal:content="structure python:here.getZMILangStr(option['label'])">label</a>
+				</li>
+			</tal:block>
+		</tal:block>
+	</ul><!-- .nav.nav-tabs -->
+</div>
+
+<!-- /common/zmi_tabs -->

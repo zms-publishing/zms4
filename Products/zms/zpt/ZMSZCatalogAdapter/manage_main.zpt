@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="zmscontext python:here.getSelf(); standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<style>
+
+</style>
+<body tal:attributes="class python:here.zmi_body_class(id='zcatalog config')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+<tal:block tal:define="meta_types python:here.getConnectorMetaTypes(); connectors python:here.getConnectors()">
+
+<div class="help d-none" data-for="catalog_awareness_active">
+	<div class="well">On every change the content is automatically indexed in the catalog.</div>
+</div>
+
+<div class="help d-none" data-for="catalog_model">
+	<div class="well">
+		<p>
+			Select objects and their attributes from the model to be indexed automatically.
+			Custom indexing can be achieved by adding <code>catalog_index</code> py-attributes
+			to your objects returning a map with the selected attributes:
+		</p>
+		<div class="zmi-code card p-2 highlight">
+			## Script (Python) "LgFoo.catalog_index"<br/>
+			##bind container=container<br/>
+			##bind context=context<br/>
+			##bind namespace=<br/>
+			##bind script=script<br/>
+			##bind subpath=traverse_subpath<br/>
+			##parameters=zmscontext<br/>
+			##title=py: Catalog-Index<br/>
+			##<br/>
+			return [{<br/>
+			<tal:block tal:repeat="attr_id python:here.getAttrIds()">
+			&nbsp;&nbsp;&nbsp;'<code><tal:block tal:content="attr_id">the attribute-id</tal:block></code>' : ...<br/>
+			</tal:block>
+			}]
+		</div>
+	</div>
+</div>
+
+<form action="manage_changeProperties" method="post" tal:define="zcatalogs python:here.getDocumentElement().objectValues(['ZCatalog'])">
+	<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+	<input type="hidden" name="tab" value="" />
+	<input type="hidden" id="getIds" tal:attributes="value python:','.join(here.getIds())" />
+	<span class="d-none" id="getAttrs" tal:content="python:here.str_json(here.getAttrs())"></span>
+
+	<nav id="subTab">
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active show" tal:attributes="href python:'#%s'%here.meta_type" data-toggle="tab">Adapter</a>
+			</li>
+			<li class="nav-item" tal:repeat="si connectors">
+				<a class="nav-link" tal:attributes="href python:'#%s'%si.meta_type" data-toggle="tab" tal:content="python:si.meta_type">Connector</a>
+			</li>
+		</ul>
+	</nav>
+
+	<div class="tab-content">
+		<div class="tab-pane fade active show" tal:attributes="id here/meta_type">
+			<div class="card form-horizontal">
+				<div class="form-group row">
+					<label class="col-sm-2 control-label" for="connectors"><span>Connectors</span></label>
+					<div class="col-sm-4">
+							<div class="input-group">
+								<select class="form-control" id="meta_type" name="meta_type"
+										onchange="if ($(this).val()!=''){document.getElementById('addMetaTypeBtn').click();}">
+									<option value="">Select type to add...</option>
+									<tal:block tal:repeat="meta_type meta_types">
+										<option tal:condition="python:len([x for x in connectors if x.meta_type==meta_type])==0" tal:attributes="value meta_type" tal:content="meta_type">the meta_type</option>
+									</tal:block>
+								</select>
+								<div class="input-group-append">
+									<button id="addMetaTypeBtn" name="btn" type="submit" class="btn btn-secondary" value="Add"><i class="fas fa-plus"></i></button>
+								</div>
+							</div>
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+				<div class="form-group row">
+					<label class="col-sm-2 control-label" for="catalog_awareness_active"><span>Awareness</span></label>
+					<div class="col-sm-10">
+						<input type="checkbox" value="1" id="catalog_awareness_active" name="catalog_awareness_active:int" tal:attributes="checked python:['','checked'][int(here.getConfProperty('ZMS.CatalogAwareness.active',1)==1)]"/>
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+				<div class="form-group row">
+					<label class="col-sm-2 control-label" for="catalog_model"><span>Model</span></label>
+					<div class="col-sm-10">
+
+						<tal:block tal:define="global
+								metaObjIds python:here.getMetaobjIds();
+								metaObjs python:[x for x in [here.getMetaobj(y) for y in metaObjIds] if x['id'] not in ['ZMS'] and x['type'] in ['ZMSPackage','ZMSDocument','ZMSObject']];
+								metaObjPackages python:here.sort_list(['']+[x['id'] for x in metaObjs if x['type']=='ZMSPackage']);
+								metaObjPackages2 python:[x.get('package') for x in metaObjs if x.get('package') not in metaObjPackages]">
+
+							<table class="table table-sm">
+								<colgroup>
+									<col width="50%"/>
+									<col width="50%"/>
+								</colgroup>
+								<thead>
+									<tr>
+										<th tal:content="python:here.getZMILangStr('ATTR_OBJECTS')">the objects</th>
+										<th tal:content="python:here.getZMILangStr('ATTR_ATTRS')">the attributes</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="p-0">
+
+											<table class="table table-sm" id="meta_types">
+												<tbody>
+													<tal:block tal:repeat="metaObjPackage python:here.sort_list(metaObjPackages+metaObjPackages2)">
+														<tal:block tal:condition="python:metaObjPackage in metaObjPackages">
+															<tr tal:condition="python:len([x for x in metaObjs if x.get('package')==metaObjPackage])>0" tal:define="global metaObj python:here.getMetaobj(metaObjPackage)">
+																<td colspan="2">
+																	<tal:block tal:condition="python:metaObjPackage">
+																		<i class="fas fa-briefcase"></i>
+																		<strong tal:content="metaObjPackage">the id</strong>
+																	</tal:block>
+																	<tal:block tal:condition="python:not metaObjPackage">
+																		<i class="fas fa-briefcase"></i>
+																		<strong>[default package]</strong>
+																	</tal:block>
+																</td>
+															</tr>
+														</tal:block>
+														<tal:block tal:condition="not:python:metaObjPackage in metaObjPackages">
+															<tr>
+																<td colspan="2" style="text-decoration:line-through">
+																	<i class="fas fa-briefcase"></i>
+																	<strong tal:content="metaObjPackage">the id</strong>
+																</td>
+															</tr>
+														</tal:block>
+														<tal:block tal:repeat="metaObj metaObjs">
+															<tr tal:condition="python:metaObj['type']!='ZMSPackage' and metaObj.get('package')==metaObjPackage">
+																<td style="text-align:center;">
+																	<input type="checkbox" name="ids:list" tal:attributes="value metaObj/id;
+																			data-attrs python:','.join(
+																				['%s(%s)'%(xx['id'],xx['type']) for xx in
+																					[here.getMetaobjAttr(metaObj['id'],x['id']) for x in metaObj['attrs'] if x['type'] not in ['*','constant','delimiter','file','hint','image','interface']]]);
+																			checked python:['','checked'][int('catalog_index' in [x['id'] for x in metaObj['attrs']])];
+																			disabled python:['','disabled'][int('catalog_index' in [x['id'] for x in metaObj['attrs']])]" onclick="toggleMetaobj()"/>
+																</td>
+																<td>
+																	<i tal:on-error="string:ERROR icon" tal:attributes="class python:zmscontext.zmi_icon(metaObj['id'])"></i>
+																	<span tal:on-error="string:ERROR" tal:content="metaObj/name">the name</span>
+																	<span>(<tal:block tal:content="python:here.getZMILangStr('SOTYPE_%s'%metaObj['type'].upper())">the type</tal:block>)</span>
+																</td>
+															</tr>
+														</tal:block>
+													</tal:block>
+												</tbody>
+											</table>
+
+										</td>
+										<td class="p-0 border-left">
+											<table class="table table-sm" id="indexes">
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+						</tal:block>
+
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+
+				<div class="form-group row">
+					<div class="col-sm-2">&nbsp;</div>
+					<div class="col-sm-10">
+						<button name="btn" type="submit" class="btn btn-primary" value="Save">Save</button>
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+			</div><!-- .form-horizontal -->
+		</div><!-- .tab-pane -->
+
+		<div class="tab-pane fade" tal:repeat="si connectors" tal:attributes="id si/meta_type">
+			<div class="card form-horizontal">
+				<tal:block tal:content="structure python:si.manage_input_form(here,request)">
+					the zmi input-form
+				</tal:block>
+				<div class="form-group row">
+					<div class="col-sm-2">&nbsp;</div>
+					<div class="col-sm-10">
+						<div class="zmi-languages mb-3">
+							<select class="zmi-select" id="langs" name="langs:list" multiple="multiple">
+								<tal:block tal:repeat="langId python:here.getLangIds()">
+									<option selected="selected" tal:attributes="value langId" tal:content="python:'%s (%s)'%(here.getLanguageLabel(langId),langId)">the label</option>
+								</tal:block>
+							</select>
+						</div><!-- .zmi-languages -->
+						<div>
+							<div class="zmi-sitemap-expand" onclick="$('#ZMSZCatalogConnector .zmi-sitemap').toggleClass('full');$('#ZMSZCatalogConnector .zmi-sitemap-expand i').toggleClass('icon-resize-small')">
+								<i class="icon icon-resize-full fas fa-expand-arrows-alt" title="Seitenanfang"></i>
+							</div>
+							<div class="zmi-sitemap">
+							</div><!-- .zmi-sitemap -->
+						</div>
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+				<div class="form-group row">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-10">
+						<button name="btn" type="submit" class="btn btn-primary" tal:attributes="title python:here.getZMILangStr('BTN_SAVE')" value="Save">
+							<tal:block tal:content="structure python:here.getZMILangStr('BTN_SAVE')"></tal:block>
+						</button>
+						<button name="btn" type="submit" class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_DELETE')" value="Delete">
+							<tal:block tal:content="structure python:here.getZMILangStr('BTN_DELETE')"></tal:block>
+						</button>
+						<div class="btn-group">
+							<a class="btn btn-secondary" tal:attributes="href python:'%s/get_sitemap'%si.absolute_url(); title python:'%s (%s)'%(here.getZMILangStr('BTN_EXPORT'),here.getZMILangStr('TAB_SITEMAP'))" target="_blank">
+								<i class="fas fa-download"></i>
+							</a>
+							<span class="btn btn-warning" tal:attributes="title python:here.getZMILangStr('BTN_REFRESH'); data-id si/id" onclick="return zmiReindexCatalog()">
+								<i class="fas fa-sync"></i>
+							</span>
+						</div>
+					</div><!-- .col-sm-10 -->
+				</div><!-- .form-group -->
+			</div><!-- .form-horizontal -->
+		</div><!-- .tab-pane -->
+	</div><!-- .tab-content -->
+
+</form>
+
+</tal:block>
+</div><!-- #zmi-tab -->
+
+<script>
+function toggleMetaobj() {
+	var selected = {};
+	$("table#indexes input:checked").each(function() {
+			var k = $(this).val();
+			selected[k] = {
+				type:$('input[name="type_'+k+'"]').val(),
+				boost:$('input[name="boost_'+k+'"]').val()};
+		});
+	var metaObjAttrs = {};
+	$("form input[name='ids:list']:checked").each(function() {
+			if(!$(this).prop("disabled")) {
+				var dataAttrs = $(this).attr("data-attrs").split(",");
+				for (var i = 0; i < dataAttrs.length; i++) {
+					var dataAttr = dataAttrs[i];
+					var metaObjAttr = {
+								id:dataAttr.substr(0,dataAttr.indexOf("(")),
+								type:dataAttr.substr(dataAttr.indexOf("(")+1,dataAttr.indexOf(")")-(dataAttr.indexOf("(")+1))
+							};
+					if (typeof metaObjAttrs[metaObjAttr.id] == 'undefined') {
+						metaObjAttrs[metaObjAttr.id] = metaObjAttr;
+					}
+				}
+			}
+		});
+	$("table#indexes tr").remove();
+	var metaObjAttrIds = [];
+	for (var metaObjAttrId in metaObjAttrs) {
+		metaObjAttrIds.push(metaObjAttrId);
+	}
+	metaObjAttrIds.sort();
+	for (var i=0; i < metaObjAttrIds.length; i++) {
+		var metaObjAttrId = metaObjAttrIds[i];
+		var preselected = typeof selected[metaObjAttrId] != 'undefined'
+		var type = metaObjAttrs[metaObjAttrId].type;
+		var boost = 1.0;
+		if (preselected) {
+			type = selected[metaObjAttrId].type;
+			boost = parseFloat(selected[metaObjAttrId].boost);
+		}
+		$("table#indexes").append(''
+				+ '<'+'tr>'
+					+ '<'+'td style="text-align:center;">'
+						+ '<'+'input type="checkbox" name="attr_ids:list" '+(preselected?' checked="checked"':'')+'value="'+metaObjAttrId+'" onclick="toggleMetaobj()"/>'
+					+ '<'+'/td>'
+					+ '<'+'td>'
+						+ '<'+'span>'+metaObjAttrId+' ('+type+')<'+'/span> '
+						+ '<'+'input type="hidden" name="type_'+metaObjAttrId+'" value="'+type+'"/> '
+					+ '<'+'/td>'
+					+ '<'+'td>'
+						+ '<'+'input class="form-control form-control-sm" type="number" step="0.1" title="Boost" name="boost_'+metaObjAttrId+'" value="'+boost.toFixed(1)+'"/> '
+					+ '<'+'/td>'
+				+ '<'+'/tr>');
+	}
+	$("table#meta_types *.bg-info").removeClass("bg-info");
+	$("table#meta_types *.alert-success,table#indexes *.alert-success").removeClass("alert-success");
+	$("table#meta_types input:checked,table#indexes input:checked").each(function() {
+			var clazz = "alert-success";
+			if ($(this).prop("disabled")) {
+				clazz = "bg-info";
+			}
+			$("td,span",$(this).parents("tr")[0]).addClass(clazz);
+		});
+}
+
+function zmiReindexCatalog() {
+	//$(this).closest('form').append('<input type=\042hidden\042 name=\042objectIds:list\042 value=\042'+$(this).attr('data-id')+'\042><input type=\042hidden\042 name=\042btn\042 value=\042Reindex\042>').submit();
+	$(".zmi-sitemap .response").remove();
+	var $inputs = $(".zmi-sitemap input:checked");
+	var i = 0;
+	var fn = function() {
+			if (i < $inputs.length) {
+				var $input = $($inputs[i]);
+				var uid = $input.val();
+				var langs = $("#langs").val().join(';');
+				var data = {uid:uid,langs:langs};
+				var $a = $input.next("a");
+				$a.after(`<span class="response alert zmi-code"><i class="fas fa-spinner fa-spin"></i></span>`);
+				$.ajax({
+					url:"manage_reindex",
+					data:data,
+					error: function (xhr, ajaxOptions, thrownError) {
+							$a.next('.response').addClass('alert-danger').html('( '+thrownError+' )');
+							i++;
+							fn();
+						},
+					success:function(response) {
+							$a.next('.response').addClass('alert-success').html('( '+response+' )');
+							i++;
+							fn();
+						}
+					});
+			}
+		}
+	fn();
+	return false;
+}
+
+function zmiSelectObject() {
+	return false;
+}
+
+$(function() {
+
+		// select tab
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				$("input[name=tab]:hidden").val($(e.target).text().trim());
+			});
+
+		var ids = $('#getIds').val().split(",");
+		for (var i = 0; i < ids.length; i++) {
+			$('input[name="ids:list"][value="'+ids[i]+'"]').prop("checked",true);
+		}
+		toggleMetaobj();
+		var attrs = eval("("+$("#getAttrs").html()+")");
+		for (var k in attrs) {
+			$('input[name="attr_ids:list"][value="'+k+'"]').prop("checked",true);
+			$('input[name="type_'+k+'"]').val(attrs[k].type);
+			$('input[name="boost_'+k+'"]').val(attrs[k].boost);
+		}
+		toggleMetaobj();
+
+		// Sitemap
+		var href = $ZMI.getPhysicalPath();
+		$ZMI.objectTree.init(".zmi-sitemap",href,{
+				'params':{meta_types:'ZMS'},
+				'init.href':'ajaxGetNode',
+				'init.callback':function() {
+					var fn = function() {
+						var $toggle = $(".zmi-sitemap .toggle[title='+']");
+						if ($toggle.length > 0) {
+							$ZMI.objectTree.toggleClick($($toggle[0]),fn);
+						}
+						else {
+							$(".zmi-sitemap ."+$ZMI.icon_clazz("icon-home").replace(/\s/gi,'.')).each(function() {
+									var $a = $(this).parent("a");
+									var uid = $a.attr('data-uid');
+									$a.before('<input name="home_ids:list" type="checkbox" title="'+uid+'" value="'+uid+'" checked="checked"> ');
+								});
+						}
+					}
+					fn();
+				}});
+
+	});
+</script>
+
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

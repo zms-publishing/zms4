@@ -1,0 +1,20 @@
+# ZMS Dependencies
+docutils
+configparser
+Zope[wsgi]
+Products.GenericSetup
+Products.MailHost
+Products.ExternalMethod
+Products.CMFCore
+Products.PythonScripts
+Products.SiteErrorLog
+Products.StandardCacheManagers
+Products.Sessions
+Products.TemporaryFolder
+
+zope.app.publication
+zope.authentication
+zope.untrustedpython
+zope.error
+ZopeUndo
+Pillow

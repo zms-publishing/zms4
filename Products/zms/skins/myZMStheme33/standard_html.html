@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html tal:define="
+    zmscontext options/zmscontext;
+    dummy0 python:zmscontext.f_standard_html_request(); 
+    zmsroot python:zmscontext.breadcrumbs_obj_path()[0]; 
+    lang request/lang; 
+    theme_common python:here.common.absolute_url();
+    channels python:{};
+    dummy0 python:[x.operator_setitem(channels,x.id_quote(x.getTitlealt(request)),x) for x in zmscontext.getDocumentElement().filteredChildNodes(request,zmscontext.PAGES)];"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xml:lang="de" lang="de"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" tal:attributes="content python:zmscontext.attr('attr_dc_description')">
+    <meta name="author" tal:attributes="content python:zmscontext.attr('attr_dc_creator')">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>
+      <tal:block tal:condition="python:zmscontext.getLevel()>1">
+        <tal:block tal:content="python:zmscontext.getParentByLevel(1).getTitlealt(request)">the title-alt</tal:block> &gt; 
+      </tal:block>
+      <tal:block tal:content="python:zmscontext.getTitlealt(request)">the title-alt</tal:block>
+    </title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/++resource++zms_/bootstrap/css/bootstrap.css"/>
+    <!-- Custom styles for this template -->
+    <link tal:attributes="href python:'%s/webdesign/docs.css'%theme_common" rel="stylesheet">
+    <link tal:attributes="href python:'%s/webdesign/style.css'%theme_common" rel="stylesheet">
+
+    <!-- ZMI core JS -->
+    <script type="text/javascript" charset="UTF-8" tal:attributes="src python:zmscontext.getConfProperty('plugins.zmi.js')"></script>
+
+  </head>
+
+  <body tal:attributes="id python:[zmscontext.id,'zmsroot'][zmscontext.getId()=='content' and 0 or 1];class python:'web %s %s'%(zmscontext.meta_id,lang)" >
+    <a class="sr-only" href="#content"></a>
+    <!-- Docs master nav -->
+    <header id="top" class="navbar navbar-static-top bs-docs-nav" role="banner">
+      <div class="container">
+        <div class="col-md-10">
+          <nav role="navigation">
+            <ul class="nav navbar-nav">
+              <li class="first">
+                <a tal:attributes="href python:zmsroot.getHref2IndexHtml(request,deep=False);" tal:content="python:zmsroot.getTitlealt(request)">the titlealt</a>
+              </li>
+              <tal:block tal:repeat="childNode python:[x for x in zmsroot.filteredChildNodes(request,'ZMSFolder') if not x.isResource(request)]">
+                <li tal:attributes="class python:' '.join([[],['active']][int(childNode.id in zmscontext.getPhysicalPath())]);">
+                  <a tal:attributes="href python:childNode.getHref2IndexHtml(request,deep=False);" tal:content="structure python:childNode.getTitlealt(request)">the titlealt</a>
+                </li>
+              </tal:block>
+            </ul>
+          </nav>
+        </div><!-- .col-md-10 -->
+        <div class="col-md-2">
+          <div class="navbar-header">
+            <div id="navbar-search" class="inactive" onclick="$(this).removeClass('inactive',{duration:500});$('input',this).focus();" 
+                tal:define="search_channel_key python:zmscontext.id_quote(zmscontext.getLangStr('SEARCH_HEADER',lang))"
+                tal:condition="python:search_channel_key in channels.keys()">
+              <form method="get" tal:attributes="action python:channels[search_channel_key].getHref2IndexHtml(request)">
+                <div class="search-container input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input name="search" id="srch-term" type="text" autocomplete="off" placeholder="Suche" title="Geben Sie bitte hier Ihren Suchbegriff ein." class="form-control autocomplete" onfocus="select()" 
+                    onchange="if($(this).val().length>0)$('#navbar-search').removeClass('inactive');"
+                    onblur="if($(this).val().length==0)$('#navbar-search').addClass('inactive',{duration:500});"/>
+                </div>
+              </form>
+            </div><!-- #navbar-search -->
+            <div id="navbar-menu" class="btn-group">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <span class="glyphicon glyphicon-align-justify"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li>
+                  <a href="http://www.zms-publishing.com" target="_blank">
+                    <span class="glyphicon glyphicon-globe text-primary"></span>
+                    www.zms-publishing.com
+                  </a>
+                </li>
+                <li>
+                  <a href="http://zmslabs.org" target="_blank">
+                    <span class="glyphicon glyphicon-globe text-primary"></span>
+                    zmslabs.org
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li id="add-bookmark"><a href="javascript:addBookmark();"><span class="glyphicon glyphicon-plus-sign"></span> Add bookmark</a></li>
+              </ul>
+            </div><!-- .navbar-menu -->
+          </div><!-- .navbar-header -->
+        </div><!-- .col-md-2 -->
+      </div><!-- .container -->
+    </header>
+
+    <!-- Docs page layout -->
+    <div id="content" class="bs-docs-header">
+      <div class="container">
+        <h1 tal:content="python:zmscontext.getTitle(request)">The title</h1>
+        <p tal:content="python:zmscontext.attr('attr_dc_description')">The description</p>
+      </div>
+    </div><!-- #content -->
+
+    <div class="container" tal:condition="python:zmscontext.getLevel()>0">
+      <ol class="breadcrumb">
+        <tal:block tal:repeat="node python:zmscontext.breadcrumbs_obj_path()">
+          <li tal:attributes="class python:['','active'][int(node==zmscontext)]">
+            <a tal:attributes="href python:node.getHref2IndexHtml(request,deep=0)" tal:content="python:node.getTitlealt(request)">
+              the titlealt
+            </a>
+          </li>
+        </tal:block>
+      </ol>
+    </div><!-- .container -->
+
+  <tal:block tal:define="
+      childNodes python:[x for x in zmscontext.filteredChildNodes(request) if not x.isResource(request)];
+      childElements python:[x for x in childNodes if x.isPageElement()];
+      childDocuments python:[x for x in childNodes if x.meta_id in ['ZMSDocument']];
+      article python:len(childNodes)==len(childDocuments) and 1 or 0;
+      childFolders python:[x for x in zmscontext.filteredChildNodes(request,['ZMSFolder']+ [['ZMSDocument'],[]][article]) if not x.isResource(request)];">
+  <div class="container bs-docs-container">
+    <div class="row">
+      <div class="col-md-9" role="main">
+
+        <tal:block tal:content="structure zmscontext/zmi_body_content">The content</tal:block>
+
+        <article tal:condition="article">
+        <div class="bs-docs-sidebar" role="complementary">
+          <h2 class="small-head">Bitte w&auml;hlen Sie:</h2>
+          <ul class="nav bs-docs-sidenav">
+            <li tal:repeat="childNode childDocuments">
+              <a tal:attributes="href python:'#%s'%childNode.id">
+                <tal:block tal:content="python:childNode.getTitle(request)">The title</tal:block>
+                <span class="glyphicon glyphicon-arrow-right"></span>
+              </a>
+            </li>
+          </ul>
+        </div> 
+        <div class="bs-docs-section" tal:repeat="childNode childDocuments">
+          <h1 class="page-header" tal:attributes="id python:childNode.id" tal:content="python:childNode.getTitle(request)">The title</h1>
+          <p><em tal:content="python:zmscontext.attr('attr_dc_description')">The description</em></p>
+          <tal:block tal:content="structure childNode/f_bodyContent">The content</tal:block>
+          <a class="back-to-top" href="#top" tal:content="python:zmscontext.getLangStr('PAGETOP',lang)">
+              pagetop
+          </a>
+        </div><!-- /.bs-docs-section -->
+        </article>
+
+      </div><!-- /.col-md-9 -->
+
+      <div class="col-md-3">
+        <div class="bs-docs-sidebar" role="complementary">
+          <ul class="nav bs-docs-sidenav" tal:condition="python:zmscontext.getLevel()>0">
+            <li tal:repeat="childNode childDocuments">
+              <a tal:attributes="href python:[childNode.getHref2IndexHtml(request,deep=False),'#%s'%childNode.id][article]" tal:content="python:childNode.getTitle(request)">The title</a>
+            </li>
+          </ul>
+          <a class="back-to-top" href="#top" tal:condition="python:zmscontext.getLevel()>0" tal:content="python:zmscontext.getLangStr('PAGETOP',lang)">
+            pagetop
+          </a>
+          <tal:block tal:content="structure python:zmscontext.pageelement_Teaser(zmscontext)">the teaser-elements</tal:block>
+        </div><!-- /.bs-docs-sidebar -->
+      </div><!-- /.col-md-3 -->
+
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+  </tal:block>
+
+
+    <footer class="bs-docs-footer" role="contentinfo">
+      <div class="container">
+        <div class="col-md-12">
+          <p style="font-size:10px">Content Management System ZMS is based on Python, jquery and bootstrap – and 100% free of PHP</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" charset="UTF-8" tal:attributes="src python:'/++resource++zms_/i18n/%s.js'%request['lang']"></script>
+    <tal:block tal:repeat="src python:[zmscontext.getConfProperty(x) for x in zmscontext.getConfProperty('bootstrap.libs').split(',')]"
+      ><script type="text/javascript" charset="UTF-8" tal:attributes="src src"></script>
+    </tal:block>
+    <script type="text/javascript" charset="UTF-8" tal:attributes="src python:'%s/js/jquery-ui.min.js'%theme_common"></script>
+    <script type="text/javascript" charset="UTF-8" tal:attributes="src python:'%s/js/script.js'%theme_common"></script>
+    <script type="text/javascript" charset="UTF-8" tal:attributes="src python:'%s/js/bookmarks.js'%theme_common"></script>
+  </body>
+</html>

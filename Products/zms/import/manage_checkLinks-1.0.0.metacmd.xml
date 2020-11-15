@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[# Load standard-Lib for ZMS3 or ZMS4
+import Products.zms.standard as standard
+import re
+
+def manage_checkLinks( self):
+  request = self.REQUEST
+  html = ''
+  html += '<!DOCTYPE html>'
+  html += '<html lang="en">'
+  html += self.zmi_html_head(self,request)
+  html += '<body class="%s">'%(' '.join(['zmi',request['lang'],'transition',self.meta_id]))
+  html += self.zmi_body_header(self,request,options=[{'action':'#','label':'Check links...'}])
+  html += '<div id="zmi-tab">'
+  html += self.zmi_breadcrumbs(self,request)
+  html += '<form class="form-horizontal" method="post" enctype="multipart/form-data">'
+  html += '<input type="hidden" name="form_id" value="manage_checkLinks"/>'
+  html += '<input type="hidden" name="lang" value="%s"/>'%request['lang']
+  html += '<div class="col-sm-12">'
+  html += '<div class="form-group form-inline">'
+  html += '<legend>Check links...</legend>'
+  html += '<button class="btn btn-primary" value="Start" name="btn" type="submit">Start</button>'
+  html += '<div class="radio btn btn-default btn-secondary"><label><input type="radio" name="options:list" '+['','checked="checked" '][(request.get('options',[])==[])]+' value="">&nbsp;All</div><!-- .row -->'
+  html += '<div class="radio btn btn-default btn-secondary"><label><input type="radio" name="options:list" '+['','checked="checked" '][int('missing' in request.get('options',[]))]+'value="missing">&nbsp;Missing Link-Targets</div><!-- .row -->'
+  html += '<div class="radio btn btn-default btn-secondary"><label><input type="radio" name="options:list" '+['','checked="checked" '][int('inactive' in request.get('options',[]))]+'value="inactive">&nbsp;Inactive Link-Targets</div><!-- .row -->'
+  html += '<div class="radio btn btn-default btn-secondary"><label><input type="radio" name="options:list" '+['','checked="checked" '][int('trashcan' in request.get('options',[]))]+'value="trashcan">&nbsp;Links Targeting Trashcan</div><!-- .row -->'
+  html += '</div><!-- .form-group -->'
+  html += '</div><!-- .col-sm-12 -->'
+
+  # id = 'zcatalog_index'
+  # catalog = getattr(self,id,None)
+
+  def find_node(base,path):
+    ref = base
+    for id in path.split('/'):
+      if id == '..':
+        parent = ref.getParentNode()
+        if parent is not None:
+          ref = ref.getParentNode()
+      elif id not in ['','.'] and id.find('.')<0:
+        if id.startswith('#'):
+          id = id[1:]
+        childNode = getattr(ref,id,None)
+        if childNode is None and self.getConfProperty( 'ZMS.pathhandler', 0) != 0:
+          for o in filter(lambda x:x.meta_type not in ['External Method'],ref.getChildNodes()):
+            for l in o.getLanguages():
+              r = {'lang':l}
+              try:
+                if o.getDeclId(r)==id:
+                  childNode = o
+              except:
+                pass
+              if childNode is not None:
+                break
+            if childNode is not None:
+              break
+        ref = childNode
+        if ref is None:
+          break
+    return ref
+  
+  def assembleRow(l,ref,old):
+    try:
+      # ZMS3
+      old = unicode(old,'utf-8')
+    except:
+      pass
+    if ref is not None:
+      inactive = not ref.isActive(request)
+      trashcan = self.getTrashcan().isAncestor(ref)
+      if (not 'missing' in request.get('options',[])) and \
+        (inactive or not 'inactive' in request.get('options',[])) and \
+        (trashcan or not 'trashcan' in request.get('options',[])):
+        l.append('<span class="alert-success'+['',' inactive'][int(inactive)]+['',' trashcan'][int(trashcan)]+'">'+old+'</span> '+ref.zmi_breadcrumbs_obj_path(ref,request))
+          
+    else:
+      if (not 'inactive' in request.get('options',[])) and \
+        (not 'trashcan' in request.get('options',[])):
+        l.append('<span class="alert-danger missing">'+old+'</span>')
+  
+  def handleInline(node,v): 
+    l = []
+    p = '<a(.*?)>(.*?)<\\/a>'
+    r = re.compile(p)
+    for f in r.findall(v):
+      internal = False
+      ref = None
+      d = dict(re.findall('\\s(.*?)="(.*?)"',f[0]))
+      if d.get('data-id',None)!=None:
+        data_id = d['data-id']
+        ref = node.getLinkObj(data_id)
+        internal = True
+      if ref is None and d.get('href',None)!=None:
+        href = d['href']
+        href = re.sub('http://localhost:(\\d)*/','',href)
+        for prefix in [request['SERVER_URL'],self.getConfProperty('ASP.ip_or_domain','?')]:
+          if href.startswith(prefix):
+            href = href[len(prefix):]
+        if href.startswith('.') or href.startswith('/'):
+          ref = find_node(node,href)
+          internal = True
+      if internal:
+        old = (p.replace('\\','').replace('(.*?)','%s'))%tuple(f)
+        assembleRow(l,ref,old)
+    return l
+  
+  def handleUrl(node,v):
+    l = []
+    ref = None
+    if v.startswith('{$') and v.endswith('}'):
+      if not (v.startswith('{$__') and v.endswith('__}')) \
+         and not (v.startswith('{$') and v.find('id:')>0 and v.endswith('}')):
+        ref = find_node(node,v[2:-1].replace('@','/content/'))
+      elif v.startswith('{$') and v.find('id:')>0 and v.endswith('}'):
+        data_id = v
+        ref = node.getLinkObj(data_id)
+      old = v
+      assembleRow(l,ref,old)
+    return l
+
+  def visit(node, html=[]):
+    try:
+      if node.meta_id!='ZMSLinkElement' and node.getType()=='ZMSRecordSet':
+        objAttrs = node.getMetaobjAttrs(node.meta_id)
+        key = filter(lambda x:x['type']=='list',objAttrs)[0]['id']
+      else:
+        th = False
+        for key in [x for x in node.getObjAttrs() if not x.startswith('manage')]:
+          objAttr = node.getObjAttr(key)
+          datatype = objAttr['datatype']
+          if datatype in ['richtext','string','text','url']:
+            v = node.getObjAttrValue(objAttr,request)
+            if v is not None:
+              v = str(v)
+              o = v
+              l2 = []
+              if datatype in ['richtext','string','text']:
+                l2.extend(handleInline(node,v))
+              elif datatype in ['url']:
+                #if v.find('/b_title_kompcen/')>0:
+                #  ### a_title_strat_forschung-Fix
+                #  v = v.replace('/b_title_kompcen/','/a_title_strat_forschung/')
+                #  node.setObjStateModified(request)
+                #  node.setObjProperty(key, v, request['lang'])
+                #  node.onChangeObj(request,forced=1)
+                l2.extend(handleUrl(node,v))
+              if l2:
+                if not th:
+                  html.append(''
+                    + '<tr>'
+                    + '<th colspan="2" class="checklinks_path">%s</td>'%(node.zmi_breadcrumbs_obj_path(node,request))
+                    + '</tr>')
+                  th = True
+                for i2 in l2:
+                  html.append(''
+                    + '<tr>'
+                    + '<td class="checklinks_name"><code>%s</code> <strong>%s</strong></td>'%(datatype,key)
+                    + '<td class="checklinks_link">%s</td>'%i2
+                    + '</tr>')
+    except:
+      html.append(standard.writeError(node,"can't visit"))
+    for childNode in node.getChildNodes():
+      visit(childNode,html)
+
+  html += """
+      <style>
+		#zmi-tab form .btn {
+			margin-right:1em;
+		}
+		th.checklinks_path, th.checklinks_path * {
+			background: #40617e;
+			color: #ddd;
+			padding: 0.1em !important;
+		}
+		th.checklinks_path {
+			white-space: nowrap;
+		}
+		th.checklinks_path .breadcrumb {
+			max-width: calc( 100vw - 100px);
+			text-overflow: ellipsis;
+			overflow: hidden;
+			padding: 0;
+		}
+		th.checklinks_path .breadcrumb>li+li:before {
+			padding: 0 0 0 6px;
+			color: #f5f5f5;
+		}
+		th.checklinks_path .breadcrumb li.active a {
+			font-weight: bold;
+			color: white !important;
+		}
+		table.checklinks .checklinks_name {
+			width: 200px !important;
+			background: #e5e5e5;
+		}
+		table.checklinks .checklinks_name code {
+			background: #333;
+			color: white;
+			padding: 2px 4px;
+			border-radius: 4px;
+		}
+		table.checklinks td.checklinks_name,
+		table.checklinks td.checklinks_link,
+		table.checklinks th.checklinks_path,
+		table.checklinks ul.breadcrumb {
+			font-weight: normal;
+			font-size: 12px;
+			padding: 8px;
+		}
+		table.checklinks ul.breadcrumb {
+			padding: 0;
+			margin: 0;
+		}
+		span.inactive, span.inactive *, span.trashcan, span.trashcan * {
+			color: #666!important;
+			background-color: #EEE!important;
+		}
+		span.alert-danger * {
+			font-weight: bold;
+			color: #843534!important;
+		}
+      </style>
+      <table class="table checklinks table-bordered">
+      <tr>
+        <th class="checklinks_name">Type / Name</th>
+        <th class="checklinks_link">Link</th>
+      </tr>
+      """
+  l = []
+  if request.form.get('btn',None):
+    visit(self.getTrashcan(),l)
+    visit(self,l)
+  if len(l)==0:
+    l.append('<tr><td class="checklinks_name">%s</td><td class="checklinks_links">%s</td></tr>'%(str(None),str(None)))
+  html += '\n'.join(l)
+  html += '</table><!-- .table -->'
+
+  html += '</form><!-- .form-horizontal -->'
+  html += '</div><!-- #zmi-tab -->'
+  html += self.zmi_body_footer(self,request)
+  html += '</body>'
+  html += '</html>'
+
+  return html]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz">fas fa-cogs</item>
+      <item key="id">manage_checkLinks</item>
+      <item key="meta_type"><![CDATA[External Method]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item>ZMSFolder</item>
+          <item>ZMS</item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[Check links...]]></item>
+      <item key="revision">1.0.0</item>
+      <item key="roles" type="list">
+        <list>
+          <item>ZMSEditor</item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[Check links...]]></item>
+    </dictionary>
+  </item>
+</list>

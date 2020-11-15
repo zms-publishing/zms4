@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+
+<body tal:attributes="class python:here.zmi_body_class(id='sequence')">
+
+	<form class="form-horizontal card" action="manage_changeProperties" method="post">
+
+		<legend class="navbar navbar-nav navbar-expand navbar-dark">
+				<tal:block tal:content="python:here.meta_type">the meta_type</tal:block>
+		</legend>
+
+		<div class="container">
+
+			<div class="alert alert-info mx-0 my-5">
+				A Sequence is used to provide unique ids. You can update the current value.
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-2 control-label" for="currentvalue:int"><span>Current-Value</span></label>
+				<div class="col-lg-10">
+					<input class="form-control" type="text" name="currentvalue:int" size="8" tal:attributes="value python:here.currVal()"/>
+				</div>
+			</div><!-- .form-group -->
+
+			<div class="form-group row">
+				<div class="col-lg-2">&nbsp;</div>
+				<div class="col-lg-10">
+					<button name="submit" type="submit" class="btn btn-primary" value="Change">Change</button>
+					<button name="submit" type="submit" class="btn btn-secondary" value="Next">Next</button>
+				</div><!-- .col-lg-10 -->
+			</div><!-- .form-group -->
+		</div>
+	</form>
+	<style>
+		.zmi.sequence form.card legend {
+			color:white;
+			background: #354f67;
+			padding-left:1rem;
+			height:42px;
+		}
+	</style>
+</body>
+</html>

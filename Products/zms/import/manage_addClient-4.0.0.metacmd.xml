@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[from Products.PythonScripts.standard import html_quote
+
+def manage_addClient(self):
+	request = self.REQUEST
+	html = ''
+	html += '<!DOCTYPE html>'
+	html += '<html lang="en">'
+	html += self.zmi_html_head(self,request)
+	html += '<body class="%s">'%(' '.join(['zmi',request['lang'],'transition',self.meta_id]))
+	html += self.zmi_body_header(self,request,options=[{'action':'#','label':'Insert client...'}])
+	html += '<div id="zmi-tab">'
+	html += self.zmi_breadcrumbs(self,request)
+	html += '<form class="form-horizontal card" method="post" enctype="multipart/form-data">'
+	html += '<input type="hidden" name="form_id" value="manage_addClient"/>'
+	html += '<input type="hidden" name="lang" value="%s"/>'%request['lang']
+	html += '<legend>Insert new ZMS-Client</legend>'
+	html += '<div class="card-body">'
+
+	# --- Insert client.
+	# ---------------------------------
+	if request.form.get('btn')=='BTN_INSERT':
+		message = []
+		home = self.getHome()
+		home.manage_addFolder(id=request['id'],title=request['title'])
+		folder_inst = getattr(home,request['id'])
+		request.set('lang_label',self.getLanguageLabel(request['lang']))
+		zms_inst = self.initZMS(folder_inst, 'content', request['titlealt'], request['title'], request['lang'], request['manage_lang'], request)
+		zms_inst.setConfProperty('Portal.Master',home.id)
+		if request.get('acquire'):
+			for id in self.getMetaobjIds():
+				zms_inst.metaobj_manager.acquireMetaobj(id)
+		self.setConfProperty('Portal.Clients',self.getConfProperty('Portal.Clients',[])+[request['id']])
+		message.append(self.getZMILangStr('MSG_INSERTED')%request['id'])
+		request.response.redirect(self.url_append_params('%s/manage_main'%zms_inst.absolute_url(),{'lang':request['lang'],'manage_tabs_message':'<br/>'.join(message)}))
+
+	# --- Display initial insert form.
+	# ---------------------------------
+	else:
+		html += '<div class="form-group row">'
+		html += '<label for="id" class="col-sm-3 control-label mandatory">%s</label>'%(self.getZMILangStr('ATTR_ID'))
+		html += '<div class="col-sm-9"><input class="form-control" name="id" type="text" size="25" value="client0"></div>'
+		html += '</div><!-- .form-group -->'
+		html += '<div class="form-group row">'
+		html += '<label for="titlealt" class="col-sm-3 control-label mandatory">%s</label>'%(self.getZMILangStr('ATTR_TITLEALT'))
+		html += '<div class="col-sm-9"><input class="form-control" name="titlealt" type="text" size="80" value="Client0 home"></div>'
+		html += '</div><!-- .form-group -->'
+		html += '<div class="form-group row">'
+		html += '<label for="title" class="col-sm-3 control-label mandatory">%s</label>'%(self.getZMILangStr('ATTR_TITLE'))
+		html += '<div class="col-sm-9"><input class="form-control" name="title" type="text" size="50" value="Client0 - Python-based contentmanagement system for science, technology and medicine"></div>'
+		html += '</div><!-- .form-group -->'
+		html += '<div class="form-group row">'
+		html += '<label for="titlealt" class="col-sm-3 control-label">%s</label>'%(self.getZMILangStr('TAB_CONFIGURATION'))
+		html += '<div class="col-sm-9"><input name="acquire:int" type="checkbox" value="1" checked="checked"> %s</div>'%(self.getZMILangStr('BTN_ACQUIRE'))
+		html += '</div><!-- .form-group -->'
+		html += '<div class="form-row">'
+		html += '<div class="controls save">'
+		html += '<button type="submit" name="btn" class="btn btn-primary" value="BTN_INSERT">%s</button>'%self.getZMILangStr('BTN_INSERT')
+		html += '<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL">%s</button>'%self.getZMILangStr('BTN_CANCEL')
+		html += '</div><!-- .controls.save -->'
+		html += '</div><!-- .form-group -->'
+
+	# ---------------------------------
+
+	html += '</div><!-- .card-body -->'
+	html += '</form><!-- .form-horizontal -->'
+	html += '</div><!-- #zmi-tab -->'
+	html += self.zmi_body_footer(self,request)
+	html += '</body>'
+	html += '</html>'
+
+	return html]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[fas fa-home]]></item>
+      <item key="id">manage_addClient</item>
+      <item key="meta_type"><![CDATA[External Method]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item>ZMS</item>
+        </list>
+      </item>
+      <item key="name">ZMS-Client...</item>
+      <item key="revision">4.0.0</item>
+      <item key="roles" type="list">
+        <list>
+          <item>ZMSAdministrator</item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[Insert new ZMS-Client]]></item>
+    </dictionary>
+  </item>
+</list>

@@ -1,0 +1,10 @@
+<div tal:condition="python:options.get('img') not in ['',None]"
+		class="graphic"
+		tal:content="structure python:options.get('img')">
+	the img
+</div>
+<div tal:condition="python:options.get('text') not in ['',None]"
+		tal:attributes="class python:['',options.get('textclass')][int(options.get('textclass') not in ['',None])];"
+		tal:content="structure python:options.get('text')">
+	the text
+</div>

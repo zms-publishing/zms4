@@ -1,0 +1,24 @@
+<tal:block tal:define="global 
+		is_sitemap python:request.get('dtpref_sitemap','0')=='1' and not (request.get('dtpref_system','0')=='1' and request['URL'].find('/manage_workspace')>0);
+		is_system python:request.get('dtpref_system','0')=='1';
+		target python:request.get('came_from',['manage_main','manage_system'][int(is_system)]+'?lang=%s'%request.get('lang',here.getPrimaryLanguage()));">
+	<tal:block tal:condition="is_sitemap">
+		<!DOCTYPE html>
+		<html lang="en" tal:define="standard modules/Products.zms/standard">
+			<head tal:define="dummy python:here.zmi_page_request(here,request)">
+				<title tal:content="python:'ZMS | %s | %s'%(here.display_type(),request['lang'])">the title</title>
+				<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+				<meta name="version_container_abs_url" tal:attributes="content python:here.getVersionContainer().absolute_url()" />
+				<meta name="physical_path" tal:attributes="content python:'/'.join(here.getPhysicalPath())" />
+				<meta name="generator" content="ZMS4" />
+			</head>
+			<frameset tal:attributes="cols python:'%s,*'%str(request.get('manage_menu_width',224))">
+				<frame marginwidth="2" marginheight="2" scrolling="auto" name="manage_menu" tal:attributes="src python:'manage_menu?lang=%s&preview=preview'%request.get('lang','ger')+['','&zmi-debug=True'][int('zmi-debug' in request)]"/>
+				<frame marginwidth="2" marginheight="2" scrolling="auto" tal:condition="is_system" name="manage_main" tal:attributes="src python:'manage_system?lang=%s'%request.get('lang','ger')+['','&zmi-debug=True'][int('zmi-debug' in request)]"/>
+				<frame marginwidth="2" marginheight="2" scrolling="auto" tal:condition="not:is_system" name="manage_main" tal:attributes="src target"/>
+			</frameset>
+		</html>
+	</tal:block>
+	<tal:block tal:condition="not:is_sitemap" tal:content="python:request.RESPONSE.redirect(target)">redirect to target</tal:block>
+</tal:block>

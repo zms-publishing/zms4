@@ -1,0 +1,10 @@
+<tal:block tal:define="global dummy0 python:here.f_standard_html_request(here,request)"></tal:block
+><tal:block tal:condition="python:request.get('op')=='print' or 'printversion' in request">
+	<head>
+		<tal:block tal:content="structure python:here.f_headMeta_Locale(here,request)">f_headMeta_Locale</tal:block>
+		<tal:block tal:content="structure python:here.headScript(here,request)">headScript</tal:block>
+		<tal:block tal:content="structure python:here.headCStyleSheet(here,request)">headCStyleSheet</tal:block>
+	</head>
+	<tal:block tal:content="structure python:'<body class=\042print\042>'"></tal:block>
+</tal:block
+><tal:block tal:condition="not:python:request.get('op')=='print' or 'printversion' in request" tal:content="structure python:here.standard_html_header(here,request)">standard_html_header</tal:block>

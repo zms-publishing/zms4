@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+
+<body tal:attributes="class python:here.zmi_body_class(id='workflow_manager_main')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<script>
+
+/**
+ * Transfer selected object to node list.
+ */
+function selectObject(ignoredUrl, ignoredTitle, nodeName) {
+	var form = $('form.form-initialized[action="manage_changeWorkflow"]');
+	var textArea = form.find('textarea.url-input');
+	var newVal = textArea.val() + '\n' + nodeName;
+	textArea.val(newVal).trigger('change');
+}
+
+</script>
+
+<form class="form-horizontal card" action="manage_changeWorkflow" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+	<input type="hidden" name="key" value="custom"/>
+	<legend>Acquired Workflow</legend>
+	<div class="row container">
+		<label for="workflow" class="control-label pull-left"><span style="padding-right:1em;">aktiv</span></label>
+		<span class="btn btn-secondary pull-left"><input type="checkbox" id="workflow" name="workflow:int" value="1" tal:attributes="checked python:['','checked'][int(not here.getAutocommit())]" /></span>
+		<div class="col-xs-3 col-sm-4 col-md-5">
+			<textarea class="form-control url-input" name="nodes" title="Nodes" tal:content="python:'\n'.join(here.operator_getattr(here,'nodes',['{$}']))">{$}</textarea>
+		</div>
+	</div>
+	<div class="controls save">
+		<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+	</div>
+</form>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

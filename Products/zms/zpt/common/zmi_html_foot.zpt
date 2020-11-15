@@ -1,0 +1,5 @@
+<!-- common/zmi_html_foot -->
+<tal:block tal:repeat="src python:list(request.get('ZMI_LIBS_JS',[]))">
+<script type="text/javascript" charset="UTF-8" tal:condition="src" tal:attributes="src src"></script>
+</tal:block>
+<!-- /common/zmi_html_foot -->

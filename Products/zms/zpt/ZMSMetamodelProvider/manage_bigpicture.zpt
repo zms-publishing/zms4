@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='bigpicture')">
+<form class="form-horizontal card" 
+	tal:define="global
+		packageId request/id;
+		metaObjIds python:here.getMetaobjIds();
+		metaObjIds_sorted python:metaObjIds.sort();
+		metaObjs python:[here.getMetaobj(x) for x in metaObjIds]">
+	<legend class="navbar navbar-nav navbar-expand navbar-dark" 
+		tal:content="python:'BigPicture::LogicalView::%s'%packageId">the legend</legend>
+	<ol class="objlist form-control">
+		<li tal:repeat="metaObj python:[x for x in metaObjs if x['package']==packageId]">
+			<tal:block tal:define="
+					oid python:metaObj.get('id','');
+					oname python:metaObj.get('name','');
+					odisplay python:oid!=oname and '({})'.format(oname) or ''">
+				<a tal:attributes="href python:'#%s'%(metaObj.get('id','')); title metaObj/name"
+					tal:content="python:oid">the name</a>
+				<span tal:replace="odisplay"></span>
+			</tal:block>
+		</li>
+	</ol>
+
+	<tal:block tal:repeat="metaObj python:[x for x in metaObjs if x['package']==packageId]">
+		<div class="box" tal:attributes="id metaObj/id">
+			<p class="box_number" tal:content="repeat/metaObj/number">1</p>
+			<div class="objtype" tal:content="metaObj/type" title="Object Type">the type</div>
+			<div class="objid">
+				<i tal:attributes="class python:zmscontext.zmi_icon(metaObj['id'])"></i>
+				<a title="Edit Model..." target="_blank" tal:attributes="href python:'manage_main?id=%s'%(metaObj['id'])" tal:content="metaObj/id">the id</a>
+				<span class="objname" title="Display Name">
+					= <tal:block 
+						tal:define="l python:request.get('manage_lang','ger');
+									n python:metaObj.get('name','');
+									nstr python:here.getZMILangStr(n,l);
+									tstr python:here.getZMILangStr('TYPE_%s'%(n.upper()),l);"
+						tal:content="python:[tstr,nstr][tstr=='TYPE_%s'%(n.upper())]">the name</tal:block>
+				</span>
+			</div>
+			<tal:block tal:repeat="metaObjAttrId python:here.getMetaobjAttrIds(metaObj['id'])">
+				<tal:block tal:define="global metaObjAttr python:here.getMetaobjAttr(metaObj['id'],metaObjAttrId)">
+					<div tal:attributes="class python:' '.join(['attr']+[[],['subobject']][int(metaObjAttr['type'] in ['*']+metaObjIds)])" tal:condition="python:metaObjAttr['type'] not in ['delimiter','interface']">
+						<span class="attrType" tal:content="metaObjAttr/type">the type</span>
+						<span class="attrId" tal:content="metaObjAttr/id">the id</span>:
+						<span class="attrName">(<tal:block tal:content="structure metaObjAttr/name" tal:condition="python:metaObjAttr['type'] not in ['hint']">the name</tal:block>)</span>
+					</div><!-- .attr -->
+					<div class="ref" tal:condition="python:metaObjAttr['type'] in ['*']+metaObjIds">
+						<table cellspacing="0" cellpadding="0" border="0">
+						<tr valign="top">
+						<td>
+							<div class="cardinality">
+								<tal:block tal:condition="python:metaObjAttr.get('mandatory',False)">1</tal:block>
+								<tal:block tal:condition="python:metaObjAttr.get('repetitive',False)">0..*</tal:block>
+								<tal:block tal:condition="python:not metaObjAttr.get('mandatory',False) and not metaObjAttr.get('repetitive',False)">0..1</tal:block>
+							</div>
+							&nbsp;
+						</td>
+						<td>
+							<div class="attr" tal:condition="python:metaObjAttr['type'] in ['*']" tal:content="structure python:'<br/>'.join([here.display_type(request,x) for x in metaObjAttr['keys']])"></div>
+							<div class="attr" tal:condition="python:metaObjAttr['type'] in metaObjIds" tal:content="python:metaObjAttr['type']"></div>
+						</td>
+						</tr>
+						</table>
+					</div><!-- .ref -->
+				</tal:block>
+			</tal:block>
+		</div>
+	</tal:block>
+</form>
+
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+
+<script>
+	$ZMI.registerReady(function(){
+		$('ol.objlist a').click( function() { 
+		$('ol.objlist a').removeClass('active');
+		$('.box').removeClass('focused');
+		$(this).addClass('active'); 
+		$($(this).attr('href')).addClass('focused');
+		})
+	})
+</script>
+
+<style>
+.zmi.bigpicture form.card legend {
+	color:white;
+	background: #354f67;
+	padding-left:1rem;
+	height:42px;
+	margin-bottom: 1rem;
+}
+.box {
+	background-color:#CFC;
+	border:1px solid #354f67;
+	border-radius:4px;
+	padding:0;
+	margin:1em 1em 2em 1em;
+	text-align:left;
+	width:30em;
+	position:relative;
+	cursor:auto;
+}
+.box.focused {
+	background-color:#AEE;
+}
+p.box_number {
+	width: 2.5rem;
+	display: block;
+	background: #354f67;
+	position: absolute;
+	z-index: 100;
+	margin: 0;
+	border-top-left-radius: 4px;
+	color: white;
+	padding: 0 .5rem;
+	text-align: right;
+}
+ol.objlist {
+	position: fixed;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	top: 59px;
+	bottom: 59px;
+	right: 20px;
+	padding: .5em 3em;
+	background: #fcfcfc;
+	box-shadow: inset 0 2px 2px rgba(0,0,0,.075);
+	width: auto;
+	height: calc(100vh - 120px);
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+ol.objlist li {
+	font-size: smaller;
+	line-height: 1.75;
+}
+.box div {
+	padding:.15em .5em
+}
+.box .objid {
+	border-bottom:1px solid #354f67;
+	text-align:center;
+}
+.box .objid a {
+	font-weight:bold;
+	color:black;
+	text-decoration:none;
+}
+.box .objtype {
+	text-align:center;
+	font-style:italic;
+	color:darkgreen;
+}
+.box .objname {
+	color:darkred;
+}
+.box .attr {
+	font-size:smaller;
+}
+.attrId {
+	font-weight:bold
+}
+.attrType {
+	color:darkgreen;
+	float:right;
+}
+.box .attr.subobject {
+	background-color:#DFD;
+}
+.box .ref {
+	padding:2px;
+	position:absolute;
+	left:30em;
+	margin-top:-2.5em;
+}
+.box .ref .cardinality {
+	border-bottom:1px solid #C00;
+	padding:2px;
+	min-width:10em;
+	font-size:smaller;
+}
+.box .ref .attr {
+	background-color:#FFE;
+	border:1px solid #C00;
+	border-radius:4px;
+	padding:2px;
+	min-width:10em;
+	font-size:smaller;
+	margin-top:0.8em
+}
+@media print {
+	ol.objlist {
+		position: relative;
+		border: unset;
+		padding: 2.5em;
+		background:unset;
+		box-shadow: unset;
+		height:unset;
+		overflow-y: unset;
+		left: unset;
+		right:unset;
+		top:unset;
+		bottom: unset;
+	}
+	.box {
+		page-break-inside: avoid;
+	}
+	.zmi legend {
+		margin: 0 -20px;
+		background:none;
+		width: unset;
+		padding: 5px 35px;
+		height: 42px;
+		color:unset;
+	}
+	p.box_number {
+		background:unset;
+		color:black;
+		text-align: left;
+	}
+}
+</style>
+
+</body>
+</html>

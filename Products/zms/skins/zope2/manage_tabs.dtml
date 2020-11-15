@@ -1,0 +1,101 @@
+<!-- ZMS CUSTOM TABS -->
+<dtml-if "REQUEST.get('used_zms_custom_manage_page_header',False)==False and 'HelpSys' not in REQUEST.get('URL0','')">
+<!-- COMPLICATION 1: ZMI does not use manage_page_header Method -->
+<link rel="stylesheet" type="text/css" href="&dtml-BASEPATH1;/manage_page_style.css" />
+</dtml-if>
+<dtml-if "'HelpSys' in REQUEST.get('URL0','')">
+<style>
+/* COMPLICATION 2: Zope Help-System */
+ul.nav.nav-tabs {
+	margin: 0 0 1em 0;
+	padding: .5em 0 0 .5em;
+	border-bottom: 1px solid silver;
+}
+ul.nav.nav-tabs li {
+	display: inline-block;
+	padding: .4em .5em;
+	border: 1px solid silver;
+	background: #eee;
+	margin-bottom: -1px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+ul.nav.nav-tabs li.active {
+	background: white;
+	border-bottom: 1px solid white;
+}
+ul.nav.nav-tabs li a {
+	text-decoration:none;
+}
+</style>
+</dtml-if>
+
+
+<dtml-with "_(manage_options=filtered_manage_options())">
+<dtml-if manage_options>
+<dtml-call "REQUEST.set('n_', _.len(manage_options)-1)">
+<dtml-call "REQUEST.set('a_', 0)">
+<dtml-in manage_options mapping>
+<dtml-if expr="REQUEST.URL[-(_.len(action)):]==action or
+                REQUEST.URL[-17:]=='/manage_workspace' and _['sequence-start']">
+<dtml-call "REQUEST.set('a_', _['sequence-index'])">
+</dtml-if>
+
+<dtml-if "_.has_key('management_view') and management_view==label">
+<dtml-call "REQUEST.set('a_', _['sequence-index'])">
+</dtml-if>
+</dtml-in>
+
+<ul class="nav nav-tabs">
+<dtml-in manage_options mapping>
+<dtml-let s_item=sequence-item s_index=sequence-index>
+<li
+	<dtml-var "'class=\042%s %s\042'%(['','first-tab'][s_index==0],['','active'][s_index==a_])">
+	><a <dtml-if "s_item.get('action')">href="&dtml-action;"<dtml-else>href="<dtml-var "REQUEST.URL1" html_quote>"</dtml-if
+	><dtml-if "s_item.get('target')"> target="&dtml-target;"</dtml-if>><dtml-var "s_item['label']"></a></li>
+</dtml-let>
+</dtml-in>
+</ul>
+
+</dtml-if>
+
+<dtml-unless MANAGE_TABS_NO_BANNER>
+<div class="breadcrumb">
+    <dtml-if icon><img src="&dtml-BASEPATH1;/&dtml-icon;" alt="&dtml-meta_type;" border="0" /></dtml-if>
+    <dtml-if meta_type>
+      &dtml-meta_type;
+    <dtml-else>
+    Object
+    </dtml-if> 
+    at <dtml-var expr="tabs_path_default(REQUEST)">
+    <dtml-if wl_isLocked>
+     <img src="&dtml-BASEPATH1;/p_/davlocked"
+      alt="This item has been locked by WebDAV"
+      title="This item has been locked by WebDAV" />
+    </dtml-if wl_isLocked>
+  <dtml-if "_.has_key('help_topic') and _.has_key('help_product')">
+  <dtml-if "HelpSys.helpLink(help_product, help_topic)">
+  <dtml-var "HelpSys.helpLink(help_product, help_topic)">
+  </dtml-if>
+  <dtml-else>
+  <dtml-if manage_options>
+  <dtml-with "_(option=manage_options[a_])">
+  <dtml-if "option.has_key('help')">
+  <dtml-if "HelpSys.helpLink(option['help'][0], option['help'][1])">
+  <dtml-var "HelpSys.helpLink(option['help'][0], option['help'][1])">
+  </dtml-if>
+  </dtml-if>
+  </dtml-with>
+  </dtml-if>
+  </dtml-if>
+</dtml-unless>
+</div>
+
+<dtml-if manage_tabs_message>
+<div class="system-msg">
+<dtml-var manage_tabs_message newline_to_br> 
+(<dtml-var ZopeTime fmt="%Y-%m-%d %H:%M">)
+</div>
+</dtml-if>
+
+</dtml-with>

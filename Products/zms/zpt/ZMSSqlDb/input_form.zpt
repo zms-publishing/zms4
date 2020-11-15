@@ -1,0 +1,356 @@
+<tal:block tal:define="
+			standard modules/Products.zms/standard;
+			action options/action;
+			qindex options/qindex;
+			rowid options/rowid;
+			row options/row;
+			encoding python:getattr(here,'charset','utf-8');
+			entity options/entity;
+			primary_key python:here.getEntityPK(entity['id']);
+			input_form python:options.get('input_form',True);
+			request_form_inherit python:['lang','preview','qentity']+options.get('request_form_inherit',[]);">
+
+<form class="form-horizontal" id="form0" name="form0" method="post" enctype="multipart/form-data" 
+	tal:omit-tag="not:input_form"
+	tal:attributes="action request/URL"
+	tal:define="global
+		primary_key python:here.getEntityPK(entity['id']).lower();
+		qcharset python:request.get('qcharset','utf-8')">
+	<tal:block tal:repeat="key python:[x for x in request_form_inherit if x in list(request.keys())]">
+		<input type="hidden" 
+			tal:omit-tag="python: not input_form and key in ['lang','preview']"
+			tal:attributes="id key; name key; value python:request[key]"/>
+	</tal:block>
+	<input type="hidden" id="action" name="action" tal:attributes="value action">
+	<input type="hidden" id="qindex" name="qindex:int" tal:attributes="value qindex">
+	<input type="hidden" id="rowid" name="rowid" tal:attributes="value rowid">
+	<legend>
+	</legend>
+	<div class="card">
+		<div class="card-header btn-collapse">
+			<a class="btn card-toggle" href="#">
+				<i class="fas fa-th"></i>
+				<strong tal:attributes="title entity/id" tal:content="entity/label">the label</strong>:
+				<tal:block tal:content="python:here.getZMILangStr({'insert':'CAPTION_INSERT','update':'CAPTION_EDIT'}[action])%here.getZMILangStr('ATTR_RECORD')">the heading</tal:block>
+			</a>
+		</div><!-- card-header -->
+		<div class="card-body">
+		<tal:block tal:repeat="column entity/columns">
+			<tal:block tal:condition="python:'details' not in column" tal:define="global
+					metaObjAttr python:here.getEntityColumn(entity['id'],column['id'],row);">
+			<tal:block tal:on-error="python:'ERROR: %s'%str(metaObjAttr)" tal:define="global
+					elName python:metaObjAttr['id'];
+					elLabel python:metaObjAttr['label'];
+					elValue python:here.operator_getitem(row,elName,ignorecase=True)">
+
+			<input tal:condition="python:column['id'].lower() in request_form_inherit" type="hidden" tal:attributes="name elName; value elValue"/>
+			<div tal:condition="python:column['id'].lower() not in request_form_inherit" class="form-group row" tal:define="global done python:[]" tal:attributes="id python:'tr_%s'%(elName)">
+
+				<tal:block tal:on-error="structure string: <!-- INTERFACE ERROR -->" tal:replace="python:metaObjAttr.get('interface','')">table interface element</tal:block>
+
+				<tal:block tal:replace="nothing">
+				##### Label ############################################################
+				</tal:block>
+				<label tal:attributes="for elName; class python:' '.join(['col-sm-3 col-md-2 control-label']+[[],['mandatory']][int((metaObjAttr.get('mandatory') in ['1',1,'True',True]) and metaObjAttr.get('auto') in ['',None])])">
+					<i tal:condition="python:metaObjAttr.get('pk')" class="fas fa-key"></i>
+					<span tal:content="elLabel">the label</span>
+				</label>
+
+				<tal:block tal:replace="nothing">
+				##### Password #########################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10" tal:condition="python:not done and metaObjAttr.get('password') in ['1',1,'True',True]">
+					<input class="form-control" type="password" tal:attributes="name elName" value="******"/>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</div>
+
+				<tal:block tal:replace="nothing">
+				##### Auto #############################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10 ZMSSqlDbForm-auto" tal:condition="python:not done and metaObjAttr.get('auto') not in ['',None]">
+					<div class="form-control-static" tal:condition="python:metaObjAttr.get('datatype') in ['datetime']">
+						<input type="hidden" tal:attributes="name elName; value python:DateTime(elValue)"/>
+						<tal:block tal:content="python:DateTime(elValue)">the value</tal:block>
+					</div>
+					<div class="form-control-static" tal:condition="not:python:metaObjAttr.get('datatype') in ['datetime']">
+						<input type="hidden" tal:attributes="name elName; value elValue"/>
+						<tal:block tal:content="elValue">the value</tal:block>
+					</div>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</div>
+
+				<tal:block tal:replace="nothing">
+				##### Fk ###############################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10 ZMSSqlDbForm-fk" tal:condition="python:not done and metaObjAttr.get('fk') not in ['',None]">
+				<tal:block tal:define="
+						tablename python:metaObjAttr['fk'].get('tablename','');
+						fieldname python:str(metaObjAttr['fk'].get('fieldname','')).replace('\'','\\\'');
+						displayfield python:str(metaObjAttr['fk'].get('displayfield','')).replace('\'','\\\'');">
+					<tal:block tal:condition="python:metaObjAttr['fk'].get('lazy')">
+						<tal:block tal:repeat="option python:[(metaObjAttr['options']+[['','']])[0]]">
+							<div class="input-group">
+								<input class="lazy" type="hidden" tal:attributes="id metaObjAttr/id; name elName; value python:option[0]"/>
+								<input class="form-control" type="text" tal:attributes="id python:'label_%s'%(elName); value python:option[1]" disabled="disabled"/>
+								<div class="input-group-append" tal:define="actions python:['select']+[[],['insert']][int(metaObjAttr['fk'].get('editable',0))]">
+									<a class="btn btn-secondary btn-sm" href="javascript:;" 
+										tal:attributes="onclick python:'$ZMI.iframe(\'%s/manage_zmi_lazy_select_form\',{id:\'%s\',qentity:\'%s\',\'primary_key\':\'%s\',\'qcolumns:list\':\'%s\',\'actions\':\'%s\'},{iframe:true,height:400,title:getZMILangStr(\'BTN_SELECT\')+\': %s\'})'%(here.absolute_url(),metaObjAttr['id'],tablename,fieldname,displayfield,','.join(actions),elLabel)" 
+										><i class="fas fa-pencil-alt"></i></a>
+								</div>
+						</tal:block>
+					</tal:block>
+					<tal:block tal:condition="python:metaObjAttr['fk'].get('editable') and not metaObjAttr['fk'].get('lazy')">
+						<tal:block tal:define="
+								pk python:here.getEntityPK(tablename); 
+								displayValue python:(here.query('SELECT %s AS displayfield FROM %s WHERE %s=%s'%(displayfield,tablename,pk,here.sql_quote__(tablename,pk,elValue)),encoding=encoding)['records']+[{'displayfield':''}])[0]['displayfield']">
+							<tal:block tal:content="structure python:here.zmi_input_autocomplete(here,name=elName,value=displayValue,lang_str=elLabel,type='autocomplete',ajax_url='ajaxGetObjOptions',obj_id=tablename,attr_id=displayfield)">the control</tal:block>
+						</tal:block>
+					</tal:block>
+					<tal:block tal:condition="python:not metaObjAttr['fk'].get('editable') and not metaObjAttr['fk'].get('lazy')">
+						<tal:block tal:content="structure python:here.zmi_input_select(here,name=elName,value=elValue,lang_str=elLabel,options=metaObjAttr['options'])">the control</tal:block>
+					</tal:block>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</tal:block>
+				</div>
+
+				<tal:block tal:replace="nothing">
+				##### Multiselect ######################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10 ZMSSqlDbForm-multiselect" tal:condition="python:not done and metaObjAttr.get('multiselect') not in ['',None]">
+					<tal:block tal:repeat="value metaObjAttr/value">
+						<input type="hidden" tal:attributes="name python:'old_%s:list'%elName; value value"/>
+					</tal:block>
+					<tal:block tal:condition="python:metaObjAttr['multiselect'].get('lazy')">
+						<div class="pull-left">
+							<select class="form-control form-on-submit-selected" tal:attributes="id elName; name python:'%s:list'%elName" multiple="multiple">
+							<tal:block tal:repeat="option metaObjAttr/options">
+								<option selected="selected" tal:attributes="value python:option[0]" tal:content="python:option[1]">the option</option>
+							</tal:block>
+							</select>
+						</div><!-- .pull-left -->
+						<div class="pull-left">
+							<div class="btn-group-vertical" tal:on-error="python:'ERROR: %s'%str(metaObjAttr)">
+								<a class="btn btn-primary btn-sm" href="javascript:;" tal:attributes="onclick python:'$ZMI.iframe(\'%s/manage_zmi_lazy_select_form\',{id:\'%s\',qentity:\'%s\',\'primary_key\':\'%s\',\'qcolumns:list\':\'%s\',\'actions:list\':\'multiselect\'},{iframe:true,height:400,title:getZMILangStr(\'BTN_INSERT\')+\': %s\'})'%(here.absolute_url(),metaObjAttr['id'],metaObjAttr['dst']['fk']['tablename'],str(metaObjAttr['dst']['fk']['fieldname']).replace('\'','\\\''),str(metaObjAttr['dst']['fk']['displayfield']).replace('\'','\\\''),elLabel)"
+									><i class="fas fa-plus-square"></i></a>
+								<a class="btn btn-secondary btn-sm" href="javascript:;" tal:attributes="onclick python:'$ZMI.removeFromMultiselect(document.getElementById(\'%s\'))'%elName" 
+									><i class="fas fa-minus-sign"></i></a>
+								<a class="btn btn-secondary btn-sm" href="javascript:;" tal:attributes="onclick python:'$(\'select#%s option\').prop(\'selected\',true)'%elName" 
+									><i class="fas fa-check-square-sign"></i></a>
+							</div><!-- .btn-group -->
+						</div><!-- .pull-left -->
+						<div class="clearfix"></div><!-- .clearfix -->
+					</tal:block>
+					<tal:block tal:condition="not:python:metaObjAttr['multiselect'].get('lazy')">
+						<tal:block tal:content="structure python:here.zmi_input_multiselect(here,name=elName,value=metaObjAttr['value'],lang_str=elLabel,options=metaObjAttr['options'])">the control</tal:block>
+					</tal:block>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</div>
+
+				<tal:block tal:replace="nothing">
+				##### Multimultiselect #################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10 ZMSSqlDbForm-multimultiselect" tal:condition="python:not done and metaObjAttr.get('multimultiselect') not in ['',None]">
+					<tal:block tal:define="global
+							elName python:'%s_%s'%(metaObjAttr['multimultiselect']['tablename'],metaObjAttr['multimultiselect']['fk']);
+							items python:metaObjAttr['multimultiselect'].get('tables',[])">
+						<div class="control-group pull-left" tal:repeat="item items">
+							<tal:block tal:define="global
+									i python:items.index(item)">
+								<label tal:attributes="for python:'%s%i'%(elName,i); class python:' '.join(['control-label']+[[],['mandatory']][int(item.get('nullable') not in ['',None])])" tal:content="structure python:here.getLangStr(item['label'],request['lang'])">the label</label>
+								<div tal:condition="python:item.get('lazy')">
+									<div class="pull-left">
+										<input class="lazy" type="hidden" tal:attributes="id python:'%s%i'%(elName,i); name python:'%s%i'%(elName,i)"/>
+										<input class="form-control" type="text" tal:attributes="id python:'label_%s%i'%(elName,i); name python:'label_%s%i'%(elName,i)" disabled="disabled"/>
+									</div>
+									<div class="pull-left">
+										<span class="btn btn-secondary" 
+												tal:attributes="onclick python:'$ZMI.iframe(\'%s/manage_zmi_lazy_select_form\',{id:\'%s\',qentity:\'%s\',\'primary_key\':\'%s\',\'qcolumns:list\':\'%s\',\'actions:list\':\'select\'},{iframe:true,height:400,title:getZMILangStr(\'BTN_SELECT\')+\': %s\'})'%(here.absolute_url()
+																	,'%s%i'%(elName,i)
+																	,item['tablename'].lower()
+																	,item['fieldname'].lower().replace('%s.'%item['tablename'].lower(),'').replace('\'','\\\'')
+																	,item['displayfield'].lower().replace('%s.'%item['tablename'].lower(),'').replace('\'','\\\'')
+																	,elLabel)"
+											><i class="fas fa-pencil-alt"></i></span>
+									</div>
+								</div>
+								<div tal:condition="not:python:item.get('lazy')">
+									<tal:block tal:content="structure python:here.zmi_input_select(here,name='%s%i'%(elName,i),value=None,lang_str=item['label'],options=metaObjAttr['multimultiselect']['options'][item['tablename']])">the control</tal:block>
+								</div>
+							</tal:block>
+						</div><!-- .pull-left -->
+						<div class="pull-left">
+							<label class="control-label">&nbsp;</label>
+							<div>
+								<span class="btn btn-primary" tal:attributes="onclick python:'zmiMultimultiselect(\'%s\')'%metaObjAttr['id']"><i class="fas fa-plus-square"></i></span>
+							</div>
+						</div><!-- .pull-left -->
+						<div class="clearfix"></div><!-- .clearfix -->
+						<div class="control-group" style="margin-top:4px;">
+							<div class="pull-right">
+								<div class="btn-group-vertical">
+									<span class="btn btn-secondary" tal:attributes="onclick python:'$ZMI.removeFromMultiselect(document.getElementById(\'%s\'))'%metaObjAttr['id']"><i class="fas fa-minus-sign"></i></span>
+									<span class="btn btn-secondary" tal:attributes="onclick python:'$(\'select#%s option\').attr(\'selected\',\'selected\')'%elName"><i class="fas fa-check-square-sign"></i></span>
+								</div><!-- .btn-group -->
+							</div><!-- .pull-right -->
+							<select class="form-control form-on-submit-selected" tal:attributes="id python:metaObjAttr['id']; name python:'%s:list'%metaObjAttr['id']" multiple="multiple">
+								<tal:block tal:repeat="option metaObjAttr/value">
+									<option selected="selected" tal:attributes="value python:option[0]" selected="selected" tal:content="structure python:option[1]">the option</option>
+								</tal:block>
+							</select>
+						</div><!-- .control-group -->
+						<div class="clearfix"></div><!-- .clearfix -->
+					</tal:block>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</div>
+
+				<tal:block tal:replace="nothing">
+				##### Default ##########################################################
+				</tal:block>
+				<div class="col-sm-9 col-md-10 ZMSSqlDbForm-default" tal:condition="python:not done">
+					<tal:block tal:content="structure python:here.getObjAttrInput(fmName='form0',obj_attr=metaObjAttr,value=metaObjAttr.get('value',elValue),REQUEST=request)">the control</tal:block>
+					<tal:block tal:define="dummy0 python:done.append(True)"></tal:block>
+				</div>
+
+			</div><!-- .form-group -->
+
+			<tal:block tal:replace="nothing">
+			##### Password (Confirm) #################################################
+				</tal:block>
+			<div tal:condition="python:column['id'].lower() not in request_form_inherit and metaObjAttr.get('password') in ['1',1,'True',True]" class="form-group row" tal:define="global done python:[]" tal:attributes="id python:'tr_%s'%(elName)">
+				<label for="confirm" class="col-sm-3 col-md-2 control-label">
+					<span tal:content="python:here.getZMILangStr('ATTR_CONFIRM')">the label</span>
+				</label>
+				<div class="col-sm-9 col-md-10">
+					<input class="form-control" type="password" name="confirm" value="******"/>
+				</div>
+			</div><!-- .form-group -->
+
+			</tal:block>
+			</tal:block>
+		</tal:block>
+
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+				</div>
+			</div><!-- .form-row -->
+
+		</div><!-- card-body -->
+	</div><!-- .card -->
+
+</form><!-- .form-horizontal -->
+
+	<div style="margin-top:1em" class="col-sm-12" tal:condition="python:action!='insert'"
+		><tal:block tal:repeat="column entity/columns"
+			><tal:block tal:condition="python:'details' in column">
+				<div tal:attributes="id python:'div_%s'%(column['id'])"></div>
+				<tal:block tal:content="structure python:'<script>'">script</tal:block>
+					function <tal:block tal:content="column/id">column/id</tal:block>GetAjax() {
+						var $div = $("#div_<tal:block tal:content="column/id">column/id</tal:block>");
+						$div.html('<img src="/++resource++zms_/img/loading.gif" alt="Loading..."/> <tal:block tal:content="python:here.getZMILangStr('MSG_LOADING')">loading</tal:block>');
+						$.ajax({
+							url:"<tal:block tal:content="here/absolute_url">here/absolute_url</tal:block>/manage_zmi_details_grid",
+							data:{
+								'lang':'<tal:block tal:content="request/lang">request/lang</tal:block>',
+								'qentity':'<tal:block tal:content="entity/id">entity/id</tal:block>',
+								'qcolumn':'<tal:block tal:content="column/id">column/id</tal:block>',
+								'qentitypk':'<tal:block tal:content="primary_key">primary_key</tal:block>',
+								'qentitypkval':<tal:block tal:content="python:same_type(here.operator_getitem(row,primary_key,ignorecase=True),1) and here.operator_getitem(row,primary_key,ignorecase=True) or '\'%s\''%(here.operator_getitem(row,primary_key,ignorecase=True))">primary_key/value</tal:block>,
+								'qsize:int':999
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+								$div.html('<strong>ERROR:</strong> <code>'+xhr+' '+thrownError+'</code>');
+							},
+							success:function(xmlDoc) {
+								$div.html(xmlDoc);
+							}
+						});
+					};
+					$(function() {
+							<tal:block tal:content="column/id">column/id</tal:block>GetAjax();
+						});
+				<tal:block tal:content="structure python:'</script>'">script</tal:block>
+			</tal:block
+		></tal:block
+	></div>
+
+<script>
+
+/**
+ * multimultiselect:
+ */
+/**
+ * multimultiselect:
+ */
+function zmiMultimultiselect(id) {
+	var $tr = $("#tr_"+id);
+	var $controls = Array();
+	var v = Array();
+	var l = Array();
+	$("select,input",$tr).each(function() {
+			var $control = $(this);
+			var $controlGroup = $control.parents(".control-group.pull-left");
+			var $label = $("label",$controlGroup);
+			var labelText = $label.text().basicTrim();
+			if (!($control.attr("name").indexOf(id)==0||$control.attr("name").indexOf("label_")==0)) {
+				$controlGroup.removeClass("has-error");
+				$label.attr("title","");
+				$control.attr("title","");
+				if ($control.val()=="") {
+					$controlGroup.addClass("has-error");
+					$label.attr("title",getZMILangStr("MSG_REQUIRED").replace(/%s/,labelText));
+					$control.attr("title",getZMILangStr("MSG_REQUIRED").replace(/%s/,labelText)).tooltip({placement:'right'});
+				}
+				v.push($control.val());
+				if (this.nodeName.toLowerCase()=="input") {
+					var $displayControl = $("#label_"+$(this).attr("id"));
+					l.push($displayControl.val());
+					$controls.push($displayControl);
+				}
+				else if (this.nodeName.toLowerCase()=="select") {
+					l.push($("option:selected",this).text());
+				}
+				$controls.push($control);
+			}
+		});
+	if ($(".has-error",$tr).length==0) {
+		for (var c=0; c < $controls.length; c++) {
+			$controls[c].val("");
+		}
+		var option = {value:v.join("|"),label:l.join(" | "),defaultSelected:true};
+		$ZMI.appendToMultiselect(id, option);
+	}
+}
+
+/**
+ * select/multiselect:
+ * callback for zmi_lazy_select_form.
+ */
+function zmiLazySelect(id, option) {
+	if ($("#"+id).hasClass("lazy")) {
+		$("#"+id).val(option["value"]);
+		$("#label_"+id).val(option["label"]);
+	}
+	else {
+		$ZMI.appendToMultiselect(id, option);
+	}
+}
+
+/**
+ * Close iframe and get ajax.
+ */
+function zmiIframeClose(id, message) {
+	var pos = $("#tr_"+id).position();
+	$ZMI.showMessage(pos,message,"alert-success");
+	zmiModal("hide");
+	setTimeout(id+"GetAjax()",0);
+}
+
+</script>
+
+<!-- interface -->
+<tal:block tal:content="structure python:standard.dt_exec(here,entity.get('interface',''))">the interface</tal:block>
+<!-- /interface -->
+
+</tal:block>

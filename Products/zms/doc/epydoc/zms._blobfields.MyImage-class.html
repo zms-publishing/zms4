@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>zms._blobfields.MyImage</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.zms-publishing.com">ZMS Python based Content Management System for Science, Technology and Medicine.</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;zms ::
+        <a href="zms._blobfields-module.html">Module&nbsp;_blobfields</a> ::
+        Class&nbsp;MyImage
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="zms._blobfields.MyImage-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class MyImage</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+                                                                                                                                                                                                                               object --+    
+                                                                                                                                                                                                                                        |    
+                                                                                                                                                                                                                                   <a href="zms._blobfields.MyBlob-class.html">MyBlob</a> --+
+                                                                                                                                                                                                                                            |
+                                                                                                                                                                                                           Persistence.Persistent --+       |
+                                                                                                                                                                                                                                    |       |
+                                                                                                                                                                                                             Acquisition.Implicit --+       |
+                                                                                                                                                                                                                                    |       |
+            ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+   |       |
+                                                                                                                                                                                                                                |   |       |
+                                                                                                                                                                                                        OFS.ZDOM.Node --+       |   |       |
+                                                                                                                                                                                                                        |       |   |       |
+                                                                                                                                                                                                         OFS.ZDOM.Element --+   |   |       |
+                                                                                                                                                                                                                            |   |   |       |
+                                                                                                                                                                                               OFS.ZDOM.ElementWithAttributes --+   |       |
+                                                                                                                                                                                                                                |   |       |
+                                                                                                                                                                                              OFS.PropertyManager.PropertyManager --+       |
+                                                                                                                                                                                                                                    |       |
+        ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+       |       |
+                                                                                                                                                                                                                            |       |       |
+                                                                                                                                                                              AccessControl.PermissionMapping.RoleManager --+       |       |
+                                                                                                                                                                                                                            |       |       |
+                                                                                                                                                                                        AccessControl.rolemanager.RoleManager --+   |       |
+                                                                                                                                                                                                                                |   |       |
+                                                                                                                                                                                                             OFS.role.RoleManager --+       |
+                                                                                                                                                                                                                                    |       |
+        ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+       |       |
+                                                                                                                                                                                                                            |       |       |
+    ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                   webdav.EtagSupport.EtagSupport --+   |   |       |       |
+                                                                                                                                                                                                                    |   |   |       |       |
+                                                                                                                                                                                         webdav.Lockable.LockableItem --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                                 webdav.Resource.Resource --+       |       |
+                                                                                                                                                                                                                            |       |       |
+    ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                               OFS.CopySupport.CopySource --+       |       |
+                                                                                                                                                                                                                            |       |       |
+    ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                                      App.Management.Tabs --+       |       |
+                                                                                                                                                                                                                            |       |       |
+                                                                                                                                                                                              OFS.Traversable.Traversable --+       |       |
+                                                                                                                                                                                                                            |       |       |
+                                                                                                                                                                                                        OFS.ZDOM.Node --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                                         OFS.ZDOM.Element --+       |       |
+                                                                                                                                                                                                                            |       |       |
+ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+       |       |       |
+                                                                                                                                                                                                                    |       |       |       |
+                                                                                                                                                                                            AccessControl.owner.Owned --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                                          OFS.owner.Owned --+       |       |
+                                                                                                                                                                                                                            |       |       |
+    ExtensionClass("Base", (object,), {'__slots__':(), '__getattribute__': Base_getattro, '__getstate__': Base__getstate__, '__setstate__': Base__setstate__, '__reduce__': Base__reduce__, '__new__': Base__new__,}) --+   |       |       |
+                                                                                                                                                                                                                        |   |       |       |
+                                                                                                                                                                                                     App.Undo.UndoSupport --+       |       |
+                                                                                                                                                                                                                            |       |       |
+                                                                                                                                                                                                          OFS.SimpleItem.Item --+   |       |
+                                                                                                                                                                                                                                |   |       |
+                                                                                                                                                                                                    OFS.SimpleItem.Item_w__name__ --+       |
+                                                                                                                                                                                                                                    |       |
+                                                                                                                                                                                                              OFS.Cache.Cacheable --+       |
+                                                                                                                                                                                                                                    |       |
+                                                                                                                                                                                                                       OFS.Image.File --+   |
+                                                                                                                                                                                                                                        |   |
+                                                                                                                                                                                                                          OFS.Image.Image --+
+                                                                                                                                                                                                                                            |
+                                                                                                                                                                                                                                           <strong class="uidshort">MyImage</strong>
+</pre>
+
+<hr />
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        0.1
+      </p>
+</div><!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>str</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="zms._blobfields.MyImage-class.html#toXml" class="summary-sig-name">toXml</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">sender</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">base_path</span>=<span class="summary-sig-default">''</span>,
+        <span class="summary-sig-arg">data2hex</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Serialize this file to xml-string.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>int</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="zms._blobfields.MyImage-class.html#getWidth" class="summary-sig-name">getWidth</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get width of this image.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>int</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="zms._blobfields.MyImage-class.html#getHeight" class="summary-sig-name">getHeight</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get height of this image.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="zms._blobfields.MyBlob-class.html">MyBlob</a></code></b>:
+      <code><a href="zms._blobfields.MyBlob-class.html#__bobo_traverse__">__bobo_traverse__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#__call__">__call__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#__str__">__str__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#equals">equals</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getContentType">getContentType</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getData">getData</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getDataSizeStr">getDataSizeStr</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getFilename">getFilename</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getHref">getHref</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getMediadbfile">getMediadbfile</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getMimeTypeIconSrc">getMimeTypeIconSrc</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getObjAttrs">getObjAttrs</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#get_real_size">get_real_size</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#on_setobjattr">on_setobjattr</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__init__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Image.Image</code></b>:
+      <code>tag</code>,
+      <code>update_data</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Image.File</code></b>:
+      <code>PUT</code>,
+      <code>PrincipiaSearchSource</code>,
+      <code>__len__</code>,
+      <code>getSize</code>,
+      <code>get_size</code>,
+      <code>id</code>,
+      <code>manage_FTPget</code>,
+      <code>manage_edit</code>,
+      <code>manage_upload</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.PropertyManager.PropertyManager</code></b>:
+      <code>getProperty</code>,
+      <code>getPropertyType</code>,
+      <code>hasProperty</code>,
+      <code>manage_addProperty</code>,
+      <code>manage_changeProperties</code>,
+      <code>manage_changePropertyTypes</code>,
+      <code>manage_delProperties</code>,
+      <code>manage_editProperties</code>,
+      <code>propdict</code>,
+      <code>propertyDescription</code>,
+      <code>propertyIds</code>,
+      <code>propertyItems</code>,
+      <code>propertyLabel</code>,
+      <code>propertyMap</code>,
+      <code>propertyValues</code>,
+      <code>valid_property_id</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.ZDOM.ElementWithAttributes</code></b>:
+      <code>getAttribute</code>,
+      <code>getAttributeNode</code>,
+      <code>getAttributes</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.role.RoleManager</code></b>:
+      <code>manage_access</code>,
+      <code>manage_acquiredPermissions</code>,
+      <code>manage_addLocalRoles</code>,
+      <code>manage_changePermissions</code>,
+      <code>manage_defined_roles</code>,
+      <code>manage_delLocalRoles</code>,
+      <code>manage_editRoles</code>,
+      <code>manage_permission</code>,
+      <code>manage_role</code>,
+      <code>manage_setLocalRoles</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>AccessControl.rolemanager.RoleManager</code></b>:
+      <code>ac_inherited_permissions</code>,
+      <code>access_debug_info</code>,
+      <code>acquiredRolesAreUsedBy</code>,
+      <code>get_local_roles</code>,
+      <code>get_local_roles_for_userid</code>,
+      <code>get_valid_userids</code>,
+      <code>has_local_roles</code>,
+      <code>manage_getUserRolesAndPermissions</code>,
+      <code>permission_settings</code>,
+      <code>permissionsOfRole</code>,
+      <code>possible_permissions</code>,
+      <code>rolesOfPermission</code>,
+      <code>userdefined_roles</code>,
+      <code>users_with_local_role</code>,
+      <code>valid_roles</code>,
+      <code>validate_roles</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>AccessControl.PermissionMapping.RoleManager</code></b>:
+      <code>manage_getPermissionMapping</code>,
+      <code>manage_setPermissionMapping</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.SimpleItem.Item_w__name__</code></b>:
+      <code>getId</code>,
+      <code>getPhysicalPath</code>,
+      <code>title_and_id</code>,
+      <code>title_or_id</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.SimpleItem.Item</code></b>:
+      <code>manage_FTPlist</code>,
+      <code>manage_FTPstat</code>,
+      <code>manage_afterAdd</code>,
+      <code>manage_afterClone</code>,
+      <code>manage_beforeDelete</code>,
+      <code>manage_editedDialog</code>,
+      <code>objectIds</code>,
+      <code>objectItems</code>,
+      <code>objectValues</code>,
+      <code>raise_standardErrorMessage</code>,
+      <code>this</code>,
+      <code>tpURL</code>,
+      <code>tpValues</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webdav.Resource.Resource</code></b>:
+      <code>COPY</code>,
+      <code>DELETE</code>,
+      <code>HEAD</code>,
+      <code>LOCK</code>,
+      <code>MKCOL</code>,
+      <code>MOVE</code>,
+      <code>OPTIONS</code>,
+      <code>PROPFIND</code>,
+      <code>PROPPATCH</code>,
+      <code>TRACE</code>,
+      <code>UNLOCK</code>,
+      <code>dav__init</code>,
+      <code>dav__simpleifhandler</code>,
+      <code>dav__validate</code>,
+      <code>listDAVObjects</code>,
+      <code>manage_DAVget</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webdav.Lockable.LockableItem</code></b>:
+      <code>wl_clearLocks</code>,
+      <code>wl_delLock</code>,
+      <code>wl_getLock</code>,
+      <code>wl_hasLock</code>,
+      <code>wl_isLocked</code>,
+      <code>wl_lockItems</code>,
+      <code>wl_lockTokens</code>,
+      <code>wl_lockValues</code>,
+      <code>wl_lockmapping</code>,
+      <code>wl_setLock</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webdav.EtagSupport.EtagSupport</code></b>:
+      <code>http__etag</code>,
+      <code>http__parseMatchList</code>,
+      <code>http__processMatchHeaders</code>,
+      <code>http__refreshEtag</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.CopySupport.CopySource</code></b>:
+      <code>cb_isCopyable</code>,
+      <code>cb_isMoveable</code>,
+      <code>cb_userHasCopyOrMovePermission</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>App.Management.Tabs</code></b>:
+      <code>filtered_manage_options</code>,
+      <code>manage_workspace</code>,
+      <code>tabs_path_default</code>,
+      <code>tabs_path_info</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Traversable.Traversable</code></b>:
+      <code>absolute_url</code>,
+      <code>absolute_url_path</code>,
+      <code>restrictedTraverse</code>,
+      <code>unrestrictedTraverse</code>,
+      <code>virtual_url_path</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.ZDOM.Element</code></b>:
+      <code>getChildNodes</code>,
+      <code>getElementsByTagName</code>,
+      <code>getFirstChild</code>,
+      <code>getLastChild</code>,
+      <code>getNextSibling</code>,
+      <code>getNodeName</code>,
+      <code>getNodeType</code>,
+      <code>getParentNode</code>,
+      <code>getPreviousSibling</code>,
+      <code>getTagName</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.ZDOM.Node</code></b>:
+      <code>getNodeValue</code>,
+      <code>getOwnerDocument</code>,
+      <code>hasChildNodes</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.owner.Owned</code></b>:
+      <code>manage_changeOwnershipType</code>,
+      <code>manage_takeOwnership</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>AccessControl.owner.Owned</code></b>:
+      <code>changeOwnership</code>,
+      <code>getOwner</code>,
+      <code>getOwnerTuple</code>,
+      <code>getWrappedOwner</code>,
+      <code>manage_fixupOwnershipAfterAdd</code>,
+      <code>owner_info</code>,
+      <code>userCanTakeOwnership</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>App.Undo.UndoSupport</code></b>:
+      <code>manage_undo_transactions</code>,
+      <code>undoable_transactions</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Cache.Cacheable</code></b>:
+      <code>ZCacheable_configHTML</code>,
+      <code>ZCacheable_enabled</code>,
+      <code>ZCacheable_get</code>,
+      <code>ZCacheable_getCache</code>,
+      <code>ZCacheable_getManager</code>,
+      <code>ZCacheable_getManagerId</code>,
+      <code>ZCacheable_getManagerIds</code>,
+      <code>ZCacheable_getManagerURL</code>,
+      <code>ZCacheable_getModTime</code>,
+      <code>ZCacheable_getObAndView</code>,
+      <code>ZCacheable_invalidate</code>,
+      <code>ZCacheable_isCachingEnabled</code>,
+      <code>ZCacheable_set</code>,
+      <code>ZCacheable_setEnabled</code>,
+      <code>ZCacheable_setManagerId</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__doc__"></a><span class="summary-name">__doc__</span> = <code title="&quot;&quot;&quot;ZMS product module.&quot;&quot;&quot;">&quot;&quot;&quot;ZMS product module.&quot;&quot;&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="zms._blobfields.MyImage-class.html#__obj_attrs__" class="summary-name">__obj_attrs__</a> = <code title="['content_type', 'size', 'data', 'filename', 'mediadbfile', 'width', '\
+height', 'aq_parent']">['content_type', 'size', 'data', 'filename', '<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__xml_attrs__"></a><span class="summary-name">__xml_attrs__</span> = <code title="['content_type', 'width', 'height']">['content_type', 'width', 'height']</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="getWidth__roles__"></a><span class="summary-name">getWidth__roles__</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="getHeight__roles__"></a><span class="summary-name">getHeight__roles__</span> = <code title="None">None</code>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="zms._blobfields.MyBlob-class.html">MyBlob</a></code></b>:
+      <code><a href="zms._blobfields.MyBlob-class.html#__call____roles__">__call____roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#__class_name__">__class_name__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getContentType__roles__">getContentType__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getDataSizeStr__roles__">getDataSizeStr__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getData__roles__">getData__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getFilename__roles__">getFilename__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getHref__roles__">getHref__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getMediadbfile__roles__">getMediadbfile__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getMimeTypeIconSrc__roles__">getMimeTypeIconSrc__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#getObjAttrs__roles__">getObjAttrs__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#get_real_size__roles__">get_real_size__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#get_size__roles__">get_size__roles__</a></code>,
+      <code><a href="zms._blobfields.MyBlob-class.html#index_html">index_html</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Image.Image</code></b>:
+      <code>alt</code>,
+      <code>height</code>,
+      <code>manage</code>,
+      <code>manage_editForm</code>,
+      <code>manage_main</code>,
+      <code>manage_options</code>,
+      <code>manage_uploadForm</code>,
+      <code>meta_type</code>,
+      <code>security</code>,
+      <code>view_image_or_file</code>,
+      <code>width</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Image.File</code></b>:
+      <code>precondition</code>,
+      <code>size</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.PropertyManager.PropertyManager</code></b>:
+      <code>__propsets__</code>,
+      <code>manage_propertiesForm</code>,
+      <code>manage_propertyTypeForm</code>,
+      <code>propertysheets</code>,
+      <code>title</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.role.RoleManager</code></b>:
+      <code>aclAChecked</code>,
+      <code>aclEChecked</code>,
+      <code>aclPChecked</code>,
+      <code>manage_acquiredForm</code>,
+      <code>manage_editLocalRoles</code>,
+      <code>manage_listLocalRoles</code>,
+      <code>manage_permissionForm</code>,
+      <code>manage_reportUserPermissions</code>,
+      <code>manage_roleForm</code>,
+      <code>selectedRoles</code>,
+      <code>smallRolesWidget</code>,
+      <code>validRoles</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>AccessControl.rolemanager.RoleManager</code></b>:
+      <code>__ac_local_roles__</code>,
+      <code>__ac_roles__</code>,
+      <code>permissionMappingPossibleValues</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.SimpleItem.Item</code></b>:
+      <code>REQUEST</code>,
+      <code>__allow_access_to_unprotected_subobjects__</code>,
+      <code>__name__</code>,
+      <code>icon</code>,
+      <code>isPrincipiaFolderish</code>,
+      <code>isTopLevelPrincipiaApplicationObject</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>webdav.Resource.Resource</code></b>:
+      <code>__dav_resource__</code>,
+      <code>__http_methods__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>App.Management.Tabs</code></b>:
+      <code>manage_tabs</code>,
+      <code>manage_workspace__roles__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Traversable.Traversable</code></b>:
+      <code>getPhysicalRoot</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.owner.Owned</code></b>:
+      <code>manage_owner</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>App.Undo.UndoSupport</code></b>:
+      <code>manage_UndoForm</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>OFS.Cache.Cacheable</code></b>:
+      <code>ZCacheable_manage</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
+</tr>
+</table>
+<a name="toXml"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">toXml</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">sender</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">base_path</span>=<span class="sig-default">''</span>,
+        <span class="sig-arg">data2hex</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Serialize this file to xml-string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>sender</code></strong> (<code>zmsobject.ZMSObject=None</code>) - the sender-node</li>
+        <li><strong class="pname"><code>base_path</code></strong> (<code>str=''</code>) - the base-path</li>
+        <li><strong class="pname"><code>data2hex</code></strong> (<code>Bool=True</code>) - convert data inline to hex, otherwise saved to file in base-path</li>
+    </ul></dd>
+    <dt>Returns: <code>str</code></dt>
+        <dd>the xml-string</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="getWidth"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getWidth</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get width of this image.</p>
+  <dl class="fields">
+    <dt>Returns: <code>int</code></dt>
+        <dd>the width of this image.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="getHeight"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getHeight</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get height of this image.</p>
+  <dl class="fields">
+    <dt>Returns: <code>int</code></dt>
+        <dd>the height of this image.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
+<a name="section-ClassVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variable Details</span></td>
+</tr>
+</table>
+<a name="__obj_attrs__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">__obj_attrs__</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+['content_type', 'size', 'data', 'filename', 'mediadbfile', 'width', '<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+height', 'aq_parent']
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.zms-publishing.com">ZMS Python based Content Management System for Science, Technology and Medicine.</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Oct 12 21:36:30 2019
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

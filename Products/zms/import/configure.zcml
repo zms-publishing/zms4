@@ -1,0 +1,5 @@
+<configure xmlns="http://namespaces.zope.org/zope" xmlns:zms="http://namespaces.zope.org/zms">
+  <source location="./"/>
+  <!--<source location="https://www.zms-publishing.com/import/"/>-->
+  <!--<source location="https://zmslabs.org/download/CMESS/"/>-->
+</configure>

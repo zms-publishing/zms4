@@ -1,0 +1,63 @@
+<tal:block tal:define="zmscontext python:here.getSelf();">
+<div class="help" data-for="qsuggest">
+	<div class="well">
+		<h4>Suggest with facets</h4>
+		<p>
+			<code>solr.suggest='select?q=*:*&amp;rows=0&amp;facet=true&amp;facet.field=text&amp;facet.prefix=%s&amp;facet.limit=5'</code>
+		</p>
+		<h4>Suggester - a flexible "autocomplete" component.</h4>
+		<p>
+			<code>solr.suggest='suggest?q=%s'</code><br/>
+			@see <a href="http://wiki.apache.org/solr/Suggester/" target="_blank">http://wiki.apache.org/solr/Suggester/</a>
+		</p>
+	</div>
+</div>
+
+
+<div id="ZCatalogSolrConnector"  tal:define="
+		solr_url python:here.getConfProperty('solr.url','http://localhost:8983/solr');
+		solr_core python:here.getConfProperty('solr.core',here.getAbsoluteHome().id);
+		admin_url python:'%s/#/%s'%(solr_url,solr_core);
+		select_url python:'%s/%s/select'%(solr_url,solr_core);
+		suggest_url python:'%s/%s/suggest'%(solr_url,solr_core);
+		">
+	<div class="form-group row">
+		<label class="col-sm-2 control-label" for="solr_url"><span>URL</span></label>
+		<div class="col-sm-10"><input type="text" class="form-control" name="solr_url" tal:attributes="value solr_url"></div>
+	</div>
+	<div class="form-group row">
+		<label class="col-sm-2 control-label" for="solr_url"><span>Core</span></label>
+		<div class="col-sm-10"><input type="text" class="form-control" name="solr_core" tal:attributes="value solr_core"></div>
+	</div>
+	<div class="form-group row">
+		<label class="col-sm-2 control-label" for="admin_url"><span>Admin</span></label>
+		<div class="col-sm-10"><a tal:attributes="href admin_url" target="_blank" tal:content="admin_url">the solr-admin</a></div>
+	</div>
+	<div class="form-group row">
+		<label class="col-sm-2 control-label" for="qsearch"><span>Query</span></label>
+		<div class="col-sm-10">
+			<div class="input-group">
+				<input type="text" class="form-control" id="qsearch" name="q" tal:attributes="value python:request.get('q','*')">
+				<div class="input-group-append">
+					<button class="btn btn-primary" 
+						tal:attributes="onclick python:'javascript:$ZMI.iframe(\'%s/search_xml\',{q:$(\'#ZCatalogSolrConnector #qsearch\').val()},{iframe:true,title:\'Solr: Select\'});;return false'%(here.absolute_url())"
+						><i class="fas fa-external-link-alt"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-sm-2 control-label" for="qsuggest"><span>Suggest</span></label>
+		<div class="col-sm-10">
+			<div class="input-group">
+				<input type="text" class="form-control" id="qsuggest" name="q" tal:attributes="value python:request.get('q','*')">
+				<div class="input-group-append">
+					<button class="btn btn-primary" 
+						tal:attributes="onclick python:'javascript:$ZMI.iframe(\'%s/suggest_xml\',{q:$(\'#ZCatalogSolrConnector #qsuggest\').val()},{iframe:true,title:\'Solr: Suggest\'});;return false'%(here.absolute_url())"
+						><i class="fas fa-external-link-alt"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</tal:block>

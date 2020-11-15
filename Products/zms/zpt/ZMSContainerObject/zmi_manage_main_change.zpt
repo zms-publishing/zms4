@@ -1,0 +1,29 @@
+<tal:block tal:replace="nothing">
+#####  Object State  ###########################################################
+</tal:block>
+<a class="object_has_titleimage" title="Title Image Preview: Click to Edit"
+	tal:on-error="python:here.attr('titleimage')"
+	tal:condition="python:here.attr('titleimage')" 
+	tal:attributes="href python:'%s/manage_properties?lang=%s'%(here.absolute_url(),request['manage_lang'])"
+	><i class="far fa-image text-primary titleimage-preview" tal:attributes="style python:'--titleimage_url:url(%s)'%(here.attr('titleimage').getHref(request))"></i>
+</a>
+<span class="version_object_state" tal:content="structure python:here.zmi_version_object_state(here,request)">zmi_version_object_state</span>
+<tal:block tal:define="standard modules/Products.zms/standard;
+	change_uid python:here.attr('change_uid');
+	change_dt  python:here.attr('change_dt');
+	constraints python:here.attr('check_constraints');">
+	<span class="zmi-change-uid" tal:condition="change_uid" tal:content="structure python:standard.string_maxlen(change_uid,20)">the change-uid</span>
+	<span class="zmi-change-dt" tal:condition="change_dt" tal:content="structure python:here.getLangFmtDate(change_dt,request['manage_lang'],'DATETIME_FMT')">the change-dt</span>
+	<tal:block tal:on-error="nothing" tal:repeat="category python:list(constraints)">
+		<div tal:attributes="class python:'constraint constraint-%s'%category[:-1].lower()">
+			<strong style="white-space:nowrap"><i class="icon-warning-sign fas fa-exclamation-triangle text-danger" tal:attributes="title python:category[:-1]+' '+category[:-1]"></i></strong>
+			<span tal:content="python:'; '.join([x[1] for x in constraints[category]])">the messages</span>
+		</div>
+	</tal:block>
+</tal:block
+
+><tal:block tal:replace="nothing">
+##### Custom ###################################################################
+</tal:block
+><tal:block tal:content="structure python:here.attr('manage_main_change')"></tal:block
+><tal:block tal:content="structure python:here.my_manage_main_change(here,request)" tal:on-error="nothing"></tal:block>

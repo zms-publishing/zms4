@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='browse')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<form class="form-horizontal card mb-5" method="get" 
+	tal:define="path python:here.getPath(request); 
+		items python:here.readDir(path);
+		columns python:['meta_type','id','get_size','bobobase_modification_time'];
+		labels python:{'meta_type':'type','id':'name','get_size':'size','bobobase_modification_time':'last_modified'}">
+
+	<legend class="form-row">
+		<span class="d-block col-sm-3">
+			<i tal:attributes="class python:here.icon_clazz"></i>
+			<tal:block tal:content="python:here.meta_type">the meta_type</tal:block>
+		</span>
+		<code class="d-block col-sm-9 text-sm-right">
+			<span class="text-dark">System-Path</span>
+			<tal:block tal:content="path">the path</tal:block>
+		</code>
+	</legend>
+
+	<div class="table-responsive" tal:condition="python:len(items)>0">
+		<table class="table table-sm table-striped mb-0">
+			<colgroup>
+				<col width="30" />
+				<col width="*" />
+				<col width="80" />
+				<col width="160" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th tal:repeat="column columns">
+						<tal:block 
+							tal:define="label python:here.getZMILangStr('ATTR_%s'%labels[column].upper())" 
+							tal:content="label">the label
+						</tal:block>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr tal:repeat="item items"
+					><td>&nbsp;<i title="File" class="far fa-file"><span class="sr-only">File</span></i></td
+					><td><a tal:attributes="href python:'manage_index_html?filename=%s'%item['file']" target="_blank" tal:content="python:item['file']">the file</a></td
+					><td><tal:block tal:content="python:here.getDataSizeStr(item['size'])">the size</tal:block></td
+					><td><tal:block tal:content="python:here.getLangFmtDate(item['mtime'])">the timestamp</tal:block></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

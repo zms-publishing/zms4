@@ -1,0 +1,1681 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?zms version='ZMS4-4.0.0.dev.REV
+'?>
+<list>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_card</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">header</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Header (Optional)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<script>
+	// Add Help Button
+	$ZMI.registerReady(function() {
+		try {
+			$('.zmi-action.btn-group.pull-right').first().append('<a class="btn" title="Bootstrap-Card" href="https://getbootstrap.com/docs/4.1/components/card/" target="_blank"><i class="fas fa-question-circle"></i></i></a>');
+		} catch {
+			console.log('ERROR: Add Help Button');
+		}
+	})
+</script>
+<style>
+	input.form-control.header,
+	input.form-control.footer	{
+		background: rgba(51, 122, 182, 0.15)
+	}
+</style>]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">interface0</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">interface0</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">interface</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">image</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Image (286x180)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">image</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">title</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Title</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">subtitle</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Subtitle</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">text</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Text</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">text</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">footer</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Footer (Optional)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">links</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Links</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">bt_link_list</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[far fa-address-card]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_card.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		id zmscontext/id;
+		img python:zmscontext.attr('image');
+		src python:img and img.getHref(request) or None;
+		title python:zmscontext.attr('title');
+		subtitle python:zmscontext.attr('subtitle');
+		text python:zmscontext.attr('text');
+		header python:zmscontext.attr('header');
+		footer python:zmscontext.attr('footer');
+		linklist python:zmscontext.getChildNodes(request,['bt_link_list']) and zmscontext.links.attr('links') or None;">
+	<div class="card" tal:attributes="id id">
+		<div class="card-header" tal:condition="header" tal:content="header">header</div>
+		<img class="card-img-top" tal:condition="img" tal:attributes="src src; alt title">
+		<div class="card-body">
+			<h5 class="card-title" tal:condition="title" tal:content="structure title">Card title</h5>
+			<h6 class="card-subtitle mb-2 text-muted" tal:condition="subtitle" tal:content="structure subtitle">Card subtitle</h6>
+			<p class="card-text" tal:condition="text" tal:content="structure text">
+				Some quick example text to build on the card title and make up the bulk of the card's content.
+			</p>
+			<tal:block tal:condition="linklist" tal:repeat="link linklist" 
+				tal:on-error="structure string:<!-- ERROR: linklist -->">
+				<a class="btn btn-primary" 
+					tal:define="
+						url link/url; 
+						url_obj python:'{' in url and zmscontext.getLinkObj(url,request) or None; 
+						url_target python:url_obj and url_obj.getHref2IndexHtml(request) or url;"
+				tal:attributes="href url_target"
+				tal:content="structure link/label">Go somewhere</a>
+			</tal:block>
+		</div>
+		<div class="card-footer" tal:condition="footer"><small class="text-muted" tal:content="footer">footer</small></div>
+	</div>
+</tal:block>
+
+<!-- /bt_card.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Card]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">0</item>
+			<item key="id">bt_card</item>
+			<item key="name">Card</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_card_layout</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[far fa-address-card]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">layout</item>
+					<item key="keys" type="list">
+					<list>
+						<item>##</item>
+						<item><![CDATA[return []]></item>
+						<item>('card-group','Group'),</item>
+						<item>('card-deck','Deck'),</item>
+						<item>('card-columms','Columns'),</item>
+						<item>]</item>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Layout</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">select</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">cards</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Cards</item>
+					<item key="repetitive" type="int">1</item>
+					<item key="type">bt_card</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_card_layout.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		id zmscontext/id;
+		layout python:zmscontext.attr('layout');
+		cards python:zmscontext.filteredObjChildren('cards',request);">
+	<div tal:attributes="class python:'bt_card_layout %s'%(layout); id id">
+		<tal:block tal:repeat="card cards">
+			<tal:block tal:content="structure python:card.getBodyContent(request)"></tal:block>
+		</tal:block>
+	</div>
+</tal:block>
+
+<!-- /bt_card_layout.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Card-Columns]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">1</item>
+			<item key="id">bt_card_layout</item>
+			<item key="name">Card-Layout</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_carousel</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[far fa-images]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<script>
+	// Add Help Button
+	$ZMI.registerReady(function() {
+		try {
+			$('.zmi-action.btn-group.pull-right').first().append('<a class="btn" title="Bootstrap-Carousel" href="https://getbootstrap.com/docs/4.1/components/carousel/" target="_blank"><i class="fas fa-question-circle"></i></i></a>');
+		} catch {
+			console.log('ERROR: Add Help Button');
+		}
+	})
+</script>]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">interface0</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">interface0</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">interface</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default">5000</item>
+					<item key="id">interval</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Interval</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">int</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default">1</item>
+					<item key="id">indicators</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Show indicators]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">boolean</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default">1</item>
+					<item key="id">controls</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Show controls (prev/next)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">boolean</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default">1</item>
+					<item key="id">captions</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Show captions]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">boolean</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">slides</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Slides</item>
+					<item key="repetitive" type="int">1</item>
+					<item key="type">bt_slide</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_carousel.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		id zmscontext/id;
+		interval python:zmscontext.attr('interval');
+		indicators python:zmscontext.attr('indicators');
+		controls python:zmscontext.attr('controls');
+		slides python:zmscontext.filteredObjChildren('slides',request);
+		is_manage python:len(request.get('URL','').split('/manage'))>1;
+		">
+	<div class="carousel slide" data-ride="carousel"
+		tal:attributes="id id;class python:is_manage and default or 'carousel slide carousel-fade';data-interval interval">
+		<ol tal:condition="indicators" class="carousel-indicators">
+			<li tal:repeat="slide slides"
+				tal:attributes="data-target python:'#%s'%(id); data-slide-to python:slides.index(slide); class python:['','active'][slides.index(slide)==0]">
+			</li>
+		</ol><!-- .carousel-indicators -->
+		<div class="carousel-inner">
+			<tal:block tal:repeat="slide slides">
+				<div class="carousel-item"
+					tal:define="
+						active_css python:slides.index(slide)==0 and 'active' or '';
+						set_active_css python:request.set('active_css',active_css)"
+					tal:replace="structure python:slide.getBodyContent(request)">
+					<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" focusable="false"><rect width="100%" height="100%" fill="#00000066"/></svg>
+					<div class="container">
+						<div class="carousel-caption text-left">
+							<h1>Example headline.</h1>
+							<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							<p><a class="btn btn-lg btn-danger" href="#" role="button">Sign up today</a></p>
+						</div>
+					</div>
+				</div>
+			</tal:block>
+		</div><!-- .carousel inner -->
+		<tal:block tal:condition="controls" tal:define="
+				ATTR_PREVIOUS python:zmscontext.getZMILangStr('ATTR_PREVIOUS');
+				ATTR_NEXT python:zmscontext.getZMILangStr('ATTR_NEXT')">
+			<a class="carousel-control-prev" tal:attributes="href python:'#%s'%(id);title ATTR_PREVIOUS"
+				role="button" data-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="sr-only" tal:content="ATTR_PREVIOUS">Previous</span>
+			</a>
+			<a class="carousel-control-next" tal:attributes="href python:'#%s'%(id);title ATTR_NEXT"
+				role="button" data-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="sr-only" tal:content="ATTR_NEXT">Next</span>
+			</a>
+	</tal:block>
+	</div><!-- .carousel slide -->
+	<script 
+		tal:condition="not:is_manage"
+		tal:content="python:'$ZMI.registerReady(function(){ $(\'#%s\').carousel({interval: %s }) })'%(id, interval)">
+	</script>
+</tal:block>
+
+<!-- /bt_carousel.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Carousel]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">1</item>
+			<item key="id">bt_carousel</item>
+			<item key="name">Carousel</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_collapse</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[fas fa-align-justify]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<script>
+	// Add Help Button
+	$ZMI.registerReady(function() {
+		try {
+			$('.zmi-action.btn-group.pull-right').first().append('<a class="btn" title="Bootstrap-Collapsible Content: Accordion & Tabs" href="https://getbootstrap.com/docs/4.1/components/collapse" target="_blank"><i class="fas fa-question-circle"></i></i></a>');
+		} catch {
+			console.log('ERROR: Add Help Button');
+		}
+	})
+</script>]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">interface0</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">interface0</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">interface</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">stereotype</item>
+					<item key="keys" type="list">
+					<list>
+						<item>Accordion</item>
+						<item>Tabs</item>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Stereotype</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">select</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">title</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Title</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">items</item>
+					<item key="keys" type="list">
+					<list>
+						<item>bt_collapse_simple</item>
+						<item>bt_collapse_complex</item>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Items</item>
+					<item key="repetitive" type="int">1</item>
+					<item key="type">*</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_collapse.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		stereotype python:zmscontext.attr('stereotype');
+		items python:zmscontext.filteredObjChildren('items',request)">
+
+	<div tal:condition="python:stereotype=='Accordion'" tal:attributes="id zmscontext/id">
+		<tal:block tal:repeat="item items">
+			<tal:block tal:content="structure python:item.getBodyContent(request)"></tal:block>
+		</tal:block>
+	</div>
+
+	<tal:block tal:condition="python:stereotype=='Tabs'">
+		 <ul class="nav nav-tabs" role="tablist" tal:attributes="id zmscontext/id">
+			<tal:block tal:repeat="item items">
+				<li class="nav-item" tal:define="active python:items.index(item)==0">
+					<a tal:attributes="class python:' '.join(['nav-link']+[['','active'][active]]); aria-selected active; aria-controls item/id; href python:'#%s'%item.id" data-toggle="tab" tal:content="structure python:item.attr('headline')">Item</a>
+				</li>
+			</tal:block>
+		</ul>
+		<div class="tab-content" tal:attributes="id python:'%sContent'%zmscontext.id">
+			<tal:block tal:repeat="item items">
+				<div role="tabpanel"
+						tal:define="active python:items.index(item)==0" 
+						tal:attributes="id item/id; class python:' '.join(['tab-pane','fade']+[[],['show','active']][active])"
+						tal:content="structure python:item.attr('body')+''.join([x.getBodyContent(request) for x in item.filteredObjChildren('body',request)])">
+					the body
+				</div>
+			</tal:block>
+		</div><!-- .tab-content -->
+	</tal:block>
+
+</tal:block>
+
+<!-- /bt_collapse.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Accordion]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">1</item>
+			<item key="id">bt_collapse</item>
+			<item key="name"><![CDATA[Collapsible Content]]></item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_collapse_complex</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[fas fa-indent]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">headline</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Headline</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">body</item>
+					<item key="keys" type="list">
+					<list>
+						<item>type(ZMSObject)</item>
+						<item>type(ZMSRecordSet)</item>
+						<item>type(ZMSModule)</item>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Body</item>
+					<item key="repetitive" type="int">1</item>
+					<item key="type">*</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_area_item.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		accordion python:zmscontext.getParentNode();
+		siblings python:accordion.filteredObjChildren('items',request);
+		expanded python:siblings.index(zmscontext)==0;
+		headline python:zmscontext.attr('headline');
+		body python:''.join([x.getBodyContent(request) for x in zmscontext.filteredObjChildren('body',request)]);">
+	<div class="card">
+		<div class="card-header" tal:attributes="id python:'heading_%s'%zmscontext.id">
+			<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" tal:attributes="data-target python:'#collapse_%s'%zmscontext.id; aria-expanded expanded; aria-controls python:'collapse_%s'%zmscontext.id" tal:content="structure headline">
+					Collapsible Group Item #N
+				</button>
+			</h5>
+		</div><!-- .card-header -->
+		<div tal:attributes="id python:'collapse_%s'%zmscontext.id; class python:' '.join(['collapse']+[['','show'][expanded]]); aria-labelledby python:'heading_%s'%zmscontext.id; data-parent python:'#%s'%accordion.id">
+			<div class="card-body" tal:content="structure body">
+				Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+			</div>
+		</div>
+	</div><!-- .card -->
+</tal:block>
+
+<!-- /bt_area_item.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Complex-Item]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">0</item>
+			<item key="id">bt_collapse_complex</item>
+			<item key="name"><![CDATA[Collapse Item (Complex)]]></item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_collapse_simple</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[fas fa-grip-lines]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">headline</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Headline</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">body</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Body</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">richtext</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_area_record.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		accordion python:zmscontext.getParentNode();
+		siblings python:accordion.filteredObjChildren('items',request);
+		expanded python:siblings.index(zmscontext)==0;
+		headline python:zmscontext.attr('headline');
+		body python:zmscontext.attr('body');">
+	<div class="card">
+		<div class="card-header" tal:attributes="id python:'heading_%s'%zmscontext.id">
+			<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" tal:attributes="data-target python:'#collapse_%s'%zmscontext.id; aria-expanded expanded; aria-controls python:'collapse_%s'%zmscontext.id" tal:content="structure headline">
+					Collapsible Group Item #N
+				</button>
+			</h5>
+		</div><!-- .card-header -->
+		<div tal:attributes="id python:'collapse_%s'%zmscontext.id; class python:' '.join(['collapse']+[['','show'][expanded]]); aria-labelledby python:'heading_%s'%zmscontext.id; data-parent python:'#%s'%accordion.id">
+			<div class="card-body" tal:content="structure body">
+				Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+			</div>
+		</div>
+	</div><!-- .card -->
+</tal:block>
+
+<!-- /bt_area_record.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Simple-Item]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">0</item>
+			<item key="id">bt_collapse_simple</item>
+			<item key="name"><![CDATA[Collapse Item (Simple)]]></item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_jumbotron</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[fas fa-republican]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<script>
+	// Add Help Button
+	$ZMI.registerReady(function() {
+		try {
+			$('.zmi-action.btn-group.pull-right').first().append('<a class="btn" title="Bootstrap-Jumbotron" href="https://getbootstrap.com/docs/4.1/components/jumbotron/" target="_blank"><i class="fas fa-question-circle"></i></i></a>')
+		} catch {
+			console.log('ERROR: Add Help Button');
+		}
+	})
+</script>]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">interface0</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">interface0</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">interface</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">title</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Title</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">subtitle</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Subtitle</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">text</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Text</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">richtext</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">links</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Links</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">bt_link_list</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_jumbotron.standard_html -->
+
+<tal:block tal:define="
+		zmscontext options/zmscontext;
+		title python:zmscontext.attr('title');
+		subtitle python:zmscontext.attr('subtitle');
+		text python:zmscontext.attr('text');
+		linklist python:zmscontext.getChildNodes(request,['bt_link_list']) and zmscontext.links.attr('links') or None;">
+	<div class="jumbotron">
+		<h1 class="display-4" tal:content="structure title">Jumbotron title</h1>
+		<p class="lead" tal:content="structure subtitle" tal:condition="subtitle">Jumbotron subtitle</p>
+		<hr class="my-4"/>
+		<p tal:content="structure text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		<p class="lead" tal:condition="linklist">
+			<tal:block tal:repeat="link linklist" tal:on-error="structure string:<!-- ERROR: linklist -->">
+				<a	class="btn btn-primary btn-lg" role="button" 
+					tal:define="
+						url link/url; 
+						url_obj python:'{' in url and zmscontext.getLinkObj(url,request) or None; 
+						url_target python:url_obj and url_obj.getHref2IndexHtml(request) or url;"
+				tal:attributes="href url_target"
+				tal:content="structure link/label">Learn more</a>
+			</tal:block>
+		</p>
+	</div>
+</tal:block>
+
+<!-- /bt_jumbotron.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Jumbotron]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">1</item>
+			<item key="id">bt_jumbotron</item>
+			<item key="name">Jumbotron</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_link_list</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">links</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Links</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">list</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_link_list.interface0 -->
+
+<div class="form-group row" id="tr_links_interface0" tal:define="zmscontext options/zmscontext">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-10">
+		<table class="table table-bordered m-0">
+			<tbody>
+			<tr class="row_insert">
+				<td class="meta-sort"><span class="btn btn-light btn-add"><i class="fas fa-plus"></i></td>
+				<td class="meta-url"><input class="form-control form-control-sm url-input" name="links_url__" placeholder="Select Url..."/>
+				<td class="meta-label"><input class="form-control form-control-sm" name="links_label__" placeholder="Enter Label..."/>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+$(function() {
+		$("#tr_links_links").hide();
+		var links = [];
+		var $table = $("#tr_links_interface0 table");
+		var xml = $.parseXML($("#links_links").val());
+		var $xml = $(xml);
+		$("list > item > dictionary",$xml).each(function() {
+				var record = {};
+				$("item",this).each(function() {
+						var $item = $(this);
+						record[$item.attr("key")] = $item.text();
+					});
+				links.push(record);
+			});
+		var refreshData = function() {
+				var xml = '';
+				xml += '<list>\n';
+				for (var i=0; i < links.length; i++) {
+					var record = links[i];
+					xml += '<item type="dict">\n';
+					xml += '<dictionary>\n';
+					for (var k in record) {
+						xml += '<item key="'+k+'"><!{CDATA{'+record[k]+'}}></item>\n';
+					}
+					xml += '</dictionary>\n';
+					xml += '</item>\n';
+				}
+				xml += '</list>';
+				$("#links_links").val(xml);
+			};
+		var refreshView = function() {
+				$("tr:not(:last)",$table).remove();
+				var $last = ("tr:last",$table);
+				var html = '';
+				for (var i=0; i < links.length; i++) {
+					var record = links[i];
+					html += '<tr>\n';
+					html += '<td class="meta-sort">\n';
+					html += '<div class="input-group input-group-sm">\n';
+					html += '<select class="zmi-sort">\n';
+					for (var j=0; j < links.length; j++) {
+						html += '<option value="'+j+'"' + (j==i?' selected="selected"':'') + '>'+(j+1)+'<'+'/option>\n';
+					}
+					html += '</select>\n';
+					html += '<a class="btn btn-secondary btn-delete" href="javascript:;"><i class="fas fa-times"></i></a>';
+					html += '</div>\n';
+					html += '</td>\n';
+					html += '<td class="meta-url">\n';
+					html += '<input class="form-control form-control-sm url-input" name="links_url_'+i+'" value="'+record.url+'">\n';
+					html += '</td>\n';
+					html += '<td class="meta-label">\n';
+					html += '<input class="form-control form-control-sm" name="links_label_'+i+'" value="'+record.label+'">\n';
+					html += '</td>\n';
+					html += '</tr>\n';
+				}
+				$last.prepend(html);
+				var refreshLinks = function() {
+						links = [];
+						$("tr:not(:last)",$table).each(function() {
+								var $tr = $(this);
+								var record = {url:$("input[name^='links_url_']",$tr).val(),label:$("input[name^='links_label_']",$tr).val()};
+								links.push(record);
+							});
+						refreshData();
+					}
+				$(".btn-delete",$table).click(function() {
+						if (confirm(getZMILangStr('MSG_CONFIRM_DELOBJ'))) {
+							$(this).parents('tr').remove();
+							refreshLinks();
+						}
+					});
+				$("tr:not(:last) input",$table).change(refreshLinks);
+				refreshData();
+			};
+		refreshView();
+		$(".btn-add",$table).click(function() {
+				var $tr = $(this).parents("tr")[0];
+				if ($("input[value='']",$tr).length==0) {
+					var record = {url:$("input[name^='links_url_']",$tr).val(),label:$("input[name^='links_label_']",$tr).val()};
+					links.push(record);
+					$("input",$tr).val("");
+				}
+				refreshView();
+			});
+	});
+</script>
+
+<!-- /bt_link_list.interface0 -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">interface0</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">interface0</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">interface</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">0</item>
+			<item key="id">bt_link_list</item>
+			<item key="name">Links</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSResource</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">bt_slide</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[far fa-image]]></item>
+					<item key="default"></item>
+					<item key="id">icon_clazz</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name"><![CDATA[Icon (Class)]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">constant</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">image</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">1</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name">Image</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">image</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">image_filter</item>
+					<item key="keys" type="list">
+					<list>
+						<item>##</item>
+						<item><![CDATA[return []]></item>
+						<item><![CDATA[	('#00000000','No Filter'),]]></item>
+						<item><![CDATA[	('#00000033','12% Darker'),]]></item>
+						<item><![CDATA[	('#00000066','25% Darker'),]]></item>
+						<item><![CDATA[	('#00000099','40% Darker')]]></item>
+						<item>]</item>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Image Filter]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">select</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">title</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">title</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">text</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Text</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">text</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">url</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Link</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">url</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="default"></item>
+					<item key="id">url_title</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">1</item>
+					<item key="name">Link-Titel</item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">string</item>
+				</dictionary>
+				</item>
+				<item type="dictionary">
+				<dictionary>
+					<item key="custom"><![CDATA[<!-- bt_slide.standard_html -->
+
+<div class="carousel-item" 
+	tal:define="
+	zmscontext options/zmscontext;
+	id zmscontext/id;
+	title python:zmscontext.attr('title');
+	text python:zmscontext.attr('text');
+	img python:zmscontext.attr('image');
+	img_filter python:zmscontext.attr('image_filter');
+	src python:img.getHref(request);
+	url python:zmscontext.attr('url');
+	url_obj python:'{' in url and zmscontext.getLinkObj(url,request) or None;
+	url_target python:url_obj and url_obj.getHref2IndexHtml(request) or url;		
+	url_title python:zmscontext.attr('url_title');
+	show_captions python:zmscontext.getParentNode().attr('captions');"
+	tal:attributes="
+			id id;
+			class python:'carousel-item %s'%(request.get('active_css','active'));
+			style python:'background-image:url(\'%s\');;background-size:cover;;background-position:center;;'%(src)">
+	<svg class="bd-placeholder-img imgage_filter" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" focusable="false">
+		<rect width="100%" height="100%" fill="#00000066" tal:attributes="fill python:img_filter and img_filter or '#00000000'" />
+	</svg>
+	<div class="container" tal:condition="show_captions">
+		<div class="carousel-caption text-left">
+			<h1 tal:content="title">Example headline.</h1>
+			<p tal:condition="text" tal:content="text">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+			<p tal:condition="url">
+				<a class="btn btn-lg btn-danger" href="#" role="button"
+					tal:attributes="href url" tal:content="python:url_title!='' and url_title or 'More ...' ">
+					Sign up today
+				</a>
+			</p>
+		</div>
+	</div>
+</div>
+
+<!-- /bt_slide.standard_html -->]]>
+					</item>
+					<item key="default"></item>
+					<item key="id">standard_html</item>
+					<item key="keys" type="list">
+					<list>
+					</list>
+					</item>
+					<item key="mandatory" type="int">0</item>
+					<item key="meta_type"></item>
+					<item key="multilang" type="int">0</item>
+					<item key="name"><![CDATA[Template: Slide]]></item>
+					<item key="repetitive" type="int">0</item>
+					<item key="type">zpt</item>
+				</dictionary>
+				</item>
+			</list>
+			</item>
+			<item key="access" type="dictionary">
+			<dictionary>
+				<item key="delete_custom"></item>
+				<item key="delete_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+				<item key="insert_custom">{$}</item>
+				<item key="insert_deny" type="list">
+				<list>
+					<item></item>
+					<item></item>
+					<item></item>
+				</list>
+				</item>
+			</dictionary>
+			</item>
+			<item key="enabled" type="int">0</item>
+			<item key="id">bt_slide</item>
+			<item key="name">Carousel-Slide</item>
+			<item key="package">com.zms.foundation.bootstrap</item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSObject</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+	<item type="dictionary">
+	<dictionary>
+		<item key="key">com.zms.foundation.bootstrap</item>
+		<item key="value" type="dictionary">
+		<dictionary>
+			<item key="__obj_attrs__" type="list">
+			<list>
+			</list>
+			</item>
+			<item key="enabled" type="int">1</item>
+			<item key="id">com.zms.foundation.bootstrap</item>
+			<item key="name">com.zms.foundation.bootstrap</item>
+			<item key="package"></item>
+			<item key="revision">4.1.0</item>
+			<item key="type">ZMSPackage</item>
+			<item key="version">4.0.2</item>
+		</dictionary>
+		</item>
+	</dictionary>
+	</item>
+</list>

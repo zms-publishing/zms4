@@ -1,0 +1,9 @@
+HOWTO: install ckeditor in zms-distribution
+================================================================================
+1. Upload build-config.js to http://ckeditor.com/builder
+2. Download custom build as zip
+3. Extract to /ckeditor.
+4. Remove /ckeditor/samples.
+--5. Copy /ckeditor/lang to /ckeditor/lingua.
+--6. /ckeditor/ckeditor.js: replace '"lang/"' by '"lingua/"'
+7. /ckeditor/config.js: overwrite with file from zms-distribution

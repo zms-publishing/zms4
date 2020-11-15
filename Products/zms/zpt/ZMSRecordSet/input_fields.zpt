@@ -1,0 +1,213 @@
+<!-- ZMSRecordSet/input_fields -->
+
+	<tal:block tal:define="standard modules/Products.zms/standard;
+			meta_id options/meta_id;
+			action options/action;
+			qindex options/qindex;
+			row options/row;
+			metaObj python:here.getMetaobj(meta_id);
+			metaObjIds python:here.getMetaobjIds();
+			metaObjAttrIds python:here.getMetaobjAttrIds(metaObj['id']);
+			objAttrs python:here.getObjAttrs(metaObj['id'])">
+
+<tal:block tal:define="global
+			records python:here.attr(metaObjAttrIds[0]);
+			metaObjAttrs python:[x for x in metaObj['attrs'][1:] if 
+				not x['id'].startswith('_')
+				and x['type'] in here.metaobj_manager.valid_types+metaObjIds+['delimiter','hint','interface']
+				]">
+
+<form class="form-horizontal" id="form0" name="form0" action="manage_changeRecordSet" method="post" enctype="multipart/form-data">
+	<input type="hidden" id="lang" name="lang" tal:attributes="value python:request['lang']">
+	<input type="hidden" id="preview" name="preview" tal:attributes="value python:request['preview']">
+	<input type="hidden" id="action" name="action" tal:attributes="value action">
+	<input type="hidden" id="qindex" name="qindex:int" tal:attributes="value qindex">
+	<input type="hidden" name="form_id" tal:attributes="value python:request['ZMI_TIME']">
+	<div class="card">
+
+		<div class="card-header btn-collapse">
+			<a class="btn card-toggle pull-left" data-toggle="collapse" tal:attributes="href python:'#input_fields'">
+				<i class="fas fa-invisible"></i>
+				<tal:block tal:content="python:here.getZMILangStr({'insert':'CAPTION_INSERT','update':'CAPTION_EDIT'}[action])%here.getZMILangStr('ATTR_RECORD')">the label</tal:block>
+			</a>
+		</div><!-- card-header -->
+
+		<div class="collapse show" tal:attributes="id python:'input_fields'">
+			<div class="card-body"> 
+
+		<div class="form-group row" tal:condition="python:'_change_uid' in row">
+			<label class="col-sm-3 col-md-2 control-label">
+				<span tal:content="python:here.getZMILangStr('ATTR_LAST_MODIFIED')">last modified</span>
+			</label>
+			<div class="col-sm-9 col-md-10" tal:content="python:here.getLangFmtDate(row.get('_change_dt'))+' '+here.getZMILangStr('BY')+' '+str(row.get('_change_uid'))">[change_dt] by [change_uid]</div>
+		</div>
+
+		<tal:block tal:repeat="metaObjAttr metaObjAttrs">
+			<tal:block tal:define="global
+				metaObjAttrId python:metaObjAttr['id'];
+				obj_attr python:here.getObjAttr(metaObjAttr['id']);
+				elName python:metaObjAttr['id'];
+				elLabel python:metaObjAttr['name'];
+				elDefault python:standard.dt_exec(here,metaObjAttr.get('default',''));
+				elValue python:here.formatObjAttrValue(obj_attr,here.operator_getitem(row,elName,elDefault),request['lang']);"
+
+			><tal:block tal:condition="python:metaObjAttr['type']=='hint'"
+				><div class="zmi-hint" tal:content="structure elLabel">the hint</div>
+			</tal:block
+			><tal:block tal:condition="python:metaObjAttr['type']=='interface'"
+				><div class="zmi-interface" tal:content="structure python:here.attr(metaObjAttrId)">the interface</div
+			></tal:block
+
+			><div class="form-group row"
+					tal:attributes="id python:'tr_%s'%(elName)"
+					tal:condition="not:python:metaObjAttr['type'] in ['delimiter','hint','interface']">
+				<label tal:attributes="for elName; class python:' '.join(['col-sm-3 col-md-2 control-label']+[[],['mandatory']][int(metaObjAttr.get('mandatory'))])">
+					<span tal:content="elLabel">the label</span>
+				</label>
+				<div class="col-sm-9 col-md-10">
+
+					<tal:block tal:condition="python:metaObjAttr['type'] in here.metaobj_manager.valid_types" tal:content="structure 
+							python:here.getObjAttrInput(fmName='form0',obj_attr=here.getObjAttr(elName),value=elValue,REQUEST=request)">
+						the control
+					</tal:block>
+					<tal:block tal:condition="python:metaObjAttr['type'] in ['image'] and elValue is not None and here.operator_gettype(elValue) is str">
+						<img src="data:image/png;base64," tal:attributes="data-previewbase64 elValue" width="32" height="32" />
+						<input type="hidden" tal:attributes="value elValue" />
+					</tal:block>
+
+					<tal:block tal:condition="python:metaObjAttr['type'] in metaObjIds" tal:repeat="fkContainer python:here.getParentNode().getChildNodes(request,metaObjAttr['type'])">
+						<tal:block tal:define="global
+								options python:[];
+								fkMetaObj python:here.getMetaobj(fkContainer.meta_id);
+								fkMetaObjAttrIdRecordSet python:fkMetaObj['attrs'][0]['id'];
+								fkMetaObjRecordSet python:fkContainer.attr(fkMetaObjAttrIdRecordSet);
+								fkMetaObjIdId python:here.getMetaobjAttrIdentifierId(fkContainer.meta_id)">
+							<tal:block tal:repeat="fkMetaObjRecord fkMetaObjRecordSet">
+								<tal:block tal:define="global
+										fkMetaObjAttrs python:[x for x in fkMetaObj['attrs'] if x['type']=='string' and fkMetaObjRecord.get(x['id'],'')!=''];
+										fkSummary python:', '.join([str(fkMetaObjRecord.get(x['id'])) for x in fkMetaObjAttrs])">
+									<tal:block tal:define="global dummy0 python:options.append((standard.string_maxlen(fkSummary,50),fkMetaObjRecord[fkMetaObjIdId]))"></tal:block>
+								</tal:block>
+							</tal:block>
+							<tal:block tal:define="global dummy0 python:options.sort()"></tal:block>
+							<div class="input-group">
+								<select class="form-control" tal:attributes="name python:metaObjAttr['id']">
+									<option tal:condition="python:not metaObjAttr.get('mandatory',0)" value="" tal:content="python:'--- %s ---'%here.getZMILangStr('ACTION_SELECT')%metaObjAttr['name']"></option>
+									<tal:block tal:repeat="option options">
+										<option tal:attributes="value python:option[1]; selected python:['','selected'][int(str(option[1])==str(row.get(metaObjAttr['id'])))]" tal:content="python:option[0]"></option>
+									</tal:block>
+								</select>
+								<div class="input-group-append">
+									<a class="btn btn-secondary" href="javascript:;" 
+										tal:attributes="onclick python:'self.location.href=\'%s/manage_main?lang=%s\'+($(\'select[name=%s]\').val().length==0?\'\':\'&action=updateForm&qidentifier=\'+$(\'select[name=%s]\').val())'%(fkContainer.absolute_url(),request['lang'],metaObjAttr['id'],metaObjAttr['id'])"
+										><i class="fas fa-eject"></i></a>
+								</div><!-- .input-group-append -->
+							</div><!-- .input-group -->
+						</tal:block>
+					</tal:block>
+
+				</div><!-- .col-md-10 -->
+			</div><!-- .form-group -->
+			</tal:block>
+		</tal:block>
+
+	<div class="form-row">
+		<div class="controls save">
+			<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+			<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+		</div>
+	</div><!-- .form-row -->
+
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+	</div><!-- .card -->
+</form>
+
+	<tal:block tal:condition="not:python:action=='insert'">
+		<tal:block tal:repeat="identifier python:[x['id'] for x in metaObjAttrs if x['type']=='identifier']">
+			<tal:block tal:repeat="metaObj python:[x for x in [here.getMetaobj(x) for x in here.getMetaobjIds()] if x['type']=='ZMSRecordSet']">
+				<tal:block tal:repeat="metaObjAttr python:[x for x in metaObj['attrs'] if x['type']==meta_id]">
+					<tal:block tal:repeat="node python:[x for x in here.getParentNode().objectValues(['ZMSCustom']) if x.meta_id==metaObj['id']]" tal:define="global
+								elName python:metaObjAttr['id'];
+								elLabel python:metaObj['name']">
+						<div class="form-horizontal">
+						<div class="card">
+						<div class="card-header btn-collapse">
+							<a class="btn card-toggle pull-left" data-toggle="collapse" tal:attributes="href python:'#%s_grid'%metaObjAttr['id']">
+								<i class="fas fa-invisible"></i>
+								<i class="fas fa-table"></i>
+								<tal:block tal:content="elLabel">the label</tal:block>
+							</a>
+							<div class="clearfix"></div>
+						</div><!-- card-header -->
+						<div class="collapse show" tal:attributes="id python:'%s_grid'%metaObjAttr['id']">
+							<div class="card-body" tal:define="global 
+									records python:node.attr(metaObj['attrs'][0]['id']);
+									filtered_records python:[x for x in records if x[metaObjAttr['id']]==row[identifier]];
+									metaObjAttrs python:[x for x in metaObj['attrs'][1:] if 
+											x['id'] not in ['__sort_id']
+											and x['type'] in here.metaobj_manager.valid_types
+											and x['type'] not in ['password']
+											and x.get('custom')
+											]">
+								<tal:block tal:content="structure python:here.metaobj_recordset_main_grid(
+										metaObjAttrIds=here.getMetaobjAttrIds(metaObj['id']),
+										metaObjAttrs=metaObjAttrs,
+										filtered_records=filtered_records,
+										records=records,
+										form_action='%s/manage_changeRecordSet'%node.absolute_url(),
+										input_target=here.url_append_params(request['URL'],{'action':action,'qindex':qindex}),
+										url='%s/manage_main'%node.absolute_url())">
+									metaobj_recordset_main
+								</tal:block>
+							</div><!-- .card-body -->
+						</div><!-- .collapse -->
+						</div><!-- .card -->
+						</div><!-- .form-horizontal -->
+					</tal:block>
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</tal:block>
+
+</tal:block>
+
+	</tal:block>
+
+<script>
+$ZMI.registerReady(function() {
+  $("img[src='data:image/png;base64,']").each(function() {
+    var src = $(this).attr("src");
+    var dat = $(this).data("previewbase64");
+    // switch ID and NAME between input-file and input-hidden
+    // to preserve inline image if not changed
+    if (dat) {
+      $(this).attr('src',src+dat);
+      var input_hidden  = $(this).next("input[type='hidden']");
+      var input_file    = $(this).prev().find('.btn-file');
+      var input_rename  = input_file.attr('id')+'_SWITCHED_TO_HIDDEN';
+      input_hidden.attr('id',input_file.attr('id'));
+      input_hidden.attr('name',input_file.attr('id'));
+      input_file.attr('id',input_rename);
+      input_file.attr('name',input_rename);
+    }
+    else {
+      $(this).next("input[type='hidden']").remove();
+      $(this).remove();
+    }
+  });
+  $('input[type=file]').change(function () {
+		// re-switch ID and NAME between input-file and input-hidden
+		// to allow update of inline image
+		var img_src       = $(this).parent().parent().parent().parent().find("img");
+	  var input_hidden  = img_src.next("input[type='hidden']");
+	  var input_rename  = input_hidden.attr('id');
+		$(this).attr('id',input_rename);
+		$(this).attr('name',input_rename);
+		input_hidden.remove();
+		img_src.remove();
+	});
+});
+</script>
+
+<!-- /ZMSRecordSet/input_fields -->

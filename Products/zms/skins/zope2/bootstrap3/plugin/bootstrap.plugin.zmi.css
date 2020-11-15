@@ -1,0 +1,2462 @@
+/* bootstrap.plugin.zmi.css */
+.loading .navbar-inverse {
+	background-color:#333;
+}
+#navbar-sitemap {
+	margin:0;
+	float:left;
+	padding:10px 0px 0px 15px;
+	color:#9D9D9D;
+}
+#navbar-sitemap:hover,
+#navbar-sitemap.active {
+	color:#FFF;
+	text-decoration:none;
+}
+.navbar-brand {
+	max-width:500px;
+	text-align:left;
+	margin:0 1em 0 10px;
+	float:left;
+	padding:10px 0px 0px 5px;
+}
+div.help, p.well {
+	display:none;
+}
+.zmi-helper-hidden, .ui-helper-hidden {
+	display:none;
+}
+textarea.zmi-helper-hidden, textarea.ui-helper-hidden {
+	display:none!important;
+}
+.zmi-helper-clickable, .ui-helper-clickable {
+	cursor:pointer!important;
+}
+.zmi header {
+	background-color:black;
+	height:42px;
+}
+.zmi header .product {
+	font-weight:bold;
+}
+.zmi header .navbar-brand .slogan {
+	font-size:x-small;
+	margin-left:15px;
+}
+.zmi header .zmsdebug .navbar-brand .product:after {
+	content: "DEBUG MODE";
+	font-size: 13px;
+	color: white;
+	font-weight: normal;
+	line-height: 1;
+	display: block;
+	height: 42px;
+	padding: 14px 8px;
+	background: #337ab7;
+	position: absolute;
+	top: 0;
+	left: 105px;
+}
+.zmi header .zmsdebug .navbar-brand .slogan {
+	visibility:collapse;
+}
+@media (max-width: 367px) {
+	.zmi header .navbar-nav.pull-right {
+		display: none!important;
+	}
+	.zmi header .navbar-main {
+		min-width:367px;
+	}
+}
+@media (max-width: 767px) {
+	.zmi header .navbar-nav.pull-right {
+		display: block;
+		position: absolute;
+		right: 0;
+	}
+	.zmi header .navbar .authenticated_user,
+	.zmi header .navbar .language_label {
+		display:none;
+	}
+}
+@media (max-width: 992px) {
+	.zmi header .navbar-brand .slogan {
+		display:none;
+	}
+}
+.zmi header .navbar {
+	margin:0;
+	height:42px;
+	min-height:42px;
+}
+.zmi header .navbar-fixed-top .navbar-inner,
+.zmi header .navbar-fixed-bottom .navbar-inner {
+	padding:0!important;
+}
+.zmi.preview_top .navbar .pull-right {
+	padding-top:.8em;
+	padding-right:.25em;
+}
+.zmi.preview_top .navbar .pull-right .btn.btn-primary {
+	margin-top: -.45em;
+}
+.zmi.preview_top .navbar .pull-right * {
+	color:#aaa;
+	text-decoration:none;
+}
+.zmi.preview_top .navbar .pull-right a:hover {
+	color:#FFF;
+}
+.zmi.preview_top .zmi header .pull-right span.zmi-top-active {
+	color:#FFF;
+	font-weight:bold;
+}
+.zmi ul.main-nav {
+	margin-top:0.5em;
+	padding-left:1em;
+}
+/* Show Config-Menu Accesskeys on Hover */
+.zmi header .navbar-nav ul.dropdown-menu li a[accesskey]:hover:after {
+	content:"\F11C";
+	display:block;
+	float:right;
+	color:#818ea254;
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: inherit;
+	-webkit-font-smoothing: antialiased;
+}
+.zmi header .navbar-nav ul.dropdown-menu li a[accesskey]:hover:before {
+	content:attr(accesskey);
+	display:block;
+	float:right;
+	color:#818ea287;
+	font-family:Menlo,Monaco,Consolas,"Courier New",monospace;
+	padding-left:.3rem;
+	margin-right:-.6rem;
+}
+/* BO HORIZONTAL SCROLLING MAIN NAVIGATION */
+nav .wrapper {
+	position:relative;
+	margin:0 auto;
+	overflow:hidden;
+	padding:0px;
+	height:44px;
+	top:1.3px
+}
+nav .main-nav.nav-tabs {
+	position:absolute;
+	left:0px;
+	top:0px;
+	min-width:1600px;
+}
+nav .main-nav.nav-tabs li{
+	display:table-cell;
+	position:relative;
+	text-align:center;
+	cursor:grab;
+	cursor:-webkit-grab;
+	vertical-align:middle;
+}
+nav .scroller {
+	color:white;
+	background-color:rgb(81, 142, 212);
+	text-align:center;
+	cursor:pointer;
+	display:none;
+	padding:12.5px 8px 12.5px 8px;
+	white-space:no-wrap;
+	vertical-align:middle;
+}
+nav .scroller,
+nav .scroller i.glyphicon,
+nav .scroller i.glyphicon:hover {
+	color:white !important;
+} 
+nav .scroller-right{
+	float:right;
+}
+nav .scroller-left {
+	float:left;
+}
+/* EO HORIZONTAL SCROLLING MAIN NAVIGATION */
+
+.zmi .navbar-inner {
+	border-radius:0 !important;
+}
+.zmi:not(.manage-menu) footer {
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	font-size: 11px !important;
+	color:#999;
+	padding: 0.75em 0 0.75em 1.65em;
+	height:2.5em;
+	line-height:1em;
+	background: #f5f5f5!important;
+}
+.zmi footer a {
+	color: inherit;
+}
+.zmi footer .back-to-top {
+	color:#08c;
+	cursor:pointer;
+	text-align:center;
+	margin: 0;
+	position: fixed;
+	bottom: .2em;
+	right: .4em;
+	padding:.2em .3em;
+	z-index: 100;
+	border:none;
+	border-radius:4px;
+}
+.zmi footer .back-to-top:hover {
+	background-color:#08c;	
+}
+.zmi footer .back-to-top:hover i {
+	color:#fff;	
+}
+.zmi ul.breadcrumb {
+	clear:left;
+	padding: 1em 0 1em 1.8em;
+	margin-bottom: 0px !important;
+}
+.zmi #zmi-tab > ul.breadcrumb li a,
+.zmi #zmi-tab > ul.breadcrumb li span {
+	display:inline-block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 128px;
+	overflow: hidden;
+	vertical-align: bottom;
+}
+.zmi .breadcrumb li a * {
+	display:inline!important
+}
+.zmi ul.breadcrumb.small {
+	padding:0.4em 0 0 0 !important;
+	margin:0 !important;
+	background-color:transparent !important;
+	font-size: 80%;
+}
+.zmi ul.breadcrumb.small li {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 98px;
+	overflow: hidden;
+}
+.zmi ul.breadcrumb.small li i:before {
+	display: contents;
+}
+#attr_ref_preview .contentEditable {
+	background-color: #FFF;
+	box-shadow: 0 2px 10px #ccc;
+	border-radius: 4px;
+	padding: 1em;
+	margin: 0 0 1em;
+}
+#attr_ref_preview .contentEditable:before {
+	content: 'preview';
+	display: inline-block;
+	text-align: right;
+	position: relative;
+	float: right;
+	color: silver;
+}
+
+/* url popover showing breadcrumbs */
+.popover.bottom {
+	max-width:90% !important;
+}
+.zmi ol, .zmi ul, .zmi li, .zmi p, .zmi sup, .zmi sub,
+.zmi table, .zmi tr, .zmi th, .zmi td {
+	color:#333;
+}
+.zmi a {
+	color:#08c;
+}
+.zmi a.text-danger {
+	color: #a94442;
+}
+.zmi a.btn-primary {
+	color:#FFF;
+}
+.zmi a.btn-default {
+	color:#000;
+}
+.zmi ul.breadcrumb li {
+	white-space:nowrap;
+}
+.zmi ul.breadcrumb li.active a {
+	color:black;
+}
+.breadcrumb>li+li:before {
+	padding: 0 0 0 6px;
+	color:#888;
+}
+.center h1 {
+	line-height:1.4em;
+	font-size:x-large;
+	font-weight:normal;
+}
+.center h1 small {
+	display:block;
+	margin-top:0.5em;
+	line-height:1.5em;
+	font-size:small;
+}
+#zmi_item_ .center h1 {
+	padding:0.5em 0;
+	margin:0;
+}
+ul.portalClients .zmi-item .center h1 {
+	padding: 0.5em 0;
+	margin:0;
+}
+ul.portalClients .zmi-item .center small {
+	display:none;
+}
+.form-multiautocomplete {
+	margin-bottom:4px;
+}
+.ui-autocomplete-input {
+	background:white url(/++resource++zms_/img/ico_autocomplete.gif) right bottom no-repeat;
+}
+.ui-autocomplete {
+	list-style: none;
+	padding:0;
+}
+.ui-autocomplete .ui-menu-item .ui-corner-all {
+	display: block;
+	padding: 4px;
+}
+.ui-autocomplete .ui-menu-item .ui-state-focus,
+.ui-autocomplete .ui-menu-item .ui-state-hover {
+	background:#eee;
+}
+.twosided_multiselect > .col-xs-5:first-child select {
+	background: #f8f8f8;
+}
+.twosided_multiselect.searchable > .col-xs-2 {
+	padding-top: 2.35em;
+}
+.form-small {
+	font-size:smaller;
+}
+.form-disabled {
+	color:#666 !important;
+	background-color:#EEEEEE !important;
+}
+.form-modified {
+	color:#212C33 !important;
+	background-color:#eff7fd !important;
+}
+.form-conflicted {
+	color:#332121 !important;
+	background-color:#FFE1E1 !important;
+}
+.form-conflicted:focus,
+.form-modified:focus {
+	color:#000 !important;
+	background-color:#FFF !important;
+}
+.nav-tabs {
+	margin-bottom:0;
+	margin-top:1em;
+}
+.nav-tabs li.active > a {
+	background-color: #f5f5f5 !important;
+	font-weight:bold;
+}
+ul.nav-buttons li {
+	float:left;
+	list-style-type:none;
+}
+div#zmi-tab {
+	background-color:#f5f5f5!important;
+	/* border-bottom: 1px solid #ddd;*/
+	min-height: calc(100vh - 112px);
+}
+div.alert {
+	margin:1em 1.5em;
+}
+.contentEditable.ZMSNote div.alert {
+	margin: 2px 0 !important;
+}
+/* OBESOLETE: img.grippy */
+img.grippy {
+	width:6px!important;
+	height:14px!important;
+	background:url(/++resource++zms_/img/grippy.png);
+	vertical-align:middle;
+	cursor:move;
+}
+div.grippy {
+	width: 8px!important;
+	height: 16px!important;
+	cursor: move;
+	display: inline-block;
+	color: #DDD;
+	font-size: 14px;
+	overflow: hidden;
+	position: absolute;
+	left:0;
+}
+.zmi-item.ui-sortable-helper {
+	box-shadow:2px 5px 8px #ccc;
+	background-color:white !important;
+	opacity:.9;
+}
+.zmi-container {
+	margin:0;
+	padding:0;
+	width:98% !important;
+}
+ul.zmi-container .contentEditable {
+	cursor:pointer;
+}
+ul.zmi-container li.zmi-item,
+ul.zmi-container li.ui-state-highlight {
+	list-style-type:none;
+	float:none;
+	clear:both;
+}
+ul.zmi-container.zmi-sortable li.ui-state-highlight {
+	min-height: 4em;
+	margin-bottom: 0;
+	width: 80%;
+	border: 0;
+	background: #D8DEE4;
+	border-radius: 0;
+}
+ul.zmi-container li.zmi-item .inactive .contentEditable {
+	filter:Alpha(opacity=40);-moz-opacity:0.40;opacity:0.40
+}
+ul.portalClients.zmi-container .zmi-item .portalClient .contentEditable {
+	border-top:none !important;
+	font-size:large;
+	padding-left:1em;
+	color:#6B9EB8;
+	padding-top: 0;
+	margin:0;
+}
+ul.portalClients.zmi-container .zmi-item .portalClient .portalClientId {
+	text-align:right;
+	float:right;
+	margin:.6em .15em !important;
+	color:#aaa;
+	font-size:12px;
+}
+/* Showing clientids only to Managers */
+.zmi ul.portalClients.zmi-container .zmi-item .portalClient .portalClientId.zmi-manage-main-change {
+	visibility:hidden;
+}
+.zmi.Manager ul.portalClients.zmi-container .zmi-item .portalClient .portalClientId.zmi-manage-main-change {
+	visibility:visible;
+}
+ul.portalClients.zmi-container .zmi-item .portalClient div.ZMS {
+	float:left;
+	position:absolute;
+	padding:.35em 0 0 1em;
+	margin-top: 0;
+}
+table.table tbody tr td.data > div {
+	white-space:nowrap;
+	overflow:hidden;
+	max-width:50em;
+	max-height:30px;
+	padding:0;
+	margin:0;
+}
+table.table tbody tr td.data > div.string,
+table.table tbody tr td.data > div.text {
+	text-overflow: ellipsis;
+	max-width: 36em;
+}
+table.table tbody tr td.data > div.file {
+	text-overflow: ellipsis;
+	max-width: 12em;
+}
+
+table.table.zmi-sortable select.zmi-sort {
+	direction:rtl;
+	width:4em;
+}
+table.table.zmi-sortable input {
+	margin-bottom:10px;
+}
+table.table.zmi-sortable .input-group input {
+	margin-bottom:0px;
+}
+.col_min {width:1em}
+.col_max {width:100%}
+.row_insert .language_id input {width:4em;}
+
+.zmi-item img.grippy {
+	position:absolute;
+	display:block;
+}
+table.table.zmi-sortable img.grippy {
+	margin-bottom:8px;
+}
+tr.zmi-selected td, tr.zmi-selected td,
+ul.zmi-container > li.zmi-item.zmi-selected > div.center,
+ul.zmi-container > li.zmi-item.zmi-selected > div.center .contentEditable,
+ul.zmi-container > li.zmi-item.zmi-selected > div.center a {
+	background-color:rgba(0, 136, 204, 0.10) !important;
+}
+tr.zmi-highlighted td, tr.zmi-highlighted td,
+ul.zmi-container > li.zmi-item.zmi-highlighted > div.center,
+ul.zmi-container > li.zmi-item.zmi-highlighted > div.center .contentEditable,
+ul.zmi-container > li.zmi-item.zmi-highlighted > div.center a {
+	background-color:#08c!important;
+	color:#fff!important;
+}
+#manage_addProduct .center {
+	padding:.5em;
+	font-size:large;
+}
+
+form.form-insert a.accordion-toggle {
+	color:#08c;
+}
+ul.zmi-container > .zmi-item > .center {
+	float:left;
+	width:80% !important;
+}
+
+ul.zmi-container > .zmi-item > .right {
+	float:left;
+	width:20% !important;
+}
+ul.zmi-container .zmi-item .clearboth {
+	float:none;
+	clear:both;
+}
+ul.zmi-container .zmi-item.pageelement .center {
+	background-color:#FFF;
+	min-height:4em;
+}
+ul.zmi-container .zmi-item .center .contentEditable {
+	border-left:none !important;
+	border-right:none !important;
+	border-bottom:none !important;
+	border-top:1px dotted #ccc !important;
+	padding-top:0.2em;
+}
+ul.zmi-container.zmi-sortable.pages .zmi-item:last-child .center  .contentEditable {
+	border-bottom:1px dotted #ccc !important
+}
+.zmi-container li.zmi-item .center .contentEditable .contentEditable {
+	padding: 0;
+	margin: 0;
+	border: none !important;
+	min-height: 1em;
+}
+.zmi-container .zmi-item .center .contentEditable h1,
+.zmi-container .zmi-item .center .contentEditable h2 {
+	padding: .3em 0;
+	margin: 0;
+}
+ul.zmi-container .zmi-item.pageelement .center > * {
+	padding-left:.8em;
+}
+ul.zmi-container .zmi-item.pageelement .center .contentEditable {
+	border:1px solid white;
+	padding:3px 6px 3px 1.5em;
+	overflow:hidden;
+}
+ul.zmi-container .zmi-item.page .center .contentEditable {
+	padding-top: .4em;
+	margin:0;
+}
+.properties .attr_last_modified #zmi-toggle-activity-btn {
+	padding:3px 0;
+	box-shadow: none;
+}
+.properties .attr_last_modified #zmi-toggle-activity-btn #zmi-toggle-activity {
+	vertical-align:inherit;
+	margin: 0 .3em;
+}
+.properties .attr_last_modified .btn.zmi-changes {
+	padding:3px 0px;
+	box-shadow:none;
+}
+.properties .accordion-heading button.btn.btn-default.dropdown-toggle {
+	padding:6px 9px;
+}
+
+.properties .form-group.activity input.form-element.datetimepicker {
+	width:12.7em !important;
+}
+#zmiIframe .form-group.activity input.form-element.datetimepicker {
+	width:8.4em !important;
+}
+#attrActivity .icon-info-sign {
+	margin-top: -3px;
+	display: block;
+}
+#attrActivity .get_uid {
+	cursor: pointer;
+}
+.horizontal-group .mandatory span {
+	background: none !important;
+	padding-left: 0 !important;
+}
+.horizontal-group .controls {
+	margin-left: 0px;
+}
+.horizontal-group .form-group label {
+	float:none;
+	width:auto;
+	text-align:left;
+}
+.horizontal-group .controls.save {
+	margin-top:2.1em;
+}
+
+.form-horizontal label.control-label {
+	font-weight: normal;
+	color: #75A7C0;
+}
+.form-horizontal .has-success label.control-label {
+	font-weight: bold;
+	color: #3C763D;
+}
+.form-horizontal .has-warning label.control-label {
+	font-weight: bold;
+	color: #8A6D3B;
+}
+.form-horizontal .has-error label.control-label {
+	font-weight: bold;
+	color: #A94442;
+}
+.form-horizontal .col-lg-10 .form-control {
+/* overwrite jquery-ui with bootstrap-defaults */
+	display: block;
+	width: 100%;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.428571429;
+	color: #555;
+}
+.form-horizontal .col-lg-10 input[type="checkbox"] {
+	width:auto;
+	margin:0;
+}
+.form-horizontal .form-group.activity .col-lg-10 {
+	padding-left: 2em;
+}
+.form-horizontal .form-group.activity {
+	margin-bottom: 7px !important;
+}
+.form-horizontal .attr_last_modified {
+	white-space:nowrap;
+	color:#888;
+}
+.form-horizontal .accordion-heading.attr_last_modified .btn.btn-default.split-right {
+	border-color: rgba(0,0,0,0.1);
+	padding:0 4px 4px 4px;
+	height:22px;
+}
+.form-horizontal .attr_last_modified div.pull-left {
+	padding:0 0 0 1em !important;
+	margin:0 !important;
+}
+.form-horizontal .attr_last_modified div.pull-left .btn-group.zmi-action {
+	margin-right:.4em;
+}
+.is-modified input,
+.is-modified select,
+.is-modified textarea,
+.zmi-item.is-new .center,
+.zmi-item.is-modified .center,
+.zmi-item.is-deleted .center {
+	background-color:#EFF7FF !important;
+}
+.is-modified label span:before {
+	/* icon-pencil */
+	content: "\f040";
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	speak: none;
+	display:inline-block;
+	margin-right:.3em
+}
+.zmi-item.is-deleted .center div * {
+	text-decoration: line-through!important;
+}
+.zmi-item.is-deleted .center div > *  {
+	opacity:0.5;
+}
+
+/*  Sitemap Menu
+    ------------------------------------------------------- */
+
+.zmi.manage-menu .zmi-page {
+	white-space:nowrap;
+	overflow:hidden;
+}
+.zmi.properties .zmi-page {
+	white-space:nowrap;
+	overflow:visible;
+}
+.zmi.manage-menu .zmi-sitemap {
+	margin-top:1em
+}
+.zmi.manage-menu .dropdown-header {
+	color: #999 !important;
+	background-color: transparent !important;
+	border-bottom: 1px solid #666 !important;
+}
+.zmi .breadcrumb a[title=Bookmark] {
+	margin-left: .15em;
+	margin-bottom: -1px;
+}
+.zmi-browse-iframe-preview {
+	position:absolute;
+	max-width:40em;
+	background-color:#FFFFFF;
+	box-shadow: 0 0 2em #00000033;
+	margin: 0.2em;
+	padding:0;
+	border:none;
+	z-index:99999;
+}
+.zmi-browse-iframe-preview .contentEditable {
+	zoom: 0.6;
+	-moz-transform:scale(0.6);
+}
+.zmi-sitemap > div,
+.zmi-sitemap ul,
+.zmi-sitemap ol {
+	margin-top:0.3em;
+	margin-left:0;
+	padding-left:1em;
+	list-style:outside none none;
+}
+.zmi-sitemap li.active > a  {
+	font-weight:bold;
+}
+.zmi.manage-menu .navbar-brand {
+	font-size:100%!important;
+}
+body.browse_iframe .toggle {
+	font-size:120%;
+	vertical-align:bottom;
+	width:12px;
+	margin-right:2px;
+	text-align:center;
+	display:inline-block;
+	cursor:pointer;
+}
+.zmi.manage-menu .toggle,
+.zmi-sitemap .toggle {
+	color:#CCC;
+	font-size:120%;
+	vertical-align:bottom;
+	width:12px;
+	margin-right:2px;
+	text-align:center;
+	display:inline-block;
+	cursor:pointer;
+}
+.zmi.manage-menu {
+	background-color:#404040;
+}
+.zmi.manage-menu .ZMSDocument .toggle {
+	color:#404040;
+}
+.zmi.manage-menu .zmi header {
+	background-color: transparent !important;
+}
+.zmi.manage-menu .zmi-sitemap a,
+.zmi.manage-menu .zmi-sitemap li > span i {
+	color:#ccc;
+}
+.zmi.manage-menu li.active > a,
+.zmi.manage-menu li > a:hover {
+	color:white !important;
+	text-decoration:none;
+}
+.zmi.manage-menu .zmi-sitemap li.inactive > a {
+	color:#888;
+}
+.zmi.manage-menu .zmi-helper-clickable {
+	color:#999;
+}
+.zmi.manage-menu li.restricted > a > i {
+	color:orange;
+}
+.zmi.manage-menu .zmi-helper-clickable:hover {
+	color:#FFF;
+}
+.zmi.manage-menu .dropdown-menu {
+	filter:Alpha(opacity=90);-moz-opacity:0.90;opacity:0.90;
+}
+.zmi.manage-menu .navbar-inverse .navbar-nav .dropdown-menu > li > a {
+	color: #FFFFFF !important;
+}
+.zmi.manage-menu .navbar-nav .open .dropdown-menu {
+	background-color: #000;
+}
+.zmi.manage-menu .navbar-nav .dropdown-menu > li > a:hover,
+.zmi.manage-menu .navbar-nav .dropdown-menu > li > a:focus {
+	background-color: #3B5B77 !important;
+}
+.zmi.manage-menu .dropdown-lang .dropdown-menu {
+	background-color: #222;
+	border: 1px solid #888;
+	color: #000;
+	left: -100px;
+	position: absolute;
+	min-width: 110px;
+}
+.zmi.manage-menu .dropdown-lang .dropdown-menu > li > a:focus,
+.zmi.manage-menu .dropdown-lang .dropdown-menu > li > a:hover {
+	background-color:transparent !important;
+	color:#fff !important;
+}
+.zmi.manage-menu #loading,
+.zmi.manage-menu #loading .icon {
+	color: #CCCCCC !important;
+}
+.zmi.manage-menu .zmi-helper-clickable.refresh {
+	margin-left: 1em;
+}
+.zmi.manage-menu .zmi-helper-clickable.refresh i {
+	margin-right: .35em;
+}
+
+/*  Font Awesome styles: prevent resetting by CK Editor
+    ------------------------------------------------------- */
+.cke_reset_all span[class^="glyphicon-"],
+.cke_reset_all span[class*=" glyphicon-"],
+.cke_reset_all i[class^="icon-"],
+.cke_reset_all i[class*=" icon-"] {
+	font-family: FontAwesome !important;
+	margin-right:4px !important;
+	font-size: 14px;
+}
+/* Enlarging CKE Format Panel to bootraps preview formats */
+div.cke_panel {
+	width: 280px !important;
+}
+/* ZMS Linkbutton for CKEditor */
+.cke_button_icon.cke_button__linkbutton_icon{
+ background-image:url('/++resource++zms_/ckeditor/plugins/icons.png') !important;
+ background-position:0 -696px !important;;
+ background-size:auto !important;;
+}
+.cke_button_icon.cke_button__linkbutton_icon:before{
+ box-sizing:border-box;
+}
+
+/* Contraint Messages */
+.zmi-manage-main-change div.constraint {
+	display:none;
+}
+div.constraint {
+	font-size: 11px;
+	padding: 8px;
+}
+.zmi.properties div.constraint {
+	border-radius: 4px;
+	margin: 1.5em 0;
+}
+.constraint-error {
+	color:#A94442;
+}
+div.constraint-error {
+	background-color:#F2DEDE;
+}
+.zmi.properties div.constraint-warning {
+	border: 1px solid rgba(169,68,66,0.25);
+}
+.constraint-warning {
+	color:#8A6D3B; 
+}
+div.constraint-warning {
+	background-color:#FCF8E3;
+}
+.zmi.properties div.constraint-warning {
+	border: 1px solid rgba(138, 109, 59, 0.25);
+}
+.constraint-restriction {
+	color:#31708F;
+}
+div.constraint-restriction {
+	background-color:#D9EDF7;
+}
+.zmi.properties div.constraint-restriction {
+	border: 1px solid rgba(49, 112, 143, 0.25);
+}
+
+/* Contraint as Tooltip */
+
+.btn-group.zmi-action .tooltip .tooltip-inner {
+	padding: 1px;
+	background-color: #888
+}
+.btn-group.zmi-action .tooltip .tooltip-inner .constraint {
+	border-radius: 4px;
+	overflow:hidden;
+	margin: 0;
+}
+.btn-group.zmi-action .tooltip-arrow {
+	border-top-color: #888;
+}
+
+.zmi-container .right li span[class^="glyphicon-"],
+.zmi-container .right li span[class*=" glyphicon-"],
+.zmi-container .right li i[class^="icon-"],
+.zmi-container .right li i[class*=" icon-"] {
+	display: inline-block;
+	width: 1.5em;
+	font-size: 14px;
+}
+
+ul.zmi-container .right div input {
+	margin:8px;
+}
+ul.zmi-container .zmi-item .zmi-action {
+	margin-left:-179px;
+}
+ul.zmi-container .zmi-item .zmi-action .split-left {
+	width:180px;
+	overflow:hidden;
+	visibility:hidden;
+	text-align:left;
+	z-index:9999;
+}
+.checkbox.split-left {
+	height:1em;
+}
+.checkbox.split-left input {
+	margin:.2em .5em 0 0;
+}
+.zmi-action .btn.btn-default.split-left,
+.zmi-action .btn.btn-default.split-right {
+	background-color: #eee;
+	color:#333;
+}
+.zmi-action .btn.split-left,
+.zmi-action .btn.split-right {
+	border-color: #eee;
+	font-weight:bold;
+	height:2.7em;
+	margin-left:0;
+}
+ul.zmi-container.pages .zmi-item .contentEditable {
+	padding-left:1.0em !important;
+	font-size:large;
+}
+.zmi .form-horizontal {
+	background-color:#FFF;
+	margin-left:1.5em;
+	margin-right:1.5em;
+	padding:0.5em;
+}
+.zmi form.form-horizontal.form-insert {
+	margin:0;
+}
+.zmi legend {
+	margin-bottom: .35em;
+	border-bottom: none;
+	color:#888;
+}
+.zmi legend.pull-left {
+	margin-bottom: .5em;
+	width:auto;
+}
+.system table.zopeobjects i {
+	margin-left:3px;
+}
+.zmi.properties .accordion-group {
+	background-color: #FFF;
+	padding:1em;
+}
+.zmi.properties .accordion-group .accordion-inner {
+	padding:0.5em 0;
+	margin:0.5em 0;
+}
+.zmi.properties .ZMSRecordSet.main #attrActivity .accordion-inner,
+.zmi.properties.ZMSSqlDb #attrActivity .accordion-inner {
+	margin: 0.5em 1.55em;
+}
+.zmi.properties .accordion-body.container .accordion-inner {
+	margin:0;
+}
+.zmi.properties form.form-horizontal .accordion-group.zmi-container .accordion-heading {
+	padding:0.5em 0;
+}
+.zmi.properties form.form-horizontal {
+	background-color: transparent;
+	padding: 0;
+}
+.zmi.properties form.form-horizontal .accordion-group {
+	width: 100%;
+	background-color: #FFF;
+}
+.zmi.properties form.form-horizontal .accordion-group.zmi-container {
+	width: 100%;
+	background-color:transparent;
+}
+.zmi.properties form.form-horizontal .accordion-body.container {
+	margin-left: -1em;
+	max-width:2600px !important;
+	width:100% !important;
+	background-color: #FFF;
+}
+.zmi.properties form.form-horizontal .accordion-group .accordion-group.zmi-container .accordion-body.container {
+	margin-left: 0em;
+}
+.properties.zmi form.form-horizontal .accordion-group .accordion-group.zmi-container {
+	padding:1em 0 1em 0;
+}
+.zmi.properties form.form-horizontal .accordion-body.container .accordion-inner {
+	background-color:#f5f5f5!important;
+	padding:0;
+}
+.zmi.properties form.form-horizontal .accordion-inner ul.zmi-container {
+	width:100% !important
+}
+.perc50 {
+	width:50%!important;
+}
+.perc90 {
+	width:90%!important;
+}
+.perc100 {
+	width:100%!important;
+}
+.col-lg-2.control-label-ace-editor {
+	background-color:#EEE;
+	border-bottom:1px solid #CCC;
+	padding:2px;
+}
+
+.form-horizontal .col-lg-2.control-label.mandatory span.glyphicon-exclamation,
+.form-horizontal .col-lg-2.control-label.mandatory i.icon-exclamation {
+	color:red;
+}
+.form-horizontal .col-lg-10 .pull-left {
+	padding-right:.5em;
+}
+div.accordion-heading a.accordion-toggle {
+	font-weight:bold;
+}
+div.accordion-heading a.accordion-toggle:hover,
+div.accordion-heading a.accordion-toggle:focus {
+	text-decoration:none;
+	color:#000000;
+}
+div.accordion-heading a.accordion-toggle .icon-caret-right,
+div.accordion-heading a.accordion-toggle .fa-caret-right,
+div.accordion-heading a.accordion-toggle .icon-caret-down,
+div.accordion-heading a.accordion-toggle .fa-caret-down {
+	margin-right:0.3em;
+}
+
+div.accordion-heading div.pull-left {
+	padding-top:0.5em;
+}
+.accordion-body.container .accordion-inner {
+	padding:0;
+	margin:0;
+}
+.accordion-body.container {
+	padding:0;
+	margin:0;
+	width:100%;
+	border:none;
+	background-color:#F5F5F5;
+}
+.form-group .save {
+	text-align:right;
+	padding-right:1em;
+}
+.accordion-body.container .zmi-container {
+	padding:0;
+	margin:0;
+}
+div.single-line {
+	width:100%;
+}
+div.single-line.input-append {
+	width:100%;
+}
+div.single-line textarea {
+	overflow:hidden;
+	font-family:"Courier New", Courier, monospace;
+	width:100%;
+}
+div.pull-left div.single-line.input-append.zmi-nodes textarea {
+	margin-left:1em;
+}
+
+@media (max-width: 767px) {
+	.zmi .accordion-heading.filters label,
+	.zmi .accordion-heading.filters input,
+	.zmi .accordion-heading.filters select {
+		display: block;
+	}
+}
+.zmi.metas .row_tableheader {
+	background: #EEEEEE;
+}
+.zmi.metas .row_tableheader th {
+	font-weight: normal;
+}
+.zmi.metas .row_tableheader th.meta-sort {
+	font-weight: bold;
+	color:#888;
+}
+.zmi.metas tr.row_metadata td span,
+.zmi.metas tr.row_metadata input,
+.zmi.metas tr.row_metadata select {
+	color: #337AB7 !important;
+}
+.zmi.metas tr.row_metadata td span {
+	opacity:0.4;
+}
+.zmi.metas table.table-striped td.meta-sort,
+.zmi.metas table.table-striped td.meta-id input,
+.zmi.metas table.table-striped td.meta-name input,
+.zmi.metas table.table-striped td.meta-type select,
+.zmi.metas table.meta-access textarea  {
+	min-width: 7em;
+	width:160px;
+}
+.zmi.metas td span.title {
+	display:none;
+}
+.zmi.metas .meta-code,
+.zmi.metas .meta-resource {
+	overflow:hidden;
+}
+.zmi.metas input[type="file"] {
+	display: inline-block;
+}
+.zmi.metas table.table-striped td.meta-id input {
+	background: rgba(237, 245, 254, 0.64);
+}
+.zmi.metas table.table-striped .row_metadata td.meta-id input,
+.zmi.metas table.table-striped .row_insert td.meta-id input {
+	background: #fff;
+}
+.zmi table#meta_overview.table tr > :first-child,
+.zmi table#meta_overview.table td.meta-space  {
+	text-align:center;
+	width:3em;
+}
+.zmi.metas table#meta_overview td.meta-id {
+	width:auto !important;
+}
+.zmi.metas table#meta_overview td.meta-id i {
+	margin:0 .5em;
+}
+.zmi.metas table#meta_overview td.meta-id a:hover i {
+	text-decoration: none;
+}
+@media (max-width: 767px) {
+	.zmi.metas table#meta_properties {
+		display: inline-table;
+		border:none;
+	}
+	/* FF Patch */
+	.zmi.metas table#meta_properties colgroup {
+		display:none;
+	}
+	.zmi.metas table#meta_properties tr {
+		display: block;
+		border-bottom:4px solid #CCC;
+	}
+	.zmi.metas table#meta_properties tr.row_tableheader {
+		display: none !important;
+	}
+	.zmi.metas table#meta_properties td,
+	.zmi.metas table#meta_properties th {
+		display:block;
+		text-align:left !important;
+		margin-top:-1px
+	}
+	.zmi.metas table#meta_properties td.meta-sort,
+	.zmi.metas table#meta_properties td.meta-id input,
+	.zmi.metas table#meta_properties td.meta-name input,
+	.zmi.metas table#meta_properties td.meta-type select,
+	.zmi.metas table#meta_properties textarea {
+		min-width: 100%;
+		width: 100%;
+	}
+	.zmi.metas table#meta_properties td span.title {
+		display:block;
+		margin-right:1em;
+	}
+	.zmi.metas table#meta_overview span.meta-id-info {
+		display:none;
+	}
+}
+.zmi.metas div.meta-access {
+	overflow-x: scroll;
+}
+.zmi.metas table.meta-access {
+	margin:2em 0 0;
+}
+.zmi.metas table.meta-access th {
+	height: 88px;
+	vertical-align:bottom !important;
+	border:none !important;
+	border-right:1px solid white;
+	border-left:1px solid white;
+	white-space: nowrap;
+}
+.zmi.metas table.meta-access th.rolename > div {
+	transform:
+	/* Magic Numbers */
+	translate(10px, 0px)
+	/* 45 is really 360 - 45 */
+	rotate(315deg);
+	width: 20px;
+}
+th.rolename > div > span {
+	display:block;
+	padding:0;
+	width:100px;
+	text-overflow: ellipsis;
+	overflow:hidden;
+	font-weight:normal;
+	cursor: default;
+}
+.zmi.metas option.deprecated {
+	color:#CCC;
+}
+.zmi-element-default {
+	background:#FFE!important;
+}
+.zmi.metas .zmi-element-disabled {
+	background:#EEE!important;
+}
+.zmi.metas .meta-default i {
+	position: absolute;
+	top: 8px;
+	left: 6px;
+	color: #999;
+	z-index:3;
+}
+.zmi.metas .meta-default .input-group .form-control {
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+.zmi.metas .meta-default textarea {
+	padding-left:24px;
+}
+.zmi.metas .meta-default select {
+	font-family: "Courier New",Courier,monospace;
+	padding-left:20px;
+}
+.zmi.metas .enabled a {
+	font-weight:bold;
+}
+.ui-helper-clickable.icon-check {
+	margin-right:0.2em;
+	color:#08c;
+}
+.ui-helper-clickable.icon-check-empty {
+	margin-right:0.3em;
+	color:#08c;
+}
+tr.row_metadata td,
+tr.row_insert td {
+	background-color:#EDF5FE !important;
+}
+tr.row_insert td:first-child {
+	text-align: right;
+	color:#999;
+}
+tr.row_insert td.meta-sort {
+	padding: 0.9em 1.35em !important;
+}
+.zmi.metas td.meta-mandatory,
+.zmi.metas td.meta-multilang,
+.zmi.metas td.meta-repetitive,
+.zmi.metas td.meta-displaycol {
+	text-align:center;
+	padding-top:0.9em;
+}
+#zmi-single-line-edit textarea {
+	font-family:"Courier New", Courier, monospace;
+}
+.zmi.metas span.input-group-addon {
+	width:29px !important;
+}
+.zmi.metas .btn-group.syncronizing .btn-default.basepath {
+	color: silver !important;
+}
+.zmi.metas .btn-group.syncronizing .btn-default.basepath:hover {
+	background: none;
+}
+@media (max-width: 767px) {
+	.zmi.metas .btn-group.syncronizing .btn-default.basepath {
+		color: white !important;
+		width:2.6em;
+		overflow:hidden;
+	}
+}
+.zmi.metas_acquire .checkbox i {
+	margin: 0 .5em;
+}
+.zmi.metas_acquire .checkbox {
+	margin: 0 0 0 2em;
+}
+div.zmi-nodes span {
+	cursor:pointer;
+}
+input.btn.btn-file {
+	background-color:#eee;
+	margin-bottom: 0.5em;
+}
+.zmi.customize #Custom table td.nowrap {
+	min-width:92px;
+}
+.zmi.customize #Custom .table-bordered tbody > tr > td:nth-child(2) {
+	max-width:1rem !important;
+	overflow-y:hidden;
+}
+.zmi.customize #Custom .table-bordered>tbody>tr>td:nth-child(3) {
+	max-width:1rem !important;
+	overflow-y:hidden;
+}
+
+.customize.config #extwizard ul.nav-pills li,
+.customize.config #InstalledProducts .tab-content .col-sm-8 button.btn {
+	min-width:160px;
+}
+.customize.config #Clients .zmi-multiselect .btn,
+.customize.config #Clients .zmi-select.zmi-sortable .btn,
+.customize.config #Clients .ui-state-highlight {
+	display: block !important;
+	text-align: left;
+}
+
+/* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * +- [ZMI] Users-Form
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+
+.zmi.users #zmi-tab > .pull-left,
+.zmi.users #zmi-tab > .pull-right {
+	width:50%;
+}
+.zmi.users form table {
+	margin-bottom: 0;
+}
+.zmi.users form table th:first-child {
+	width:6em;
+}
+.zmi.users form table th,
+.zmi.users form table td {
+	vertical-align:middle;
+}
+.zmi.users form table .breadcrumb {
+	background-color: transparent !important;
+	padding:0 !important;
+}
+.table.zmi-sortable td {
+	white-space:nowrap;
+}
+.table.zmi-sortable td img.grippy,
+.table.zmi-sortable input {
+	margin-bottom:0px;
+}
+
+
+/* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * +- [ZMI] ZMSSQLDB / ZMSRecordset
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap {
+	background-color:#DCE3F0;
+	overflow:hidden;
+	padding-right:4px;
+}
+ table.table-hover.zmi-sortable.zmi-selectable th {
+ 	cursor:default
+ }
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap a {
+	margin:0 2px 0 2px;
+}
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap input.form-control {
+	background-color:#E5EAF4;
+	border:0;
+	color:#000;
+	display:inline!important;
+	font-weight:bold;
+	margin-bottom:0;
+	padding-left:4px!important;
+}
+/* do not group these rules */
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap input.form-control::-webkit-input-placeholder {
+	color:#08c;
+}
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap input.form-control:-moz-placeholder {
+	color:#08c; /* FF 4-18 */
+}
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap input.form-control::-moz-placeholder {
+	color:#08c; /* FF 19+ */
+}
+table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable th.nowrap input.form-control:-ms-input-placeholder {
+	color:#08c; /* IE 10+ */
+}
+.nowrap {
+	white-space:nowrap;
+}
+.pagination {
+	margin:1em 0 0 0;
+	white-space:nowrap;
+}
+.pagination-pre .pull-right {
+	margin:1em 0 1.5em 0;
+}
+.pagination-centered {
+}
+.pagination > .active > a {
+	font-weight:bold;
+}
+.ZMSRecordSet form {
+	margin-left:2em;
+	margin-right:2em;
+}
+.ZMSRecordSet a.thumbnail {
+	max-width:3.0em!important;
+	max-height:3.0em!important;
+	padding:.2em!important;
+	margin:0!important;
+}
+.ZMSRecordSet .table tr td:first-child,
+.ZMSSqlDb .table tr td:first-child {
+	width:84px;
+}
+.ZMSRecordSet .table input,
+.ZMSSqlDb .table input,
+.ZMSRecordSet .table select,
+.ZMSSqlDb .table select,
+.ZMSRecordSet .table textarea,
+.ZMSSqlDb .table textarea {
+	font-size:11px;
+	padding:0 2px 0 2px;
+	margin:0;
+	height:20px;
+}
+.ZMSSqlDbForm-multimultiselect .control-group .pull-right .btn-group-vertical {
+	position: absolute;
+	right: 34px;
+}
+.table.zmi-selectable tr th,
+.ZMSRecordSet .table tr td {
+	padding:4px;
+	font-size:11px;
+}
+.table.zmi-selectable tr th {
+	min-width: 3em;
+	vertical-align: middle;
+}
+.table tr th a {
+	text-decoration:none;
+}
+.table-hover.zmi-selectable>tbody>tr:hover>td,
+.table-hover.zmi-selectable>tbody>tr:hover>th {
+	background-color: #DCE3F0;
+}
+.table.zmi-selectable tr th:first-child,
+.table.zmi-selectable tr td:first-child,
+.table.zmi-selectable tr th .btn-group,
+.table.zmi-selectable tr td .btn-group {
+	white-space:nowrap !important;
+	min-width:8em;
+}
+.table.zmi-selectable tr th .split-left,
+.table.zmi-selectable tr td .split-left {
+	font-size:11px;
+	border:1px solid #ccc;
+	margin:0px;
+	background:#DCE3F0;
+	padding:6px;
+	min-width:52px;
+	overflow:hidden;
+	height:28px;
+}
+.ZMSSqlDb .table tr td:first-child .checkbox input,
+td .btn-group .checkbox.split-left.btn input {
+	opacity: 0.5;
+	height: auto;
+	width: auto;
+	text-align: left;
+	display: block;
+	margin: 0 0 0 0;
+}
+.lazy_select_form.ZMSSqlDb td .btn-group .checkbox.split-left.btn input {
+	display: inline-block;
+}
+.table.zmi-selectable tr th:first-child span:hover ,
+.table.zmi-selectable tr td:first-child span:hover {
+	color:#000 !important
+}
+.table.zmi-selectable tr th:first-child .split-right,
+.table.zmi-selectable tr td:first-child .split-right {
+	height:28px;
+	margin:0px;
+	padding:0 0.5em;
+	background-color:#919EB3;
+}
+.ZMSSqlDb .table ul.dropdown-menu {
+	font-size:14px;
+}
+.ZMSSqlDb .table ul.dropdown-menu i {
+	padding-right:0.5em;
+}
+.ZMSSqlDb .table ul.dropdown-menu li {
+	cursor:pointer;
+}
+.ZMSRecordSet #attrProperties .form-group select,
+.ZMSSqlDb #attrProperties .form-group select,
+.ZMSRecordSet #attrProperties .form-group input,
+.ZMSSqlDb #attrProperties .form-group input {
+	width:167px;
+	float:left;
+}
+.ZMSRecordSet .accordion-group,
+.ZMSSqlDb .accordion-group {
+	border:0;
+}
+.ZMSRecordSet .form-horizontal,
+.ZMSSqlDb .form-horizontal {
+	border: 1px solid #e5e5e5;
+	border-radius: 4px;
+}
+.ZMSRecordSet .accordion-group.perc100 .accordion-heading,
+.ZMSSqlDb  .accordion-group.perc100 .accordion-heading {
+	padding: 8px 3px 8px 15px;
+}
+
+.zmi .accordion-heading.filters a.accordion-toggle.pull-left {
+	padding-top: 6px;
+}
+.zmi .accordion-heading.filters label,
+.zmi .accordion-heading.filters input,
+.zmi .accordion-heading.filters select {
+	display: inline-block;
+	width: auto;
+}
+.zmi .accordion-body.filters .accordion-inner {
+  margin:1em;
+  padding:1em !important;
+  background:#DCE3F0;
+  border-radius:4px;
+}
+.zmi #qsize {
+	display:inline-block;
+	width:5em;
+}
+.ZMSRecordSet #attrProperties,
+.ZMSSqlDb #attrProperties {
+	border:0;
+}
+.ZMSRecordSet #attrProperties .accordion-inner,
+.ZMSSqlDb #attrProperties .accordion-inner {
+	padding-top: 0.5em;
+}
+.ZMSRecordSet #attrProperties .accordion-inner label,
+.ZMSSqlDb #attrProperties .accordion-inner label {
+	color:#999;
+}
+#insertUserForm .ZMSRecordSet {
+	overflow-y: hidden;
+	margin-left: -15px;
+	padding-left: 1px;
+}
+#insertUserForm .ZMSRecordSet table th,
+#insertUserForm .ZMSRecordSet table td {
+	max-width: 8em;
+}
+#insertUserForm .ZMSRecordSet table th:not(:first-child),
+#insertUserForm .ZMSRecordSet table td {
+	overflow: hidden;
+}
+#insertUserForm .ZMSRecordSet .pagination {
+	margin-left: 0;
+}
+#insertUserForm .ZMSRecordSet table div.btn-group span.split-left {
+	overflow:visible
+ }
+#insertUserForm .ZMSRecordSet.main_grid table tbody .btn-group span.split-left input {
+	margin:-2px 0 0 4px;
+	float:left;
+}
+.ZMSSqlDb .index,
+.ZMSRecordSet .index {
+	margin-left:1em;
+}
+.ZMSRecordSet.main_grid table {
+	cursor:pointer;
+}
+.ZMSRecordSet.main_grid form > table thead th div.btn-group span.split-left {
+	max-width:48px;
+	overflow:hidden;
+}
+.zmi.properties.ZMSSqlDb form .form-group .form-group {
+	margin-left:0;
+	margin-right:0;
+}
+.zmi.importexport.ZMSSqlDb form.form-horizontal {
+	padding:1.5em;
+	margin-bottom:2em
+}
+.zmi.importexport.ZMSSqlDb form.form-horizontal button {
+	margin-top:1em
+}
+.zmi.importexport.ZMSSqlDb form.form-horizontal select {
+	height:12em
+}
+/* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * +- [ZMI] Image
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+
+.zmiDivOpaque {
+	background-color:white;
+	filter:Alpha(opacity=85);
+	-moz-opacity:0.85;
+	opacity:0.85;
+}
+
+.dropdown-menu.scrollable-menu {
+	height: auto;
+	max-height: 200px;
+	overflow-x: hidden;
+}
+
+li.dropdown-submenu ul.dropdown-menu li a img {
+	margin-right:0.5em
+}
+
+div.zmi-action > ul.dropdown-menu {
+	margin-top:-1px;
+	border-top-left-radius: 0;
+	min-width:20em;
+}
+div.zmi-action .dropdown-header {
+	cursor:default;
+}
+div.zmi-action > ul.dropdown-menu .icon-double-angle-up,
+div.zmi-action > ul.dropdown-menu .icon-double-angle-down,
+div.zmi-action > ul.dropdown-menu .icon-caret-right {
+	padding-left: 3px;
+}
+div.zmi-action > ul.dropdown-menu .icon-caret-down {
+	padding-left: 2px;
+}
+div.zmi-action > ul.dropdown-menu li a {
+	padding-left:13px;
+}
+div.zmi-action ul.dropdown-menu li[title*="TAB_"] {
+	display: none;
+}
+div.right .zmi-ids input[type="checkbox"] {
+	margin-left: 3px;
+	margin-top: 3px;
+	opacity: 0.5;
+}
+div.right span.form-small {
+	display: block;
+	color:#888;
+	margin-left: 8px;
+}
+
+div.right .version_object_state {
+	display: inline-block;
+}
+div.right .version_object_state i {
+	font-size: 120%;
+}
+div.right .version_object_state i.wf-icon,
+div.right .object_has_titleimage i.titleimage-preview,
+.attr_last_modified i.wf-icon,
+.zmi-state {
+	display: inline-block;
+	margin-right: .2em;
+	background-color:transparent !important
+}
+div.right .version_object_state .zmi-state.bg-info.text-info {
+	background-color:transparent;
+}
+body.zmi ul.zmi-container > .zmi-item .right i.titleimage-preview:hover {
+	cursor:help;
+}
+body.zmi ul.zmi-container > .zmi-item .right i.titleimage-preview::after {
+	content:none;
+	width:0;
+	height:0;
+	opacity:0;
+	display:block;
+	background-color:#f5f5f5;
+	background-image:none;
+	box-shadow: none;
+}
+body.zmi ul.zmi-container > .zmi-item .right i.titleimage-preview:hover::after {
+	content:"";
+	width:20vw;
+	height:20vw;
+	opacity:1;
+	display:block;
+	position:absolute;
+	background-color:white;
+	background-image:var(--titleimage_url) !important;
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position-y:center;
+	background-position-x:center;
+	border:1px solid #c0c0c07d;
+	border-radius:4px;
+	z-index:1000;
+	margin-left:-10vw;
+	box-shadow: 5px 5px 20px #c0c0c094;
+	transition: opacity .75s, height .5s, box-shadow 1s, background-color 1s ease; 
+}
+
+div.right a:hover,
+div.right a:focus {
+	text-decoration:none;
+}
+.zmi-item .center .contentEditable {
+	border-left:none !important;
+	border-right:none !important;
+	border-bottom:none !important;
+	border-top:1px dotted #ccc !important;
+}
+
+
+/* Fixing bootstrap dropup menu: closing a 2px gap */
+.zmi .dropup .dropdown-menu {
+	margin-bottom: 0px !important;
+	border-bottom-left-radius: 0 !important;
+	border-top-left-radius: 4px !important;
+}
+
+@media (max-width: 767px) {
+	body {
+		padding:0em !important
+	}
+	/* navbar dropdown menus made again similar to upper breakpoint */
+	.navbar-nav .open .dropdown-menu {
+		position: absolute;
+		float: left;
+		width: auto;
+		min-width: 160px;
+		margin-top: 2px;
+		background-color: #FFF;
+		border: 1px solid rgba(0,0,0,0.15);
+		-webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+		box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+	}
+	.navbar-nav .localisation .dropdown-menu {
+		right: 0;
+		left: auto;
+	}
+	.navbar-nav .open .dropdown-menu>li>a,
+	.navbar-nav .open .dropdown-menu .dropdown-header {
+		padding: 3px 13px;
+	}
+	.navbar-inverse .navbar-nav .dropdown-menu > .dropdown-header {
+		border: none;
+	}
+	.navbar-inverse .navbar-nav .dropdown-menu>li>a {
+		color: #333 !important;
+	}
+	.navbar-inverse .navbar-nav .dropdown-menu .divider {
+		background-color: #E5E5E5!important;
+	}
+	.navbar-inverse .navbar-nav .dropdown-menu > li > a:hover,
+	.navbar-inverse .navbar-nav .dropdown-menu > li > a:focus {
+		background-color: #F5F5F5!important;
+	}
+	div#zmi-tab {
+		background-color: #FFF!important;
+	}
+	ul.zmi-container {
+		padding:0em;
+	}
+	ul.zmi-container > li > div.center {
+		width:100%
+	}
+	.zmi.main form {
+		margin:0px;
+	}
+	ul.zmi-container > li.zmi-item > div.right {
+		position: absolute;
+		float:right;
+		width: 100% !important;
+		text-align: right;
+	}
+	.zmi-children ul.zmi-container > li.zmi-item > div.right {
+		width: 93% !important;
+		/* obsolete? */
+	}
+	.accordion-group.zmi-container .zmi-children ul.zmi-container > li.zmi-item > div.right {
+		width: 100% !important;
+	}
+	ul.zmi-container .zmi-item .zmi-action {
+		margin-left:0px;
+	}
+	ul.zmi-container .zmi-item .zmi-action .btn {
+		border-radius: 0;
+	}
+	ul.zmi-container .zmi-item .zmi-action .split-left	{
+		width: 238px;
+	}
+	.zmi-manage-main-change {
+		display:none !important;
+	}
+	.zmi-item .dropdown-menu {
+		margin-left:0em;
+		text-align: left;
+	}
+	ul.zmi-container {
+		width: 100% !important;
+	}
+	ul.zmi-container .zmi-item .center {
+		width: 100% !important;
+	}
+	.zmi-item {
+		border-left:0px solid #ddd;
+	}
+	.right span,
+	.right span.form-small,
+	.right span.zmi-ids {
+		display:none !important;
+	}
+	img.grippy,
+	div.grippy {
+		visibility:hidden;
+	}
+	.navbar-nav>li {
+		float: left;
+	}
+	.zmi .form-horizontal {
+		margin-left:0;
+		margin-right:0;
+		padding: 1em;
+	}
+	.zmi.properties .accordion-group {
+		width:100%;
+	}
+	.zmi.properties .accordion-group.zmi-container {
+		width:100%;
+		padding:0;
+	}
+	.zmi.properties form.form-horizontal .accordion-group.zmi-container .accordion-body.container {
+		margin-left: 0;
+	}
+	.zmi.properties form.form-horizontal .accordion-group.zmi-container .accordion-heading {
+		padding-left:1em;
+	}
+	.zmi.properties .form-horizontal label.col-lg-2.control-label,
+	.zmi.properties .form-horizontal .controls {
+		margin-left: 0px;
+		width:auto;
+	}
+	.zmi.properties .form-horizontal .col-lg-2.control-label {
+		float: none;
+		text-align: left;
+	}
+	.zmi.properties .form-horizontal .form-group.activity .col-lg-2.control-label {
+		float: left;
+	}
+	.zmi.properties .form-horizontal .form-group.activity .col-lg-10 {
+		padding-left:4em;
+	}
+	.zmi-image,.zmi-file {
+		min-width:95%;
+	}
+	#zmiIframeAddDialog .modal-dialog {
+		max-width:90% !important;
+		-webkit-transform: translate(3%, 2em) !important;
+		transform: translate(3%, 2em) !important;
+	}
+}
+
+/* Fix Scroll Issue on Mutiple Modal Windows */
+.modal {
+	overflow-y:auto;
+	-ms-overflow-style: none;
+	scrollbar-width: none; 
+}
+.modal::-webkit-scrollbar { 
+	display: none;
+}
+
+@media (min-width: 767px) {
+	.zmi nav #toggle_zmitabs {
+		display: none;
+	}
+	div.zmi-action .dropdown-submenu>.dropdown-menu {
+		left: -160px;
+	}
+	div.zmi-action .dropdown-submenu>a:after {
+		display: none;
+	}
+	.zmi.properties form.form-horizontal .accordion-group {
+		/* width: 78.75%; */
+		background-color: #FFF;
+	}
+	.ZMSLinkContainer.zmi.properties form.form-horizontal .accordion-group {
+		width: 100% !important;
+	}
+}
+
+.ui-dialog .ui-dialog-title {
+	padding:0!important;
+}
+
+button.ui-dialog-titlebar-close {
+	color: #FFF!important;
+	background-color: #999!important;
+	background-image: url(/++resource++zms_/bootstrap/img/glyphicons-halflings.png)!important;
+	background-position: -309px 2px!important;
+	background-repeat:no-repeat!important;
+}
+
+.dropdown-header {
+	padding: 3px 13px;
+	font-size: inherit;
+	color: #fff !important;
+	background-color: #818EA2;
+	border-bottom:1px solid #FFFFFF;
+}
+.navbar-nav .open .dropdown-menu a {
+	padding:3px 13px;
+}
+.navbar-nav .open .dropdown-menu a i,
+.navbar-nav .open .dropdown-menu .dropdown-header i {
+	width:1.2em ;
+	display:inline-block;
+}
+.navbar-nav .open .dropdown-menu .dropdown-header i.icon-caret-down,
+.navbar-nav .open .dropdown-menu .dropdown-header i.icon-caret-right {
+	padding:2px;
+}
+.navbar-inverse .navbar-nav .dropdown-menu > .dropdown-header {
+	margin-top:9px;
+}
+li.zmi-item .btn.split-left,
+li.zmi-item .btn.split-right.dropdown-toggle {
+	width: 30px;
+	height: 30px;
+	padding: 3px 0px 0px 0px;
+	background-color: #eee;
+	border-color: rgba(0,0,0,0.1);
+}
+li.zmi-item .btn.split-left {
+	padding: 2px 0px 0px 10px;
+	color:#08c
+}
+li.zmi-item .btn.split-left:hover {
+	color:#222;
+}
+li.zmi-item span.zmi-ids {
+	/* position: absolute; */
+	display:inline-block;
+	margin: 6px;
+	vertical-align:top;
+}
+.zmi-manage-main-toggle {
+	margin: 6px;
+	cursor:pointer;
+}
+.zmi-manage-main-toggle .icon-info-sign {
+	color:#888;
+	vertical-align: text-bottom;
+}
+.zmi-manage-main-toggle .icon-info-sign.active {
+	color:#08c;
+}
+.zmi-manage-main-change {
+	display:none;
+	color:#888;
+	font-size:11px;
+	margin:4px 0 0 11px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+ul.zmi-container li.zmi-item .center > div.contentEditable {
+	min-height:60px;
+}
+.nav>li>a {
+	padding: 8px 10px 7px 10px;
+	font-size:14px;
+}
+.zmi header .navbar-nav {
+	margin:2px 0 0 0;
+}
+.zmi header .navbar-nav.pull-right {
+	width:auto;
+	margin:4px 0 !important;
+}
+
+.zmi.metas .input-group-addon {
+	padding: 0px 8px;
+}
+/* ##### METAS ##### */
+.zmi select.zmi-sort {
+/* = BS30 form-control */
+	direction:rtl;
+	width: 3.8em;
+	height: 28px !important;
+	padding:4px 2px 4px 6px;
+	color: #555555;
+	vertical-align: middle;
+	background-color: #FFFFFF;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	float:left
+}
+
+.zmi .meta-sort .add-on.btn {
+	color: #888;
+	background: #eee;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border: 1px solid #ccc;
+	padding: 3px 6px;
+}
+.zmi .meta-sort .add-on.btn:hover {
+	background: #ddd;
+	color: #A03F3F !important;
+
+}
+.tabbable .nav-tabs {
+	padding: 0 2em;
+	margin: 0 1em;
+	min-width:1000px;
+	overflow:hidden;
+	white-space: nowrap;
+	border:none;
+}
+.tabbable .nav-tabs li.active a {
+	background-color: #fff !important;
+	font-weight:normal;
+}
+.tabbable legend {
+	display:none;
+}
+.tabbable .tab-pane form {
+	padding:2em;
+	border-radius:4px;
+	box-shadow: 0px 0px 1px #888;
+	min-height: 320px;
+}
+body.zmi.customize.config #zmi-tab #Manager.tab-pane .form-group {
+	white-space:nowrap; 
+}
+body.zmi.customize.config #zmi-tab #Manager.tab-pane .btn img {
+	margin: -.5em .25em 0 0;
+}
+
+body.zmi.customize.config #zmi-tab #Manager.tab-pane .form-group a {
+	white-space:nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+	max-width:50vw;
+	margin-bottom: -.25em;
+}
+body.zmi.customize.config #zmi-tab #Custom.tab-pane table td a {
+	max-width: 30vw;
+	overflow-x: hidden;
+	display: inline-block;
+	text-overflow: ellipsis;
+}
+body.zmi.customize.config #zmi-tab #Custom.tab-pane table td {
+	max-width:  30vw;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+@media (max-width:768px) {
+	body.zmi.customize.config #zmi-tab .tabbable .nav-tabs {
+		display:none
+	}
+	body.zmi.customize.config #zmi-tab #Manager label[for="meta_type"] {
+		margin-left:-15px;
+		color:#888;
+		font-weight:normal;
+	}
+	body.zmi.customize.config #zmi-tab > .tabbable > .tab-content > .tab-pane {
+		display:block;
+	}
+	body.zmi.customize.config #zmi-tab >.tabbable .tab-pane form {
+		margin: 2em;
+		background:#fcfcfc;
+	}
+	body.zmi.customize.config #zmi-tab .tabbable legend {
+		display: block;
+		margin: 0;
+		padding: 0 0 1em 0;
+	}
+}
+body.tasks .form-horizontal,
+body.tasks table.table tbody tr td.data {
+	background-color:transparent;
+	white-space:normal;
+}
+body.tasks table.table {
+	background-color:#FFF;
+	font-size: smaller;
+}
+body.tasks table.table ul.breadcrumb {
+	margin-left: 0;
+	padding: 0 0 1em 0;
+	background: transparent;
+}
+body.tasks .zmi-container .center .contentEditable {
+	padding-left: 0 !important;
+}
+#zmiIframeAddDialog #form0 input.hasDatepicker{
+	z-index: 2000;
+}
+.zmi.zmslog .logitem {
+	margin-top:2em;
+}
+.zmi.zmslog .logitem span.pull-left {
+	padding:0 .5em;
+	font-size:200%;
+	color:#c7254e;
+}
+.zmi.zmslog .logitem code {
+	white-space:pre-wrap !important;
+}
+/*----- Multiselect ---------------------------------------------------------*/
+.btn-group.btn-group-sortable, .zmi-select {
+  float:left;
+  display:inline;
+}
+.btn-group.btn-group-sortable .btn {
+  margin: 0 .5em .5em 0;
+  height:28px;
+  padding:2px 8px;
+}
+.zmi-select .btn {
+  margin: 0 .5em .5em 0;
+  height:28px;
+  padding:2px 8px;
+  border-color:#CCC;
+  cursor:default;
+}
+.zmi-select.zmi-sortable .btn {
+  cursor:move;
+}
+.zmi-select.zmi-sortable .ui-state-highlight {
+  display:inline-block!important;
+  height: 28px!important;
+  vertical-align: middle;
+  margin:-8px .5em 0 0!important;
+  min-width: 5em!important;
+  background: #D8DEE4;
+}
+
+/*----- image ----------------------------------------------------------------*/
+.zmi-image del, .zmi-image del *,
+.zmi-file del, .zmi-file del * {
+  color:#888!important;
+}
+.zmi-image .btn-group a.btn.btn-default,
+.zmi-file .btn-group a.btn.btn-default {
+  color:#333;
+  background-color:#f5f5f5;
+  border-color:#ccc;
+  max-width:30em!important;
+  overflow:hidden;
+}
+.zmi-image .filename,
+.zmi-file .filename {
+  color:#08c;
+}
+.zmi-image-preview {
+  max-width:100px;
+}
+.zmi-image-generate-preview * {
+  float:left;
+  padding-left:0.5em;
+  padding-right:0.5em;
+  color:#888;
+}
+div.ZMSGraphic_extEdit_action {
+  margin:0px 0px 20px 0px;
+}
+.slider.slider-vertical {
+  margin-left:0.6em
+}
+.slider-handle {
+  background-image:none;
+}
+a.ZMSGraphic_extEdit_action {
+  text-decoration:none;
+}
+a.ZMSGraphic_extEdit_action.changed {
+  background-color: #F90;
+}
+a.ZMSGraphic_extEdit_action .zmi-zoom-in {
+  color:#333;
+  background-color:#FFF;
+  border:1px solid #CCC;
+  border-radius:12px;
+  opacity:0.5;
+  padding-left:4px;
+  width:24px;
+  height:24px;
+  margin-top: -26px;
+  margin-left: 2px;
+}
+a.ZMSGraphic_extEdit_action img,
+#ZMSGraphic_extEdit_image {
+  border: 1px solid #666;
+  margin:1px;
+  background:#CCC;
+}
+#ZMSGraphic_extEdit_actions .form-group {
+  margin:0.3em 0 1em 0.3em;
+}
+#ZMSGraphic_extEdit_actions .form-group .form-control {
+  width:4em;
+}
+
+/* ####################### */
+/* ZMSTable defaults       */
+/* ####################### */
+
+table.ZMSTable th {
+	background-color:#DDEFFC;
+	border:1px solid #ccc !important;
+	overflow:hidden !important;
+}
+table.ZMSTable td {
+	background-color:#f9f9f9;
+	border:1px solid #ccc !important;
+	overflow:hidden !important;
+}
+table.ZMSTable {
+	margin:1em 0;
+}
+
+.input-group-addon.input-group-dropdown {
+	padding:0;
+}
+.input-group-addon.input-group-dropdown .btn {
+	border:0;
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+}
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	/* Required to make elements draggable in old WebKit */
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+}
+/* Item Drag or Select */
+body.zmi ul.zmi-container .zmi-item.zmi-selected .center {
+	background-color:rgba(0, 136, 204, 0.10);	
+}
+body.zmi ul.zmi-container.zmi-sortable .zmi-item.zmi-data-transfer-drag .center { 
+	border-top: 4px dashed #08c !important;
+	transition: border-top 0.5s ease;
+}
+/* Show Alert Box only as Dotted Line */
+body.zmi.properties .alert.zmi-dragged-info {
+	width:auto;
+	right:21.6%;
+	margin:0;
+	padding:0;
+	border-radius: 0;
+	border: none;
+	background: none;
+	border-top: 4px dashed #0088cc !important;
+	transition: border-top 0.5s ease;
+}
+/* Show Alert Message as Sticky Footer */
+body.zmi.properties .alert.alert-success.zmi-dragged-info span.message {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	object-position: top;
+	width: 100%;
+	text-align: center;
+	background: #d4edda;
+	height: 42px;
+	line-height: 42px;
+	border-top: 1px solid #c3e6cb;
+}
+@media (max-width: 767px) {
+	body.zmi.properties .alert.zmi-dragged-info {
+		width:calc(100% - 3rem);
+		right:unset;
+	}
+}
+.zmi:not(.manage-menu) .navbar-nav .dropdown-menu a[href*="zmi-manage-system=0"] { 
+	background:rgba(53, 79, 103, 0.15); 
+}
+
+
+/* ####################### */
+/* ZMSObjectSet            */
+/* ####################### */
+
+.zmi .ZMSObjectSet .panel {
+	box-shadow:none !important;
+	border:none !important;
+	-webkit-box-shadow:none !important;
+	margin:.5em 0;
+	background-color:transparent !important;
+}
+.zmi .ZMSObjectSet .panel h3 {
+	font-size:14px;
+}
+.zmi .ZMSObjectSet .panel h3:before {
+	content:"\f016";
+	font-family:Fontawesome;
+	position:absolute;
+	display:block;
+	border:1px solid #cccccc;
+	border-radius:4px;
+	padding:.6em;
+	margin-left:-40px;
+	width:41px;
+	text-align:center;
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+	background-color:#eeeeee
+}
+.zmi .ZMSObjectSet .panel a {
+	display:block;
+	box-shadow:none !important;
+	border:1px solid #cccccc;
+	border-radius:4px;
+	padding:.6em;
+	margin-right:15px;
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+	background-color:white !important;
+}
+.zmi .ZMSObjectSet .panel a span.title {
+	max-width: calc(100% - 8em);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	display: inline-block;
+	vertical-align: text-bottom;
+}
+.zmi .ZMSObjectSet .panel a em.date {
+	float: right;
+	margin-left: 1em;
+	opacity: .5;
+	font-style: normal;
+}
+.zmi .ZMSObjectSet .form-filter .row {
+	margin: .5em -0 1.25em -15px;
+}
+@media (max-width: 767px) {
+	.zmi .ZMSObjectSet .form-filter .row {
+		margin: .5em 35px 1.25em -15px;
+	}
+}
+.zmi .ZMSObjectSet .form-filter ul.ZMSObjectSet {
+	margin-top:1em;
+}
+.zmi .ZMSObjectSet .form-filter .highlight {
+	color:#333;
+	background-color: #fff59B;
+	border:0;
+	padding:1px 0 1px 0;
+	margin:1px 0 1px 0;
+	font-weight:bold;
+}
+.zmi .ZMSObjectSet .form-filter .matched > a {
+	font-weight:bold;
+}
+
+.zmi.design .additionals i.icon-caret-right {
+	margin-right: .5em;
+	display: inline-block;
+}
+.zmi.design .additionals a:focus,
+.zmi.design .additionals a:hover {
+	text-decoration: none !important;
+}
+.zmi.design .additionals a span,
+.zmi.design .additionals a span {
+	display: inline-block;
+	margin-right: .5em;
+}
+.zmi.design .additionals pre.preview {
+	margin: .5em 0 0;
+}
+.zmi.design.config .additionals th.text-center.text-muted {
+	background: #e5e5e5 !important;
+	color: #aaa;
+	text-transform: lowercase;
+}
+
+.zmi .diff .line-number {
+		width:4em;
+		background:#FEFEFE;
+		color:#101010;
+		border:1px solid #CCC;
+		display:inline-block;
+		text-align:right;
+		padding:0 4px 0 4px;
+	}
+.zmi .diff .line-number.line-changed {
+		background:#101010;
+		color:#FEFEFE;
+	}
+.zmi .diff {
+		display: block;
+		padding: 9.5px;
+		margin: 0 0 10px;
+		font-size: 13px;
+		line-height: 1.42857143;
+		color: #333;
+		word-break: break-all;
+		word-wrap: break-word;
+		background-color: #f5f5f5;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+.zmi .focus .diff {
+		border-color: #80bdff;
+		outline: 0;
+		box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+	}
+.zmi .diff del {
+		color:#777!important;
+		background-color:#f8d7da!important;
+		text-decoration:line-through;
+	}
+.zmi .diff ins {
+		color: #3C763D!important;
+		background-color: #d4edda!important;
+		text-decoration:none;
+	}

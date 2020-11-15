@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="zmscontext python:here.getSelf(); standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:zmscontext.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<style>
+.zmi.browse_iframe .nav-pills {
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	background-color:white;
+	padding-bottom:5px;
+	z-index:9999;
+}
+.zmi.browse_iframe .tab-content {
+	padding-top:50px;
+}
+.zmi.browse_iframe .tabbable .tab-pane form {
+	box-shadow:none;
+	border:none;
+	padding:1em 0em;
+}
+.zmi.browse_iframe #search_results .line.row.gray {
+	background-color:#f8f8f8;
+}
+.zmi.browse_iframe #search_results .line.row p {
+	font-size:x-small;
+}
+.zmi.browse_iframe #search_results .line.row h2 {
+	margin-bottom:0;
+}
+.zmi.browse_iframe #search_results h2 a {
+	font-size:medium;
+}
+.zmi.browse_iframe #search_results .breadcrumb {
+	font-size:small;
+	padding:3px 0 0 0;
+	background:transparent;
+	margin:0;
+}
+.zmi.browse_iframe #search_results h4 {
+	color:#999;
+}
+.zmi.browse_iframe #search_results .header.row {
+	display:none;
+}
+.zmi.browse_iframe  .form-inline .form-control {
+	display: inline-block;
+	width: auto;
+	vertical-align: middle;
+}
+.zmi.browse_iframe .form-inline .form-group {
+	display: inline-block;
+	margin-bottom: 0px;
+	vertical-align: middle;
+}
+.zmi.browse_iframe #link .form-inline .form-group {
+	margin-top: 1em;
+	vertical-align:baseline;
+}
+</style>
+<body tal:attributes="class python:zmscontext.zmi_body_class(id='browse_iframe')">
+
+<span class="d-none" name="physical_path"
+	tal:define="global el python:zmscontext.getLinkObj(request.get('elValue'))"
+	tal:condition="python:el is not None"
+	tal:content="python:'/'.join(el.getPhysicalPath())"
+/>
+
+<div class="tabbable tabs-left">
+
+<ul class="nav nav-pills">
+	<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#sitemap" tal:attributes="title python:'%s: %s'%(zmscontext.getZMILangStr('ATTR_LINK_INTERNAL'),zmscontext.getZMILangStr('TAB_SITEMAP'))"><i class="fas fa-sitemap"></i></a></li>
+	<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#link" tal:attributes="title python:zmscontext.getZMILangStr('ATTR_LINK_EXTERNAL')"><i class="fas fa-external-link-alt"></i></a></li>
+	<li class="nav-item dropdown languages" tal:condition="python:len(zmscontext.getLangIds())>1">
+		<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" tal:attributes="title python:zmscontext.getZMILangStr('TAB_LANGUAGES')">
+			<i class="fas fa-flag"></i>
+		</a>
+		<div class="dropdown-menu">
+			<tal:block tal:repeat="language python:[request['defaultLang']]">
+				<a class="dropdown-item" tal:attributes="href python:zmscontext.url_append_params(zmscontext.url_inherit_params(request['URL'],request,['lang','selectedLang'],sep='&'),{'lang':language},sep='&'); data-language language" class="toggle-lang">
+					<i tal:attributes="class python:'fas fa-%s'%(['square','check-square'][int(request.get('selectedLang','')=='')])"></i>
+					Default
+				</a>
+			</tal:block>
+			<tal:block tal:repeat="language python:zmscontext.getLangIds()">
+				<a class="dropdown-item" tal:attributes="href python:zmscontext.url_append_params(zmscontext.url_inherit_params(request['URL'],request,['lang','selectedLang'],sep='&'),{'lang':language,'selectedLang':language},sep='&'); data-language language" class="toggle-lang">
+					<i tal:attributes="class python:'fas fa-%s'%(['square','check-square'][int(request.get('selectedLang','')==language)])"></i>
+					<tal:block tal:content="python:zmscontext.getLanguageLabel(language)">the language</tal:block>
+					<tal:block tal:condition="python:language==zmscontext.getPrimaryLanguage()">[*]</tal:block>
+				</a>
+			</tal:block>
+		</div>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+<div class="tab-pane active" id="sitemap">
+	<form class="zmi-filter" onsubmit="return false;">
+		<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+		<input type="hidden" name="preview" tal:attributes="value python:request['preview']" />
+		<div class="input-group pr-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text"><i class="fas fa-filter text-dark"></i>&nbsp;&nbsp;<span class="badge badge-pill badge-info">0</span></span>
+			</div>
+			<input type="text" class="form-control filter" name="search" placeholder=""/>
+		</div><!-- .input-group -->
+		<div id="search_results" class="form-group p-3" style="display:none">
+			<div class="header alert alert-info mx-0">
+				<span class="small-head">
+					<i class="text-primary fas fa-spinner fa-spin"></i>
+					<tal:block tal:content="python:zmscontext.getZMILangStr('MSG_LOADING')">loading</tal:block>
+				</span>
+				<div class="meta-info"></div>
+			</div><!-- .header.row -->
+			<div class="line row"></div><!-- .row -->
+			<div class="pull-right">
+				<ul class="pagination"></ul>
+			</div>
+		</div>
+	</form>
+	<div class="zmi-sitemap"></div>
+</div>
+
+<div class="tab-pane" id="link">
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="sr-only" for="url"><span tal:content="structure python:zmscontext.getZMILangStr('ATTR_URL')">the label</span></label>
+			<select class="form-control" id="type" name="type">
+				<option value="">--- <tal:block tal:content="python:zmscontext.getZMILangStr('ACTION_SELECT')%zmscontext.getZMILangStr('ATTR_TYPE')">Select tyype</tal:block> ---</option>
+				<option value="https://">https:</option>
+				<option value="http://">http:</option>
+				<option value="file://" tal:content="python:zmscontext.getZMILangStr('ATTR_FILE')">file</option>
+				<option value="mailto:" tal:content="python:zmscontext.getZMILangStr('ATTR_EMAIL')">mailto</option>
+				<option value="ftp://">ftp:</option>
+			</select>
+		</div>
+		<input class="form-control" type="text" name="url" size="25" tal:attributes="value python:request.get('url','')"/>
+		<div class="input-group-append">
+			<button class="btn btn-primary" type="submit" name="btn">Ok</button>
+		</div>
+	</div><!-- .input-group -->
+</div><!-- #link -->
+
+</div><!-- .tab-content -->
+
+<tal:block tal:content="structure python:zmscontext.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/ZMSLinkElement/manage_browse_iframe.js"></script>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/ZMS/zmi_body_content_search.js"></script>
+</body>
+</html>

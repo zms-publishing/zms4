@@ -1,0 +1,6 @@
+<tal:block tal:define="global
+		dummy0 python:request.set('ZMS_CHARSET',request.get('ZMS_CHARSET','utf-8'));
+		dummy0 python:request.set('HTTP_ACCEPT_CHARSET','%s\073q=0.7,*\073q=0.7'%request['ZMS_CHARSET']);
+		dummy0 python:request.RESPONSE.setHeader('Content-Type', 'text/html\073charset=%s'%request['ZMS_CHARSET']);"
+><meta http-equiv="Content-Type" tal:attributes="content python:'text/html\073charset=%s'%request['ZMS_CHARSET']"/>
+</tal:block>

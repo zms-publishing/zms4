@@ -1,0 +1,171 @@
+<tal:block tal:condition="python:request.get('f_zmiRichtextEditor',True)">
+
+<script language="javascript">
+//<!--
+
+/* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * +- [ZMI] Character Format
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+
+function selectObject(href, title, oid) {
+	var attrs = [];
+	if (typeof oid != 'undefined') {
+		attrs.push('data-id="'+oid+'"');
+	}
+	if (typeof href != 'undefined') {
+		attrs.push('href="'+href+'"');
+	}
+	tagSelected('a '+attrs.join(' '),'<','>');
+}
+
+// Insert tab into richedit-textarea.
+function zmiRicheditInsertTab( fmName, elName) {
+	var doc = document;
+	var fm = doc.forms[ fmName];
+	var input = fm.elements[ elName];
+	input.focus();
+	var insText = '\t';
+	// internet explorer 
+	if( typeof doc.selection != 'undefined') {
+		selectedRange = doc.selection.createRange();
+		// insert text
+		selectedRange.text = insText;
+	}
+	// newer gecko-based browsers
+	else if( typeof input.selectionStart != 'undefined') {
+		// insert text
+		var start = input.selectionStart;
+		var end = input.selectionEnd;
+		input.value = input.value.substr(0, start) + insText + input.value.substr(end);
+		// cursor-position
+		var pos = start + insText.length;
+		input.selectionStart = pos;
+		input.selectionEnd = pos;
+	}
+}
+// -->
+</script>
+
+</tal:block>
+
+<div class="row form-group form-richtext form-richtext-standard" 
+	tal:define="standard modules/Products.zms/standard; global options python:options['args'][2]">
+
+	<tal:block tal:replace="nothing"> 
+	### Label 
+	</tal:block>
+	<div class="col-sm-12" tal:condition="python:here.meta_id!='ZMSTextarea'">
+		<label class="control-label" tal:attributes="for options/elName"><span tal:content="options/lang_str">the label</span></label>
+	</div>
+
+	<div class="col-sm-12">
+
+		<tal:block tal:replace="nothing">
+		### Custom
+		</tal:block>
+		<div class="float-left" tal:condition="python:'custom_str' in options">
+			<tal:block tal:content="structure python:options.get('custom_str')">the custom-string</tal:block>
+		</div><!-- .float-left -->
+
+		<tal:block tal:replace="nothing">
+		### Paragraph-Format
+		</tal:block>
+		<div class="float-left" tal:condition="python:'format' in options or ('metaObj' in options and len([x for x in options['metaObj']['attrs'] if x['id'] == 'format'])>0)">
+			<select class="form-control" id="format" name="format" tal:attributes="title python:here.getZMILangStr('ATTR_FORMAT'); disabled python:['','disabled'][int('format' in here.getObjAttrs().keys() and here.isDisabledAttr(here.getObjAttr('format'),request))]">
+				<option value="" disabled="disabled">--- <tal:block tal:content="python:here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr('ATTR_PARAGRAPH')">Select paragraph</tal:block>... ---</option>
+				<tal:block tal:repeat="textFormat python:here.getTextFormats(request)">
+					<option tal:condition="python:'standard' in textFormat.getUsage()"
+						tal:attributes="value python:textFormat.getId(); selected python:['','selected'][int(
+							(textFormat.getId()==options.get('format','?')) or
+							(textFormat.getId()==request.get('format','?')) or
+							(textFormat.getId()==here.attr('format')) or
+							(textFormat.getId()==here.getTextFormatDefault() and len(here.attr('format'))==0)
+						)]" tal:content="python:textFormat.getDisplay()">the text-format</option>)
+				</tal:block>
+			</select>
+		</div><!-- float-left -->
+
+		<tal:block tal:replace="nothing">
+		### Character-Format (Bold, Italic, Underline, etc.)
+		</tal:block
+		><div class="btn-group float-left" 
+			tal:repeat="charFormats python:[
+				[['strong','fas fa-bold'],
+				['em','fas fa-italic']],
+				[['sub','fas fa-subscript'],
+				['sup','fas fa-superscript']],
+				[['code','fas fa-code']],
+				[['a','fas fa-link']],]"
+			><tal:block tal:repeat="charFormat charFormats"
+				><tal:block tal:condition="python:len(charFormat)==0">&nbsp;</tal:block
+				><span tal:condition="not:python:len(charFormat)==0"
+					tal:define="fmKey python:charFormat[0].replace('\042','\'+unescape(\'\%'+'22\')+\'')"
+					class="btn btn-secondary"
+					tal:attributes="class python:'btn btn-secondary charFormat-%s'%(fmKey);
+						onclick python:'setTextFormatInput(\'%s\',\'%s\',\'%s\')'%(fmKey,options['fmName'],options['elName'])"
+					><i tal:attributes="class python:charFormat[1]; title python:here.getZMILangStr('OPT_S_%s'%charFormat[0].upper())"></i></span
+			></tal:block
+		></div><!-- .btn-group -->
+		<div class="btn-group float-left">
+			<span class="btn btn-secondary" tal:attributes="onclick python:'zmiRicheditInsertTab(\'%s\',\'%s\')'%(options['fmName'],options['elName'])"><i class="fas fa-long-arrow-alt-right" title="Tab">|</i></span>
+		</div><!-- .btn-group -->
+		<div class="btn-group float-left" tal:condition="python:len(here.getCharFormats())>0"
+		><tal:block tal:repeat="charFormat python:here.getCharFormats()"
+			><tal:block
+				tal:define="
+					title      python:charFormat.get('display');
+					icon_clazz python:charFormat.get('icon_clazz');
+					btn        python:charFormat.get('btn');
+					fmKey      python:charFormat.get('tag');
+					cjs        python:standard.dt_exec(here,charFormat.get('js','')).strip();
+					cattrs     python:standard.dt_exec(here,charFormat.get('attrs','')).strip();
+					conclick   python:'setTextFormatInput(\'%s\',\'%s\',\'%s\')'%((fmKey+(' ' if cattrs else '')+cattrs).replace('\042','\'+unescape(\'\%'+'22\')+\'').strip(),options['fmName'],options['elName'])"
+				><tal:block tal:condition="python:icon_clazz or btn"
+					><tal:block tal:condition="cjs"
+						><tal:block tal:condition="python:request.get('f_zmiRichtextEditor',True)" tal:content="structure python:'<script>%s</script>'%cjs"></tal:block
+						><tal:block tal:define="global conclick python:cjs[cjs.lower().find('function')+len('function'):cjs.lower().find('{')].strip()"></tal:block
+					></tal:block
+					><span class="btn btn-secondary" tal:attributes="onclick conclick"
+						><i tal:condition="python:icon_clazz" tal:attributes="class icon_clazz; title title"></i
+						><img tal:condition="python:btn and not icon_clazz" tal:attributes="src python:['%s/format_manager/%s'%(here.getDocumentElement().absolute_url(),btn),btn][int(btn.startswith(here.getDocumentElement().absolute_url()))]; title title"/>
+					</span
+				></tal:block
+			></tal:block
+		></tal:block
+		></div><!-- .btn-group -->
+
+		<tal:block tal:replace="nothing">
+		### Align
+		</tal:block
+		><div class="btn-group btn-radiogroup float-left" data-value="textalign" tal:condition="python:'metaObj' in options and 'key' in options and len(here.filter_list(options['metaObj']['attrs'],'id',options['key']+'align','=='))>0"
+			><tal:block tal:define="textalign python:standard.nvl(here.attr('textalign'),'LEFT',['',None]); aligns python:['left','right','center']"
+				><input type="hidden" id="textalign" name="textalign" tal:attributes="value python:['',textalign][int(textalign is not None)]"
+				><tal:block tal:condition="python:not here.isDisabledAttr(here.getObjAttr('textalign'),request)"
+					><tal:block tal:repeat="align aligns"
+						><tal:block tal:define="selected python:int(str(textalign).lower()==str(align).lower())"
+							><span tal:attributes="data-value python:align.upper()"
+								><i tal:attributes="class python:'fas fa-align-%s'%align; title python:here.getZMILangStr('ALIGN%i'%(aligns.index(align)+1))"></i></span
+						></tal:block
+					></tal:block
+				></tal:block
+			></tal:block
+		></div><!-- .float-left -->
+
+		<tal:block tal:replace="nothing">
+		### Richedit
+		</tal:block
+		><div class="btn-group float-right" tal:condition="python:request.get('richedit_fmt') is not None"
+			><span class="btn btn-secondary" 
+				tal:attributes="onclick python:'zmiStandardOnSubmitEventHandler()\073zmiRichtextEditorToggle(\'%s\',\'%s\')\073'%(options['elName'],request['richedit_fmt'].getId())"
+				><i class="fas fa-eye" tal:attributes="title python:'%s (%s)'%( request['richedit_fmt'].getDisplay(), here.getConfProperty('ZMS.richtext.plugin','ckeditor').upper() )"></i>
+			</span>
+		</div><!-- .float-left -->
+
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="col-sm-12">
+		<textarea class="form-control" onselect="storeCaret(this)" tal:attributes="id options/elName; name options/elName; cols options/cols; rows options/rows" tal:content="options/value">the text</textarea>
+	</div>
+</div>

@@ -1,0 +1,26 @@
+<div class="row form-group form-richtext form-richtext-wysiwyg" tal:define="
+		standard 	modules/Products.zms/standard;
+		options 	python:options['args'][2]">
+
+	<div class="col-sm-12">
+
+		<div class="pull-left">
+			<label class="control-label" tal:attributes="for options/elName"><span tal:content="options/lang_str">the label</span></label>
+		</div><!-- .pull-left -->
+
+		<tal:block tal:replace="nothing">
+		### Richedit
+		</tal:block>
+		<div class="btn-group pull-right" tal:condition="python:request.get('htmledit_fmt') is not None">
+			<span class="btn btn-secondary border-0" tal:attributes="onclick python:'zmiStandardOnSubmitEventHandler()\073zmiRichtextEditorToggle(\'%s\',\'%s\')\073'%(options['elName'],request['htmledit_fmt'].getId())">
+				<i class="fas fa-eye-slash" tal:attributes="title python:request['htmledit_fmt'].getDisplay()"></i>
+			</span>
+		</div><!-- .pull-left -->
+
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="col-sm-12">
+		<tal:block tal:content="structure python:standard.getPlugin(here,'rte/'+here.getConfProperty('ZMS.richtext.plugin','ckeditor')+'/manage_form.zpt')">the richedit</tal:block>
+	</div>
+</div>

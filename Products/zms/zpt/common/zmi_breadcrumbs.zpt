@@ -1,0 +1,6 @@
+<!-- common/zmi_breadcrumbs -->
+
+<tal:block tal:on-error="string:ERROR common.zmi_breadcrumbs1" tal:content="structure python:here.zmi_breadcrumbs_obj_path(here,request,extra=options.get('extra'))">zmi_breadcrumbs_obj_path</tal:block>
+<tal:block tal:on-error="string:ERROR common.zmi_breadcrumbs2" tal:content="structure python:here.zmi_manage_tabs_message(here,request,extra=options.get('extra'))">zmi_manage_tabs_message</tal:block>
+
+<!-- /common/zmi_breadcrumbs -->

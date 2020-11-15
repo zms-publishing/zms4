@@ -1,0 +1,55 @@
+<!-- zmi_details_grid -->
+
+<tal:block tal:define="dummy python:here.zmi_page_request(here,request);
+		entity python:here.getEntity(request['qentity']);
+		primary_key python:here.getEntityPK(entity['id']).lower();
+		column python:{'id':request['qcolumn']};
+		qentitypkval request/qentitypkval;
+		row python:{primary_key:qentitypkval};
+		metaObjAttr python:here.getEntityColumn(entity['id'],column['id'],row);
+		elName python:metaObjAttr['id'];
+		elLabel python:metaObjAttr['label'];">
+	<div class="card" tal:attributes="id python:'tr_%s'%(elName)"
+		><div class="card-header"
+			>&nbsp;&nbsp;<a class="btn card-toggle" tal:attributes="href python:'#detailstable_%s'%(elLabel)">
+				<i class="fas"></i>
+				<tal:block tal:content="elLabel">the heading</tal:block>
+			</a>
+		</div><!-- card-header -->
+		<div class="collapse"
+				tal:attributes="id python:'#detailstable_%s'%(elLabel)"
+				tal:define="global details python:here.getEntity(metaObjAttr['details']['tablename']);"
+			><a href="javascript:;" onclick="$('.zmi_details_grid').toggle()" title="Show SQL Code">
+				&middot;
+			</a>
+			<code tal:attributes="style python:['','display:none'][len(metaObjAttr.get('error',''))==0]" class="zmi_details_grid">
+				<tal:block tal:content="python:metaObjAttr['valuesql']"></tal:block>
+				<tal:block tal:content="python:metaObjAttr.get('error','')"></tal:block>
+			</code>
+			<tal:block tal:define="global
+					r metaObjAttr/value;
+					metaObjAttrs python:[x for x in details['columns'] if not x.get('pk') and not x.get('fk',{}).get('tablename')==entity['id']];
+					metaObjAttrs python:[here.getEntityColumn(details['id'],x['id']) for x in metaObjAttrs];
+					dummy0 python:[here.operator_setitem(x,'name',x['label']) for x in metaObjAttrs];
+					metaObjAttrIds python:[x['id'] for x in metaObjAttrs];
+					">
+				<tal:block tal:content="structure python:here.metaobj_recordset_main_grid(
+						metaObjAttrIds=metaObjAttrIds,
+						metaObjAttrs=metaObjAttrs,
+						records=r,
+						record_handler=here.getEntityRecordHandler(details['id']),
+						form_action=request['URL'],
+						url_params={'qentity':details['id']},
+						actions=['insert','update','delete'],
+						insert='return $ZMI.iframe(\'%s/manage_zmi_details_form\',{action:\'insertForm\',qentity:\'%s\',qentitypk:\'%s\',qentitypkval:\'%s\',qcolumn:\'%s\'},{title:getZMILangStr(\'BTN_INSERT\')+\': %s\',iframe:true,width:800,height:600})'%(here.absolute_url(),entity['id'],primary_key,qentitypkval,metaObjAttr['id'],elLabel),
+						update='return $ZMI.iframe(\'%s/manage_zmi_details_form\',{action:\'updateForm\',qentity:\'%s\',qentitypk:\'%s\',qentitypkval:\'%s\',qcolumn:\'%s\',qindex:$(\'input:checkbox\',$(this).parents(\'tr\')).val()},{title:getZMILangStr(\'BTN_EDIT\')+\': %s\',iframe:true,width:800,height:600})'%(here.absolute_url(),entity['id'],primary_key,qentitypkval,metaObjAttr['id'],elLabel),
+						delete='if (confirm(getZMILangStr(\'MSG_CONFIRM_DELOBJ\'))) {$ZMI.iframe(\'%s/manage_zmi_details_form\',{action:\'delete\',qentity:\'%s\',qentitypk:\'%s\',qentitypkval:\'%s\',qcolumn:\'%s\',qindex:$(\'input:checkbox\',$(this).parents(\'tr\')).val()},{title:getZMILangStr(\'BTN_DELETE\')+\': %s\',iframe:true,width:800,height:600})} return false;'%(here.absolute_url(),entity['id'],primary_key,qentitypkval,metaObjAttr['id'],elLabel),
+						)">
+					metaobj_recordset_main_grid
+				</tal:block>
+		</tal:block>
+		</div><!-- .collapse -->
+	</div><!-- .card -->
+</tal:block>
+
+<!-- /zmi_details_grid -->

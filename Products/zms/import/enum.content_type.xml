@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dictionary>
+<item key="image/gif">GIF</item>
+<item key="text/html">HTML</item>
+<item key="text/html; charset=utf-8">HTML (UTF-8)</item>
+<item key="image/jpeg">JPEG</item>
+<item key="application/epub+zip">Epub</item>
+<item key="application/x-excel">MS Excel</item>
+<item key="application/x-ms-reader">MS Reader</item>
+<item key="application/msword">MS Word</item>
+<item key="application/sxw">OpenOffice</item>
+<item key="application/pdf">PDF</item>
+<item key="text/plain">Text</item>
+<item key="text/xml">XML</item>
+<item key="text/xsl">XSL</item>
+<item key="application/zip">ZIP-compressed</item>
+</dictionary>

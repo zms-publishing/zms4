@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='metas_acquire')">
+
+<tal:block tal:define="
+		master python:here.getPortalMaster();
+		masterMetaCmdIds python:master.getMetaCmdIds();
+		acquireObjs python:[(None,x,master.getMetaCmd(x)['name']) for x in masterMetaCmdIds];
+		">
+
+<tal:block tal:define="dummy0 python:acquireObjs.sort()"></tal:block>
+	<div class="container">
+	<tal:block tal:content="structure python:here.zmi_manage_tabs_message(here,request)">zmi_manage_tabs_message</tal:block>
+	<form class="form-horizontal col-xs-10" action="manage_changeMetacmds" method="post" enctype="multipart/form-data" target="_parent">
+		<input type="hidden" name="lang" tal:attributes="value request/lang">
+		<input type="hidden" name="target" tal:attributes="value python:request['URL'].split('/')[-1]">
+		<div class="form-group row">
+			<select class="form-control" size="15" id="aq_ids" name="aq_ids:list" multiple="multiple">
+				<tal:block tal:repeat="acquireObj acquireObjs">
+					<option tal:attributes="value python:acquireObj[1]" tal:content="python:'%s (%s)'%(acquireObj[1],acquireObj[2])">acquireObj</option>
+				</tal:block>
+			</select>
+			<br />
+			<button type="submit" name="btn" class="btn btn-primary" value="BTN_ACQUIRE" tal:content="python:here.getZMILangStr('BTN_ACQUIRE')">Acquire</button>
+		</div><!-- .form-group -->
+	</form>
+	</div>
+
+</tal:block>
+
+</body>
+</html>

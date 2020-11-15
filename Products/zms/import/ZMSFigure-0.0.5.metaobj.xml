@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?zms version='ZMS3-3.4.2dev (snapshot #5747:5810M)'?>
+<dictionary>
+  <item key="key">ZMSFigure</item>
+  <item key="value" type="dictionary">
+    <dictionary>
+      <item key="__obj_attrs__" type="list">
+        <list>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">img</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">1</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">1</item>
+              <item key="name">Image</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">image</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">_img</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">1</item>
+              <item key="name"><![CDATA[Image (Preview)]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">image</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">figcaption</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">1</item>
+              <item key="name">Legende</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">text</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[icon-picture fas fa-image]]></item>
+              <item key="default"></item>
+              <item key="id">icon_clazz</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Icon-Class (CSS)]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">constant</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[## Script (Python) "ZMSFigure.titlealt"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=zmscontext=None
+##title=py: DC.Title.Alt
+##
+# --// BO titlealt //--
+
+from Products.zms import standard
+try:
+    titlealt = standard.string_maxlen(zmscontext.attr('figcaption'),24)
+    img = zmscontext.attr('img')
+    if titlealt:
+        if len(titlealt) < 24:
+            return titlealt
+        else:
+            return '%s...'%(titlealt)
+    else:
+        return img.getFilename() 
+except:
+    return 'ZMSFigure'
+
+# --// EO titlealt //--
+]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">titlealt</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name">DC.Title.Alt</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">py</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[## Script (Python) "ZMSFigure.getHref2IndexHtml"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=zmscontext=None,options=None
+##title=py: Function: index_html
+##
+# --// getHref2IndexHtml //--
+
+img = zmscontext.attr('img')
+if img:
+    return img.getHref(zmscontext.REQUEST)
+return ''
+
+# --// /getHref2IndexHtml //--
+]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">getHref2IndexHtml</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Function: index_html]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">py</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[## Script (Python) "ZMSFigure.onChangeObjEvt"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=zmscontext=None,options=None
+##title=py: Event: onChange
+##
+# --// onChangeObjEvt //--
+
+from Products.zms import pilutil
+
+if pilutil.enabled():
+	request = zmscontext.REQUEST
+	lang =  request.get('lang',zmscontext.getPrimaryLanguage())
+	hiresKey = 'img_%s'%(lang)
+	loresKey = '_img_%s'%(lang)
+	maxdim = int(zmscontext.getConfProperty('InstalledProducts.pil.thumbnail.max',480))
+	img = zmscontext.attr('img')
+	imgwidth = img and int(img.getWidth()) or 0;
+	imgheight = img and int(img.getHeight()) or 0;
+
+	# new picture added
+	if int(request.get('del_img_%s'%(lang),0))==1:
+		zmscontext.attr('_img',None)
+	if (imgwidth < maxdim or imgheight < maxdim):
+		zmscontext.attr('_img',None)
+	if (hiresKey in request.keys()) and (imgwidth > maxdim or imgheight > maxdim):
+		from Products.zms import pilutil
+		return pilutil.generate_preview(zmscontext, 'img', '_img', maxdim)
+
+return None
+
+# --// /onChangeObjEvt //--
+]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">onChangeObjEvt</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Event: onChange]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">py</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[<!-- ZMSFigure.standard_html -->
+<figure role="group" style="max-width:100%;margin:1em 0;" class="ZMSFigure ZMSGraphic"
+	tal:define="zmscontext options/zmscontext;
+		id python:zmscontext.getId();
+		img python:zmscontext.attr('img');
+		imgsrc python:img and img.getHref(request) or '#';
+		imgwidth python:img and int(img.getWidth()) or 0;
+		imgheight python:img and int(img.getHeight()) or 0;
+		img_preview python:zmscontext.attr('_img');
+		imgsrc_preview python:img_preview and img_preview.getHref(request) or '#';
+		imgwidth_preview python: img_preview and int(img_preview.getWidth()) or imgwidth;
+		imgmaxsize python:int(zmscontext.getConfProperty('InstalledProducts.pil.thumbnail.max',460));
+		figcaption python:zmscontext.attr('figcaption');
+		is_manage python:len(request.get('URL','').split('/manage'))>1;"
+	tal:attributes="
+		id id; 
+		style python:is_manage and 'max-width:100%;;display:inline-block;;' or default; 
+		title python:'Image Dimensions: %spx x %spx, Preview Max. Dimension: %s'%(imgwidth, imgheight, imgmaxsize);"
+	><a class="zmslightbox fancybox" 
+		tal:omit-tag="python:imgwidth < imgmaxsize and imgheight < imgmaxsize"
+		tal:condition="img" 
+		tal:attributes="href imgsrc">
+		<img class="img img-responsive" style="max-width:100%;max-height:auto;" alt="Image" 
+			tal:attributes="
+				src python:img_preview and imgsrc_preview or imgsrc; 
+				data-hiresimg imgsrc; 
+				style python:'width:%spx;;max-width:100%%;;max-height:auto;;%s'%(imgwidth_preview, img_preview and 'cursor:zoom-in' or '')" 
+	/></a>
+	<figcaption class="text" tal:condition="figcaption" tal:content="figcaption" class="text-italic">figcaption</figcaption>
+</figure>
+<!-- ZMSFigure.standard_html -->]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">standard_html</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Template: Simple-Bild]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">zpt</item>
+            </dictionary>
+          </item>
+        </list>
+      </item>
+      <item key="access" type="dictionary">
+        <dictionary>
+          <item key="delete_custom"></item>
+          <item key="delete_deny" type="list">
+            <list>
+              <item></item>
+              <item>ZMSAuthor</item>
+              <item>ZMSEditor</item>
+            </list>
+          </item>
+          <item key="insert_custom">{$}</item>
+          <item key="insert_deny" type="list">
+            <list>
+              <item></item>
+              <item>ZMSAuthor</item>
+              <item>ZMSEditor</item>
+            </list>
+          </item>
+        </dictionary>
+      </item>
+      <item key="enabled" type="int">1</item>
+      <item key="id">ZMSFigure</item>
+      <item key="name">ZMSFigure</item>
+      <item key="package">com.zms.foundation</item>
+      <item key="revision">0.0.5</item>
+      <item key="type">ZMSObject</item>
+    </dictionary>
+  </item>
+</dictionary>

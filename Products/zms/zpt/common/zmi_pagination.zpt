@@ -1,0 +1,26 @@
+<ul class="pagination pagination-centered" 
+	tal:define="global
+		size options/size;
+		pageSize options/pageSize;
+		pageIndex options/pageIndex;
+		pageCount python:int(((size-1)/pageSize)+1);
+		url python:here.url_inherit_params(options.get('url',request['URL']),request,exclude=['pageIndex'],sep='&');
+		has_pagination python:size>pageSize;
+		has_pagination_req python:request.set('has_pagination',has_pagination)"
+	tal:condition="has_pagination">
+	<li tal:attributes="class python:['page-item','page-item disabled'][int(pageIndex==0)]"
+		><a class="page-link" tal:attributes="href python:here.url_append_params(url,{'pageIndex:int':pageIndex-1},sep='&')"
+			>&laquo;</a
+	></li>
+	<tal:block tal:repeat="page python:range(pageCount)"
+		><li tal:condition="python:pageCount>=10 and page==pageCount-1 and pageIndex<pageCount-(3+1)-1" class="page-item disabled"><span class="page-link">...</span></li
+		><li tal:condition="python:pageCount<10 or (page==0) or (page>=pageIndex-3 and page<=pageIndex+3) or (page==pageCount-1)" tal:attributes="class python:['page-item','page-item active'][int(pageIndex==page)]"
+			><a class="page-link" tal:attributes="href python:here.url_append_params(url,{'pageIndex:int':page},sep='&')" tal:content="python:page+1">page</a
+		></li
+		><li tal:condition="python:pageCount>=10 and page==0 and pageIndex>(3+1)" class="page-item disabled"><span class="page-link">...</span></li
+	></tal:block>
+	<li tal:attributes="class python:['page-item','page-item disabled'][int(pageIndex==(size-1)/pageSize)]"
+		><a class="page-link" tal:attributes="href python:here.url_append_params(url,{'pageIndex:int':pageIndex+1},sep='&')"
+			>&raquo;</a
+	></li>
+</ul>

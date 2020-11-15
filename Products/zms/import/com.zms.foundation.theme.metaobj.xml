@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[ZMSTheme]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<tal:block
+		tal:define="zmstheme python:getattr(here,here.getConfProperty('ZMS.theme'))"
+		tal:content="structure python:zmstheme.standard_html(zmscontext=here)">
+	the ZMS-theme
+</tal:block>]]>
+                  </item>
+                  <item key="id"><![CDATA[standard_html]]></item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Standard-Html]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Page Template]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete_custom"></item>
+              <item key="delete_deny" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="insert_custom"></item>
+              <item key="insert_deny" type="list">
+                <list>
+                </list>
+              </item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">0</item>
+          <item key="id"><![CDATA[ZMSTheme]]></item>
+          <item key="name"><![CDATA[ZMSTheme]]></item>
+          <item key="package"><![CDATA[com.zms.foundation.theme]]></item>
+          <item key="revision"><![CDATA[3.1.1]]></item>
+          <item key="type"><![CDATA[ZMSLibrary]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[com.zms.foundation.theme]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="enabled" type="int">1</item>
+          <item key="id"><![CDATA[com.zms.foundation.theme]]></item>
+          <item key="name"><![CDATA[com.zms.foundation.theme]]></item>
+          <item key="package"></item>
+          <item key="revision"><![CDATA[3.1.1]]></item>
+          <item key="type"><![CDATA[ZMSPackage]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+</list>

@@ -1,0 +1,125 @@
+body.zmslightbox {
+	overflow:initial;
+}
+body.zmslightbox.masked {
+	background:rgba(0,0,0,.7);
+}
+img.hiresimg {
+	cursor:zoom-in;
+}
+figure#zmslightbox {
+	margin:0 !important;
+	padding:0 !important;
+	z-index:10000;
+}
+#zmslightbox-bg {
+	position:absolute;
+	overflow:hidden;
+	background:rgba(0,0,0,.7);
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+body.zmslightbox.masked #zmslightbox-bg {
+	background:none;
+}
+#zmslightbox-wrapper {
+	position:absolute;
+	text-align:center;
+	vertical-align:center;
+	min-width:100%;
+	min-height:100%;
+}
+#zmslightbox-wrapper:after {
+	content: attr(title);
+	display:block;
+	max-width: 800px;
+	position: relative;
+	margin:0 auto;
+	padding: 1rem;
+	color: white;
+	text-shadow: 0 0 .35rem black;
+}
+#zmslightbox-wrapper img,
+#zmslightbox-wrapper img.fullscreen {
+	/* fullscreen */
+	cursor: zoom-in;
+	margin:0 auto;
+	max-width:100%;
+	max-height:100vh;
+}
+#zmslightbox-wrapper img.fullimage {
+	/* fullimage */
+	cursor: zoom-out;
+	margin:0 auto;
+	max-width:none;
+	max-height:none;
+}
+#zmslightbox-wrapper img.fullimage:focus {
+	cursor: move;
+}
+#zmslightbox-wrapper #zlb_nav_left,
+#zmslightbox-wrapper #zlb_nav_right {
+	width: 50px;
+	height: 50px;
+	position:fixed;
+	top:calc(50vh - 40px);
+	cursor:pointer;
+	filter: drop-shadow( 0 0 8px rgba(0,0,0,.5) );
+}
+#zmslightbox-wrapper #zlb_nav_left {
+	left:0;
+	background:url('data:image/svg+xml;utf8,<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path d="m 40,39 -20,-20 20,-20" style="fill:none;stroke:white;stroke-width:3;" /></svg>')
+}
+#zmslightbox-wrapper #zlb_nav_right {
+	right:0;
+	background:url('data:image/svg+xml;utf8,<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path d="m 10,39 20,-20 -20,-20" style="fill:none;stroke:white;stroke-width:3;" /></svg>')
+}
+#zmslightbox-controls {
+	position:fixed;
+	height:70px;
+	width:70px;
+	top:0;
+	right:0;
+	z-index:502;
+	background:rgba(0,0,0,.1);
+}
+#close-zmslightbox {
+	display:block;
+	position:absolute;
+	overflow:hidden;
+	height:50px;
+	width:50px;
+	text-indent:-5000px;
+	right:10px;
+	top:10px;
+	-webkit-transform:rotate(45deg);
+	-moz-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	-o-transform:rotate(45deg);
+	transform:rotate(45deg);
+}
+#close-zmslightbox:before {
+	content:'';
+	display:block;
+	position:absolute;
+	height:50px;
+	width:3px;
+	left:24px;
+	top:0;
+	background:white;
+	border-radius:2px;
+}
+
+#close-zmslightbox:after {
+	content:'';
+	display:block;
+	position:absolute;
+	width:50px;
+	height:3px;
+	top:24px;
+	left:0;
+	background:white;
+	border-radius:2px;
+}

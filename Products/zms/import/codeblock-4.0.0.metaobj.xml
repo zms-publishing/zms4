@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?zms version='ZMS3-3.4.2dev (snapshot #)'?>
+<dictionary>
+  <item key="key">codeblock</item>
+  <item key="value" type="dictionary">
+    <dictionary>
+      <item key="__obj_attrs__" type="list">
+        <list>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"><![CDATA[HINT: This object contains programming code.]]></item>
+              <item key="id">info</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name">Info-Text</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">string</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">text</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">1</item>
+              <item key="name">Code</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">text</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[<!--
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++ Ajax.org Cloud9 Editor
++++ http://ace.ajax.org
++++ @see $ZMS_HOME/plugins/www/ace.ajax.org
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-->
+<script type="text/javascript" charset="UTF-8" src="/++resource++zmi/ace.ajax.org/ace.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('textarea#text_'+getZMILang()).wrap('<div id="editor_container" class="form-group"></div>');
+		$('textarea#text_'+getZMILang()).before('<div id="editor">ace editor text</div>');
+		var dom = ace.require("ace/lib/dom");
+		// add command to all new editor instances
+		ace.require("ace/commands/default_commands").commands.push({
+			name: "Toggle Fullscreen",
+			bindKey: "F10",
+			exec: function(editor) {
+				var fullScreen = dom.toggleCssClass(document.body, "fullScreen")
+				dom.setCssClass(editor.container, "fullScreen", fullScreen)
+				editor.setAutoScrollEditorIntoView(!fullScreen)
+				editor.resize()
+			}
+		});
+		// @see https://github.com/ajaxorg/ace/wiki/Embedding---API
+		$("textarea#text_"+getZMILang()).hide();
+		editor = ace.edit("editor");
+		var value = $("textarea#text_"+getZMILang()).val();
+		var content_type = $("input#content_type").val();
+		if (typeof content_type == "undefined" || content_type == null || content_type == '' || content_type == 'text/x-unknown-content-type') {
+			var absolute_url = $("span#absolute_url").text();
+			var id = absolute_url.substr(absolute_url.lastIndexOf("/")+1);
+			if (id.endsWith(".css")) {
+				content_type = "text/css";
+			}
+			else if (id.endsWith(".less")) {
+				content_type = "text/less";
+			}
+			else if (id.endsWith(".js")) {
+				content_type = "text/javascript";
+			}
+			else {
+				content_type = "text/html";
+			}
+		}
+		if (value.indexOf("<html") == 0) {
+			content_type = "text/html";
+		}
+		if (value.indexOf("<?xml") == 0 || value.indexOf("tal:") >= 0) {
+			content_type = "text/xml";
+		}
+		if (value.indexOf("#!/usr/bin/python") == 0 || value.indexOf("## Script (Python)") == 0) {
+			content_type = "python";
+		}
+		var mode = "text";
+		if (content_type == "text/html") {
+			mode = "html";
+		}
+		else if (content_type == "text/css" || content_type == "application/css" || content_type == "application/x-css") {
+			mode = "css";
+		}
+		else if (content_type == "text/less") {
+			mode = "less";
+		}
+		else if (content_type == "text/javascript" || content_type == "application/javascript" || content_type == "application/x-javascript") {
+			mode = "javascript";
+		}
+		else if (content_type == "text/xml") {
+			mode = "xml";
+		}
+		else if (content_type == "python") {
+			mode = 'python';
+		}
+		editor.setTheme("ace/theme/chrome");
+		editor.getSession().setMode('ace/mode/'+mode);
+		editor.getSession().setValue(value);
+		editor.getSession().on("change",function() {
+			$("textarea#text_"+getZMILang()).val(editor.getSession().getValue()).change();
+		});
+
+		// More GUI Corrections
+		$('#tr_text_' + getZMILang() + ' label span').text('Code-Text');
+		$('#tr_info input.form-control').addClass('alert-info');
+
+	});
+</script>
+<style>
+	.ace_editor {
+		min-height: 520px
+	}
+	.ace_editor.fullScreen {
+		height: 100vh !important;
+		width: 100vw !important;
+		border: 0;
+		margin: 0;
+		position: fixed !important;
+		top: 42px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 10;
+		overflow: hidden;
+		background: white !important;
+	}
+	#editor_container {
+		padding: 0 16px;
+	}
+	#editor_container:after {
+		content:"Press F10 for Toggeling Full Screen View";
+		display:block;
+		font-size:10px;
+		color:silver;
+	}
+	#editor_container > div {
+		border:1px solid rgba(0,0,0,.2);
+		border-radius:4px;
+		box-shadow:inset 0 0 2px rgba(0,0,0,.25);
+		background: transparent;
+	}
+</style>]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">codeeditor</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name">codeeditor</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">interface</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">display</item>
+              <item key="keys" type="list">
+                <list>
+                  <item>rendered</item>
+                  <item>rendered_preview_only</item>
+                  <item>as_raw_code</item>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name">Display-Mode</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">select</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default"></item>
+              <item key="id">attr_dc_accessrights_restrictedEditors</item>
+              <item key="keys" type="list">
+                <list>
+                  <item>ZMSAdministrator</item>
+                  <item>ZMSEditor</item>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name">Access</item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">multiselect</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom">icon-code</item>
+              <item key="default"></item>
+              <item key="id">icon_clazz</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Icon (Class)]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">constant</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="default">0</item>
+              <item key="id">omit_div_container</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Omit DIV-Container]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">boolean</item>
+            </dictionary>
+          </item>
+          <item type="dictionary">
+            <dictionary>
+              <item key="custom"><![CDATA[<!-- codeblock.standard_html --> 
+<tal:block 
+	tal:define="global zmscontext options/zmscontext;
+		lang python:request.get('lang','eng');
+		info python:zmscontext.attr('info');
+		codeblock python:(zmscontext.attr('code') and zmscontext.attr('text')=='') or zmscontext.attr('text');
+		display python:zmscontext.attr('display');
+		onlythirdview python:(zmscontext.attr('onlythirdview') and display=='') or display=='rendered_preview_only';
+		roles python:zmscontext.attr('attr_dc_accessrights_restrictedEditors');
+		omit_tag python:zmscontext.attr('omit_div_container');
+		is_manage python:request.get('URL').find('/manage')>-1">
+	<div class="alert alert-info" style="margin:1em 0;" 
+		tal:condition="python:(is_manage and info) or (is_manage and roles)">
+		<tal:block tal:content="python: info and info or 'HINT: This object contains programming code.'">
+		</tal:block>
+		<tal:block tal:condition="roles">
+			Editing is restricted to the role(s) <span class="roles" tal:content="roles">roles</span>.
+		</tal:block>
+	</div>
+	<div class="codeblock" 
+		tal:omit-tag="omit_tag"
+		tal:condition="python:codeblock and ( (not is_manage and onlythirdview) or display=='rendered') and not display=='as_raw_code'" 
+		tal:content="structure codeblock">
+		codeblock
+	</div>
+	<pre class="code codeblock" 
+		tal:omit-tag="omit_tag"
+		tal:condition="python:display=='as_raw_code'" 
+		tal:content="python:zmscontext.getObjAttrValue(zmscontext.getObjAttr('text'),request)">
+		codeblock
+	</pre>
+</tal:block>
+<!-- /codeblock.standard_html -->]]>
+              </item>
+              <item key="default"></item>
+              <item key="id">standard_html</item>
+              <item key="keys" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="mandatory" type="int">0</item>
+              <item key="meta_type"></item>
+              <item key="multilang" type="int">0</item>
+              <item key="name"><![CDATA[Template: HTML-Block]]></item>
+              <item key="repetitive" type="int">0</item>
+              <item key="type">zpt</item>
+            </dictionary>
+          </item>
+        </list>
+      </item>
+      <item key="access" type="dictionary">
+        <dictionary>
+          <item key="delete_custom"></item>
+          <item key="delete_deny" type="list">
+            <list>
+              <item></item>
+              <item></item>
+              <item></item>
+              <item></item>
+            </list>
+          </item>
+          <item key="insert_custom">{$}</item>
+          <item key="insert_deny" type="list">
+            <list>
+              <item></item>
+              <item></item>
+              <item></item>
+              <item></item>
+            </list>
+          </item>
+        </dictionary>
+      </item>
+      <item key="enabled" type="int">1</item>
+      <item key="id">codeblock</item>
+      <item key="name">Code-Block</item>
+      <item key="package">com.zms.foundation</item>
+      <item key="revision">4.0.0</item>
+      <item key="type">ZMSObject</item>
+    </dictionary>
+  </item>
+</dictionary>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='configuration')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<style>
+.zmi .form-horizontal .card.inactive a, 
+.zmi .form-horizontal .card.inactive label span {
+	color:#cccccc;
+}
+.zmi .form-horizontal .fieldlist label.control-label {
+	text-align:left; 
+	padding-left:3rem;
+}
+.zmi .form-horizontal .fieldlist i,
+.zmi .form-horizontal .column-description i,
+.zmi .form-horizontal .column-description.text-info {
+	color:#75a7c0 !important;
+}
+.zmi .form-horizontal .fieldlist i {
+	opacity:0.5;
+}
+.zmi .form-horizontal .badge.badge-info {
+	background-color:#75a7c0;
+}
+.zmi .form-horizontal .fieldlist .form-group {
+	margin-bottom:0px;
+}
+.zmi .form-horizontal select.zmi-sort {
+	width: 4rem;
+}
+.zmi .modal.show .modal-content {
+	overflow-x: auto;
+}
+.zmi .modal.show .modal-dialog {
+	margin-left: auto;
+	margin-right: auto;
+}
+.zmi table td.column-description {
+	padding-top:.75rem !important;
+	max-width:30vw;
+}
+</style>
+
+<script>
+
+/**
+ * Submit form with given parameters.
+ */
+function zmiFormSubmit(sender,d) {
+	var $fm = $(sender).closest("form");
+	var html = '';
+	for (var i in d) {
+		$('input[name="' + i + '"]',$fm).remove();
+		html += '<input type="hidden" name="' + i + '" value="' + d[i] +'"/>';
+	}
+	$fm
+		.append(html)
+		.submit();
+}
+
+/**
+ *
+ */
+function zmiChangeTablename(sender, names) {
+
+	var table_id = $(sender).val();
+	var columns = $("#"+table_id+"-columns span.column-id");
+	if (columns.length>0) {
+		var lookup = [];
+		for (var j = 0; j < columns.length; j++) {
+			var column = $(columns[j]).text().trim();
+			lookup.push(column);
+		}
+		for (var i = 0; i < names.length; i++) {
+			var name = names[i];
+			var $input = $('*[name='+name+']');
+			var value = $input.val();
+			var html = '<'+'input class="form-control ui-autocomplete-input form-control-sm" name="'+name+'" value="'+value+'"/>';
+			$input.replaceWith(html);
+			zmiAutocomplete('input[name='+name+']',{
+				lookup:lookup
+			});
+		}
+	}
+}
+
+function onAttrTypeChange( el) {
+	var column_id = $(el).attr('name').substr( "attr_type_".length);
+	var column_type = $(el).val();
+	$("tr[id^=tr_][id$=_"+column_id+"]").addClass('d-none');
+	$("tr[id=tr_"+column_type+"_"+column_id+"]").removeClass('d-none');
+}
+
+function loadTableEditor(urlparms) {
+	zmiModal('#updateEntity',{title:getZMILangStr('TAB_PROPERTIES')+': '+getZMILangStr('ATTR_TABLE'), width:'90%'});
+	$('#zmiModalupdateEntity .modal-body').html('<div style="margin:1rem auto;text-align:center"><i class="icon-spinner icon-spin fas fa-spinner fa-spin text-primary fa-3x"></i></div>');
+	$('button[name=btn][value=BTN_CLOSE]').click(function() {
+			zmiModal("hide");
+			return false;
+		});
+	$('.zmi-tablename').change();
+	$('#zmiModalupdateEntity .modal-body').load('manage_configuration_table?' + urlparms);
+}
+
+//	$ZMI.registerReady(function(){
+//		zmiModal('#updateEntity',{title:getZMILangStr('TAB_PROPERTIES')+': '+getZMILangStr('ATTR_TABLE'), width:'90%'});
+//		$('button[name=btn][value=BTN_CLOSE]').click(function() {
+//				zmiModal("hide");
+//				return false;
+//			});
+//		$('.zmi-tablename').change();
+//	});
+
+// #############################################################################
+// ### MULTIMULTISELECT
+// #############################################################################
+var mms_uid = 0;
+
+function mms_add_row(el) {
+	var el_tbody = $($(el).parents("tbody")[0]);
+	var sender_tr = $($(el).parents("tr")[0]);
+	var el_trs = el_tbody.children();
+	var el_tr = $(el_trs[el_trs.length-2]);
+	var new_tr = el_tr.clone();
+	var el_inputs = $("textarea,input,select",new_tr);
+	var sender_inputs = $("textarea,input,select",sender_tr);
+	for ( var k = 0; k < el_inputs.length; k++) {
+		var key = $(el_inputs[k]).attr( "name");
+		var new_key = key.substring( 0, key.lastIndexOf('_')) + (mms_uid+el_trs.length) + key.substring( key.lastIndexOf('_'));
+		$(el_inputs[k]).attr( "id", new_key);
+		$(el_inputs[k]).attr( "name", new_key);
+		if ( $(el_inputs[k]).attr( "type") == "checkbox") {
+			$(el_inputs[k]).attr( "checked", $(sender_inputs[k]).attr( "checked"));
+			$(sender_inputs[k]).attr( "checked", "checked");
+		}
+		else {
+			$(el_inputs[k]).val( $(sender_inputs[k]).val( ));
+			$(sender_inputs[k]).val( "");
+		}
+	}
+	mms_uid += 1;
+	new_tr.insertBefore( el_tr);
+	new_tr.css('display','');
+	mms_normalize_rows(el_tbody);
+}
+
+function mms_delete_row(el) {
+	if (confirm(getZMILangStr('MSG_CONFIRM_DELOBJ'))) {
+		var el_tbody = $($(el).parents("tbody")[0]);
+		var el_tr = $($(el).parents("tr")[0]);
+		el_tr.remove();
+		mms_normalize_rows(el_tbody);
+	}
+}
+
+function mms_move_row(el) {
+	var el_tbody = $($(el).parents("tbody")[0]);
+	var sender_tr = $($(el).parents("tr")[0]);
+	var el_trs = el_tbody.children();
+	var si = el.selectedIndex+1;
+	if ( si > 1) {
+		si += 1;
+	}
+	var el_tr = $(el_trs[si]);
+	if ( sender_tr != el_tr) {
+		sender_tr.insertBefore( el_tr);
+	}
+	mms_normalize_rows(el_tbody);
+}
+
+function mms_normalize_rows(el_tbody) {
+	var el_selects = $("select.collectionBtn",el_tbody);
+	for ( var k = 0; k < el_selects.length; k++) {
+		for ( var l = 0; l < el_selects[k].length-1; l++) {
+			el_selects[k].options[l] = null;
+		}
+		for ( var l = 0; l < el_selects.length-1; l++) {
+			el_selects[k].options[l] = new Option( l+1, l+1);
+		}
+		if ( k < el_selects.length-1) {
+			el_selects[k].selectedIndex = k;
+		}
+	}
+}
+
+</script>
+
+
+<div class="d-none">
+	<div id="updateEntity" class="inner"><!-- manage_configuration_table --></div>
+</div>
+
+
+<tal:block tal:define="global
+	entities python:here.getEntities();
+	tables entities">
+
+<form class="form-horizontal" method="get" action="manage_changeConfiguration">
+	<input type="hidden" name="key" value="">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<input type="hidden" name="preview" tal:attributes="value request/preview">
+
+<div class="d-none">
+	<div id="importConf" class="inner">
+		<div class="form-group row">
+			<label for="file" class="col-sm-3 col-lg-2 control-label">
+				<i class="fas fa-folder-open"></i>
+				<span tal:content="python:here.getZMILangStr('ATTR_FILE')">File</span>
+			</label>
+			<div class="col-sm-9 col-lg-10"><input class="btn btn-file" name="file" type="file" /></div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<div class="col-lg-12">
+				<button type="submit" name="btn" class="btn btn-primary" value="BTN_IMPORT" tal:content="python:here.getZMILangStr('BTN_IMPORT')">Import</button>
+			</div><!-- .col-lg-12-->
+		</div><!-- .form-group -->
+	</div><!-- .inner -->
+</div><!-- #importConf -->
+
+	<div class="btn-group" style="padding:1em;">
+		<span class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_IMPORT')+'...'" onclick="zmiModal('#importConf',{title:$(this).attr('title')});return false;"><i class="fas fa-upload"></i></span>
+	</div>
+	<br/>
+	<tal:block tal:repeat="table tables">
+	<div tal:attributes="class python:' '.join(['card']+[[''],['inactive']][int(table['type']!='table')])">
+		<div class="card-header btn-collapse">
+			<a class="btn card-toggle" data-toggle="collapse" tal:attributes="href python:'#%s-columns'%table['id']">
+				<i class="fas"></i>
+			</a>
+			<a href="#" tal:attributes="title python:here.getZMILangStr('ATTR_TABLE');
+				onclick python:'javascript:loadTableEditor(urlparams=\'lang=%s&id=%s\')'%(request['lang'],table['id']); ">
+				<i tal:condition="python:table['type']!='intersection'" class="fas fa-th-list"></i>
+				<i tal:condition="python:table['type']=='intersection'" class="fas fa-link"></i>
+				<tal:block tal:content="table/label">table-label</tal:block>
+				(<tal:block tal:content="table/id">table-id</tal:block>)
+			</a>
+		</div><!-- .card-header -->
+		<div tal:attributes="id python:'%s-columns'%table['id']; class python:' '.join(['collapse']+[[],['show']][int(table==tables[0])])">
+			<div class="card-body fieldlist">
+				<tal:block tal:repeat="column table/columns">
+					<div class="form-group row">
+						<label tal:attributes="class python:' '.join(['col-sm-3 col-lg-2 control-label']+[[],['mandatory']][int(column.get('mandatory',0))]);title python:['','mandatory'][int(column.get('mandatory',0))]">
+							<span>
+								<tal:block tal:content="repeat/column/number">number</tal:block>. 
+								<tal:block tal:content="column/label">column-label</tal:block>
+							</span>
+						</label>
+						<div class="col-sm-9 col-lg-10">
+							<i class="fas fa-th-list"></i>
+							<i tal:condition="python:column.get('pk')" class="fas fa-key text-warninng"></i>
+							<span class="column-id" tal:content="column/id">column-id</span>
+							<span class="column-description text-info text-monospace" tal:attributes="title python:column.get('description','')" tal:content="python:standard.string_maxlen(s=column.get('description',''),maxlen=48)">column-description</span>
+							<tal:block tal:condition="python:column.get('fk') and column.get('fk').get('tablename')">
+								<span class="column-datatype">
+									<i class="fas fa-long-arrow-alt-right" tal:attributes="title python:column['fk'].get('fieldname','?')"></i>
+									<i class="fas fa-th"></i>
+									<tal:block tal:content="column/fk/tablename">the fk-tablename</tal:block>
+									(<tal:block tal:content="python:column['fk'].get('displayfield','?')">the fk-displayfield</tal:block>)
+								</span>
+							</tal:block>
+							<tal:block tal:condition="python:column.get('multiselect') and column.get('multiselect').get('tablename')">
+								<span class="column-datatype">
+									<i class="fas fa-long-arrow-alt-right" tal:attributes="title python:column['multiselect'].get('fk','?')"></i>
+									<i class="fas fa-link"></i>
+									<tal:block tal:content="column/multiselect/tablename">the multiselect-tablename</tal:block>
+									<tal:block tal:on-error="python:'ERROR'" tal:define="global
+											intersection python:here.getEntity(column['multiselect']['tablename']);
+											dst python:[x for x in intersection['columns'] if x.get('fk') is not None and x.get('fk',{}).get('tablename')!=table['id']][0];
+											dstentity python:here.getEntity(dst['fk']['tablename']);
+											">
+										<i class="fas fa-long-arrow-alt-right" tal:attributes="title python:dst['id']"></i>
+										<i class="fas fa-th"></i>
+										<tal:block tal:content="dstentity/id">the details-tablename</tal:block>
+									</tal:block>
+								</span>
+							</tal:block>
+							<tal:block tal:condition="python:column.get('details')">
+								<span class="column-datatype">
+									<i class="fas fa-long-arrow-alt-right" tal:attributes="title python:column['details'].get('fk','?')"></i>
+									<i class="fas fa-link"></i>
+									<tal:block tal:content="column/details/tablename">the intersection-tablename</tal:block>
+									<tal:block tal:on-error="python:'ERROR'" tal:define="global
+											intersection python:here.getEntity(column['details']['tablename']);
+											dst python:[x for x in intersection['columns'] if x.get('fk') is not None and x.get('fk',{}).get('tablename')!=table['id']][0];
+											dstentity python:here.getEntity(dst['fk']['tablename']);
+											">
+										<i class="fas fa-long-arrow-alt-right" tal:attributes="title python:dst['id']"></i>
+										<i class="fas fa-th"></i>
+										<tal:block tal:content="dstentity/id">the details-tablename</tal:block>
+									</tal:block>
+								</span>
+							</tal:block>
+							<tal:block tal:condition="not:python:column.get('datatype')=='?'">
+								<span class="column-datatype badge badge-info text-monospace" tal:content="column/datatype">column-datatype</span>
+							</tal:block>
+						</div><!-- .col-lg-10 -->
+					</div><!-- .form-group -->
+				</tal:block>
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+	</div><!-- .card -->
+	</tal:block>
+
+</form>
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

@@ -1,0 +1,574 @@
+/* ######################## */
+/* COPY FROM ZOPE           */
+/* ZMS-ZMI: TO BE MINIMIZED */
+/* ######################## */
+
+
+/* ZOPE 4 Base Styles */
+
+@media (max-width: 576px) {
+	.hidden-xs {
+		display:none;
+	}
+}
+.zmi:not(.zmi-manage_menu) main,
+.zmi main.container-fluid {
+	width: 100%;
+	padding-right: 1rem;
+	padding-left: 1rem;
+	margin-right: auto;
+	margin-left: auto;
+}
+.alert {
+	margin: 0 1rem 1rem;
+}
+main.container-fluid .alert {
+	margin: 0 0 1rem;
+}
+
+/* BUTTONS / CONTROLS */
+
+a {
+	color:#6c757d;
+}
+a:hover {
+	text-decoration: none;
+}
+
+::placeholder{
+	color:rgba(108, 117, 125, .5) !important;
+}
+:-ms-input-placeholder {
+	color:rgba(108, 117, 125, .5) !important;
+}
+::-ms-input-placeholder {
+	color:rgba(108, 117, 125, .5) !important;
+}
+
+
+.h2, h2 {
+	font-size: 1.5rem;
+	margin: 2rem 0 1rem;
+}
+.h3, h3 {
+	font-size: 1.25rem;
+	margin: 2rem 0 .5rem;
+}
+
+input.btn.btn-primary:hover {
+	background-color:#e9ecef !important;
+}
+
+
+
+.zmi-controls {
+	margin-top:1.75rem
+}
+.zmi-controls > * {
+	margin-right:.5rem;
+	margin-bottom:.6rem;
+	min-width: 7em;
+}
+
+form.zmi-upload {
+	margin: 0 -15px;
+	padding: 2.15rem 15px;
+	border-top: #ced4da solid 1px;
+}
+.zmi p.form-help {
+	margin-bottom:2rem;
+}
+
+
+/* TAB NAVIGATION */
+.zmi nav .nav-tabs .nav-item:first-child {
+	margin-left: 1em;
+}
+.zmi nav .nav-tabs .nav-item a {
+	padding-left:1em;
+	padding-right:1em;
+}
+.zmi nav .nav-tabs .nav-item a {
+	padding-left:1em;
+	padding-right:1em;
+	padding-top:.45rem
+}
+
+
+
+
+/* MAIN / OBJECTLIST */
+
+.zmi table.objectItems td {
+	line-height:1.7rem;
+}
+.zmi table.objectItems .zmi-object-check {
+	padding-left:1rem;
+	max-width:2rem;
+}
+.zmi table.objectItems th.zmi-object-id {
+	width:100%;
+}
+.zmi table.objectItems tbody .zmi-object-id {
+	font-weight: 600;
+	max-width: calc(100vw - 340px);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: silver;
+}
+.zmi table.objectItems .zmi-object-id #tablefilter {
+	padding:0 1.5em;
+	background:none;
+	border:none;
+	box-shadow:none;
+	border-radius:3px;
+	height:1.3rem;
+	width:10rem;
+	max-width:50%;
+}
+.zmi table.objectItems .zmi-object-id #tablefilter:focus {
+	outline-color: transparent;
+	border-radius: 3px;
+	background-color: #dadee3;
+}
+.zmi table.objectItems .zmi-object-id .fa-search.tablefilter {
+	margin:0 -1.5rem 0 0.5rem;
+	opacity:.3;
+	font-size:90%;
+	cursor:pointer;
+}
+.zmi table.objectItems .zmi-object-title {
+	font-weight: 400;
+	opacity:.5;
+}
+.zmi table.objectItems .zmi-object-type {
+	max-width:3rem;
+	min-width:2rem;
+	text-align:center;
+}
+.zmi table.objectItems td.zmi-object-type {
+	font-size:1.1rem;
+}
+.zmi table.objectItems td.zmi-object-type .fa.fa-terminal {
+	font-size:smaller;
+}
+.zmi table.objectItems .zmi-object-check,
+.zmi table.objectItems .zmi-object-check input,
+.zmi table.objectItems .zmi-object-type{
+	cursor:pointer;
+}
+.zmi table.objectItems td.zmi-object-id span.zmi-typename_show {
+	width:180px;
+	font-weight:normal;
+	display:inline-block;
+	font-size:small;
+	font-style: italic;
+}
+.zmi table.objectItems th.zmi-object-id.zmi-typename_show {
+	padding-left:190px;
+}
+.zmi table.objectItems .zmi-object-date,
+.zmi table.objectItems .zmi-object-size {
+	white-space:nowrap;
+}
+.zmi table.objectItems tr.checked {
+	background-color:#007bff1c !important;
+}
+.zmi form[name="objectItems"] div.zmi-controls.row span {
+    padding: .375rem .25rem;
+    min-width: initial;
+}
+
+
+/* Table Object-Items: Sorting Links*/
+
+.zmi table.objectItems th a i {
+	margin-left:.2rem;
+	color:transparent;
+}
+.zmi table.objectItems thead.sorted_desc th a,
+.zmi table.objectItems thead.sorted_asc th a,
+.zmi table.objectItems th.zmi-object-type a i {
+	color:#bbb;
+}
+.zmi table.objectItems th.zmi-object-type a.zmi-sort_key i,
+.zmi table.objectItems th a.zmi-sort_key i,
+.zmi table.objectItems th a.zmi-sort_key,
+.zmi table.objectItems thead.sorted_desc th a.zmi-sort_key,
+.zmi table.objectItems thead.sorted_asc th a.zmi-sort_key,
+.zmi table.objectItems th a:hover {
+	color:black !important;
+}
+.zmi table.objectItems th a.zmi-sort_key[title*='ASC'] i:before {
+	content:"\f0d8";
+	color:#dc3545;
+}
+.zmi table.objectItems th a.zmi-sort_key[title*='DESC'] i:before {
+	content:"\f0d7";
+	color:#dc3545;
+}
+
+
+.zmi main:not(.zmi-patch) > form > table.table {
+	margin: 0 -1rem;
+	max-width: calc(100% + 1.9rem);
+	width: calc(100% + 1.9rem);
+}
+.zmi main > form > table.table tr th:last-child,
+.zmi main > form > table.table tr td:last-child {
+	padding-right:1rem;
+}
+
+/* SECURITY TAB */
+/* https://css-tricks.com/rotated-table-column-headers/ */
+.zmi.zmi-manage_changePermissions th.blank,
+.zmi.zmi-manage_changePermissions td.blank,
+.zmi.zmi-manage_defined_roles th.blank,
+.zmi.zmi-manage_defined_roles td.blank,
+.zmi.zmi-manage_access th.blank,
+.zmi.zmi-manage_access td.blank {
+	width:100%;
+}
+.zmi.zmi-manage_changePermissions td.nowrap
+.zmi.zmi-manage_defined_roles td.nowrap,
+.zmi.zmi-manage_access td.nowrap {
+	min-width:12em;
+}
+@media (min-width: 768px) {
+	.zmi.zmi-manage_changePermissions .nowrap,
+	.zmi.zmi-manage_defined_roles .nowrap,
+	.zmi.zmi-manage_access .nowrap {
+		white-space:nowrap;
+	}
+}
+@media (max-width: 768px) {
+	.zmi.zmi-manage_access form[action='manage_reportUserPermissions'] .form-group.row.form-inline input,
+	.zmi.zmi-manage_access form[action='manage_reportUserPermissions'] .form-group.row.form-inline label  {
+		margin-bottom:.5rem;
+	}
+}
+.zmi th.zmi-akcquire-title {
+	white-space: nowrap;
+}
+
+/* TITLE ROW */
+.zmi th.zmi-rolename > div {
+	font-weight: normal;
+	cursor: default;
+}
+.zmi th.zmi-rolename > div > span {
+	text-overflow: ellipsis;
+	width: 110px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
+}
+
+@media (max-width: 768px) {
+	.zmi th.blank > div > span {
+		width: 110px;
+		overflow: hidden;
+		display: inline-block;
+	}
+	.zmi .zmi-table-head th {
+		border:none;
+	}
+	.zmi th.zmi-table-head-roles {
+		border-right-color:white !important;
+	}
+	.zmi .zmi-table-head th.zmi-rolename {
+		height:95px;
+		white-space: nowrap;
+	}
+	.zmi .zmi-table-head th.zmi-rolename > div,
+	.zmi .zmi-table-head th.blank > div {
+		transform: translate(0px,63px) rotate(-60deg);
+		padding: 0;
+		max-width: 20px;
+		/* text-overflow: ellipsis; */
+		/* overflow: hidden; */
+		font-weight: normal;
+		cursor: default;
+	}
+	.zmi .zmi-table-head  th.zmi-rolename > div > span,
+	.zmi .zmi-table-head th.blank > div > span {
+		border-top: 1px solid #ccc;
+		padding: 5px 0px 5px 20px;
+	}
+}
+.zmi .table-striped tbody tr:nth-of-type(odd) {
+	background-color: #e3e8ed33;
+}
+.zmi .table-striped.table-hover tbody tr:nth-of-type(odd) {
+	background-color: #e3e8ed33;
+}
+.zmi .table-striped.table-hover tbody tr:hover {
+	background-color: #e3e8ed7d;
+}
+
+.zmi .zmi-table-head:hover,
+.zmi .zmi-table-head:hover th,
+.zmi .zmi-table-head:hover td {
+	background: none !important;
+}
+
+ zmi-manage_addProperty form table tr td:first-child,
+.zmi-manage_propertiesForm main form table tr td:first-child {
+	text-align:center;
+	width: 4rem;
+	min-width: 4rem;
+	padding-left: 1rem;
+}
+
+.zmi-userlist .list-group .list-group-item {
+	padding-left:2rem;
+}
+.zmi-controls input.form-check-input,
+.zmi-userlist .list-group .list-group-item input.form-check-input {
+	margin-top:.4rem;
+}
+.zmi-userlist .list-group .list-group-item i.fa-user {
+	margin-right:0.15rem;
+}
+.advanced-search-only {
+	background-color: #ced4da;
+}
+textarea.zmi-code {
+	font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+/*
+	width: 100%;
+	box-shadow: inset 0px 0px 30px silver;
+	background: #f6f6f6;
+*/
+}
+/* Using ACE Editor*/
+#editor_container {
+	height:30rem;
+}
+#editor_container:after {
+	content:"Please press F10 for full screen view";
+	display:block;
+	margin-top:0;
+	font-size:11px;
+	color:#999;
+}
+#editor {
+	height:100%;
+	width: 100%;
+	border:1px solid #ccc;
+	border-radius:4px;
+	font-size: inherit;
+	line-height: 1.3;
+}
+.ace_editor.fullScreen {
+	position: absolute;
+	height: 100vh !important;
+	width: 100vw !important;
+	left: 0;
+	top: 0;
+	border:0 !important;
+	border-radius:0 !important;
+	z-index:1000;
+	box-shadow: 0px 20px 50px 0px silver;
+}
+
+.code {
+	font-size: 87.5%;
+	color: #e83e8c;
+	word-break: break-word;
+	font-size: 1em;
+	font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+
+/* MANAGE MENU */
+
+table#menu_title,
+#menu_tree table,
+table#menu_buttons {
+	margin:0;
+}
+table#menu_title {
+	margin-top:0.6em;
+}
+table#menu_title td img,
+#menu_tree table td img,
+table.main-table td img {
+	visibility:hidden;
+}
+
+#menu_buttons {
+	padding: .65rem 1rem .4rem 1rem;
+	border-bottom: 0px solid #eaecef;
+	margin: 0;
+	background-color:black;
+	color:silver;
+	height:42px;
+}
+#menu_buttons a.dropdown-toggle:hover,
+#menu_buttons.show a.dropdown-toggle {
+	color:white;
+}
+#menu_buttons ul.dropdown-menu {
+	margin: 42px 0 0 0;
+	padding: 0.5em 1em;
+	font-size: 14px;
+	box-shadow: none;
+	transform: none !important;
+	line-height: 2.3;
+	left: 0 !important;
+	border: 0;
+	border-radius: 0;
+	background: #495057;
+	height: calc( 100vh - 42px );
+	width: 100%;
+}
+#menu_buttons ul.dropdown-menu li a {
+	color:silver;
+}
+#menu_buttons ul.dropdown-menu li a:hover {
+	color:white;
+}
+
+#menu_buttons #dropdownMenu1 {
+	box-shadow: none !important;
+}
+
+table#menu_title,
+div#menu_tree {
+	width:auto;
+	background-color:transparent;
+	margin-left:1rem;
+}
+table#menu_title td {
+	padding: .5rem 0 0 0 !important;
+	font-weight:bold;
+}
+menu_workspace
+div#menu_title a {
+	color:inherit;
+}
+div#menu_tree table td{
+	padding:0.2em .3em 0 0 !important;
+	min-width:1em;
+	white-space:nowrap !important;
+}
+div#menu_tree i.icon.icon-expand-alt,
+div#menu_tree i.icon.icon-collapse-alt {
+	vertical-align:top;
+	color:#aaa;
+}
+div#menu_tree i.icon.icon-expand-alt:hover,
+div#menu_tree i.icon.icon-collapse-alt:hover {
+	color: #000 !important;
+}
+div#menu_tree a:focus,
+div#menu_tree i.icon.icon-expand-alt:focus,
+div#menu_tree i.icon.icon-collapse-alt:focus {
+	outline-color: transparent !important;
+}
+/* /MANAGE MENU */
+
+
+.zmi .btn.btn-primary.form-control-file {
+	border-color:#ced4da;
+}
+.zmi .custom-file label.custom-file-label span {
+	max-width: calc(100% - 80px);
+	display:inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* CUSTOM ICON: Folder (Ordered) */
+i.fa-folder.zmi-icon-folder-ordered:after {
+	content: "\f338";
+	font-family: "Font Awesome\ 5 Free",Fontawesome;
+	font-weight:900;
+	margin: -.65rem 0 0 -0.2rem;
+	position:absolute;
+	font-size:14px
+}
+.zmi-manage_menu i.fa-folder.zmi-icon-folder-ordered:after {
+	margin: .475rem 0 0 -.7rem;
+	font-size: 12px;
+}
+
+
+@media (max-width: 768px) {
+
+	.zmi header.navbar {
+		z-index:1001;
+	}
+	.zmi header.navbar .navbar-brand,
+	.zmi header.navbar li.zmi-authenticated_user span.zmi-label,
+	.zmi header.navbar li.zmi-cp span.zmi-label	{
+		display:none;
+	}
+	.zmi header.navbar ul.navbar-nav li.zmi-authenticated_user:before,
+	.zmi header.navbar ul.navbar-nav li.zmi-cp i {
+		margin-right: 0 !important;
+	}
+	.zmi header.navbar ul.navbar-nav li.zmi-addItemSelect .form-group {
+		margin-bottom: 0;
+	}
+	header.navbar #toggle_tabs {
+		display:inline-block;
+		cursor:pointer;
+	}
+	header.navbar #toggle_tabs:not(.collapsed) {
+		background: #e9ecef;
+		margin-left: -16px;
+		padding-left: 19px;
+		color: black;
+	}
+	header.navbar #toggle_tabs:not(.collapsed) i.fa.fa-bars:before {
+		content:"\f00d" !important;
+	}
+	.zmi nav[role="navigation"] {
+		background-color: #e9ecef;
+		margin-top:0 !important;
+		padding:0;
+		height: calc(100vh - 42px);
+		position: absolute;
+		z-index: 100;
+		width: max-content;
+		align-items: start;
+		box-shadow: 1px 0 24px rgba(53, 79, 103, 0.5);
+	}
+	.zmi nav[role="navigation"] .navbar-collapse.row {
+			margin-right: 1rem;
+			min-width:200px;
+	}
+	.zmi nav[role="navigation"] .nav-tabs {
+		display:block;
+		list-style: none;
+		padding:1rem;
+		border-bottom:0;
+		height: calc(100vh - 42px);
+	}
+	.zmi nav[role="navigation"] .nav-tabs li.nav-item {
+		padding-left:0 !important;
+		margin-left:0  !important;
+	}
+	.zmi nav[role="navigation"] .nav-tabs li.nav-item a {
+		border:0 !important;
+		background:none !important;
+		text-align:left !important;
+		margin:0;
+	}
+	.zmi table#zmi-db_info tbody tr td {
+		display:block;
+		padding:.2rem .75rem .5rem;
+	}
+	.zmi table#zmi-db_cache tbody tr td:nth-child(1) {
+		color: black;
+	}
+	.zmi table#zmi-db_info tbody tr:nth-of-type(odd) td:nth-child(2) {
+		border-top:1px solid #f7f8f9;
+	}
+	.zmi table#zmi-db_info tbody tr:nth-of-type(even) td:nth-child(2) {
+		border-top:1px solid white;
+	}
+}

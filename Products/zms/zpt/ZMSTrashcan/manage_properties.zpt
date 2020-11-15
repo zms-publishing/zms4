@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='trashcan')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<form class="form-horizontal card" name="form0" action="manage_changeProperties" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend tal:content="python:here.getZMILangStr('TAB_PROPERTIES')">Properties</legend>
+	<div class="card-body">
+		<div class="form-group row">
+			<label class="col-lg-2 control-label mandatory" for="garbage_collection"><span tal:content="python:here.getZMILangStr('ATTR_GARBAGE_COLLECTION')">garbage collection</span></label>
+			<div class="col-lg-10 form-inline">
+				<div class="mr-3" tal:content="structure python:here.getZMILangStr('OBJECTS_OLDER_THAN')">objects older than</div>
+				<div class="mr-3"><input class="form-control" type="number" id="garbage_collection" name="garbage_collection" tal:attributes="value python:getattr(here,'garbage_collection','2')" size="5" style="width:5rem;" /></div>
+				<div class="mr-3" tal:content="structure python:here.getZMILangStr('ATTR_DAYS')">days</div>
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label class="col-lg-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_LAST_EXECUTED')">last executed</span></label>
+			<div class="col-lg-10">
+				<code tal:content="structure python:here.getLangFmtDate(getattr(here,'last_garbage_collection',None))">dd.mm.yyyy</code>
+			</div><!-- .col-lg-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<div class="col-lg-2">&nbsp;</div>
+			<div class="col-lg-10">
+				<button type="submit" class="btn btn-primary" value="BTN_SAVE" 
+					tal:content="python:here.getZMILangStr('BTN_SAVE')">
+					Save
+				</button>
+				<button type="button" class="btn"  value="BTN_CANCEL" 
+					tal:content="python:here.getZMILangStr('BTN_CANCEL')"
+					onclick="window.location.href='./manage_main';">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

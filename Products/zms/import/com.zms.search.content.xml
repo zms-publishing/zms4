@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ZMSDocument>
+	<titlealt>
+		<lang id="ger"><![CDATA[Suche]]></lang>
+		<lang id="eng"><![CDATA[Search]]></lang>
+	</titlealt>
+	<active>
+		<lang id="ger">1</lang>
+			<lang id="eng">1</lang>
+	</active>
+	<title>
+		<lang id="ger"><![CDATA[Suche]]></lang>
+		<lang id="eng"><![CDATA[Search]]></lang>
+	</title>
+	<attr_dc_type>
+		<lang>Resource</lang>
+	</attr_dc_type>
+	<ZMSTextarea id_prefix="e">
+		<format><![CDATA[plain_html]]></format>
+		<text>
+			<lang id="ger"><![CDATA[<form class="search" method="get">
+
+	<tal:block tal:condition="python:request.get('searchform')">
+	<input tal:condition="python:request.get('searchform')" type="hidden" name="searchform" tal:attributes="value python:request.get('searchform')" />
+	<input tal:condition="python:request.get('lang')" type="hidden" name="lang" tal:attributes="value python:request.get('lang')" />
+	<input tal:condition="python:request.get('preview')" type="hidden" name="preview" tal:attributes="value python:request.get('preview')" />
+	<legend tal:content="python:here.getZMILangStr('SEARCH_HEADER')">Search header</legend>
+	<div class="form-group row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<tal:block tal:content="structure python:here.getTextInput(fmName='searchform',elName='search',value=request.get('search',''))">the value</tal:block>
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+	</div><!-- .form-group -->
+	</tal:block>
+
+<div id="search_results" class="form-group row" style="display:none">
+	<div class="col-md-12">
+		<h4 tal:content="python:here.getZMILangStr('SEARCH_HEADERRESULT')">Result</h4>
+		<div class="header row">
+			<div class="col-md-12">
+				<span class="small-head">
+					<i class="text-primary fas fa-spinner fa-spin"></i>
+					<tal:block tal:content="python:here.getZMILangStr('MSG_LOADING')">loading</tal:block>
+				</span>
+			</div>
+		</div><!-- .header.row -->
+		<div class="line row"></div><!-- .row -->
+			<div class="pull-right">
+				<ul class="pagination"></ul>
+			</div>
+	</div>
+</div>
+
+</form>
+
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/ZMS/zmi_body_content_search.js"></script>]]></lang>
+		</text>
+		<active>
+			<lang id="ger">1</lang>
+			<lang id="eng">1</lang>
+		</active>
+	</ZMSTextarea>
+</ZMSDocument>

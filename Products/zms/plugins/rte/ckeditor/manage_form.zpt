@@ -1,0 +1,203 @@
+<tal:block tal:replace="nothing">
+################################################################################
+###  CKEditor
+###  please refer to http://ckeditor.com/
+###  Important Note: The folder "lang" in the original distribution has been
+###  renamed into "lingua" and all references to the path "lang/" changed into
+###  "lingua/" due to Zope restrictions on subfolders named "lang".
+###
+###  Conf-Properties:
+###  plugin.rte.ckeditor.Height=400
+###  plugin.rte.ckeditor.FormatTags=p;h1;h2;h3;pre;address;div
+###  plugin.rte.ckeditor.Config
+################################################################################
+</tal:block>
+
+<textarea tal:attributes="id python:'editor_%s'%request['elName']; name python:'editor_%s'%request['elName']"></textarea>
+
+<tal:block tal:condition="python:request.get('f_zmiRichtextOnSubmitEventHandler',True)">
+
+<!-- 
+OBSOLETE:
+Fix for can't edit fields of CKEditor in jQuery UI modal dialog
+@see http://forum.jquery.com/topic/can-t-edit-fields-of-ckeditor-in-jquery-ui-modal-dialog 
+-->
+<style>
+.cke_skin_kama .cke_dialog_body { z-index: inherit; }
+</style>
+
+<tal:block tal:content="structure python:'<script>'"></tal:block>
+
+function zmiStandardOnSubmitEventHandler(fm) {
+  for (var id in CKEDITOR.instances) {
+    var elName = id.substr(id.indexOf('_')+1);
+    var el = document.getElementById('zmiStandardEditor'+elName);
+    if ( el != null && el.style.display != 'none' && el.style.visibility != 'hidden') {
+      var data = $('#'+elName).val();
+      var instance = CKEDITOR.instances['editor_'+elName];
+      if (instance) {
+        instance.setData(data,function() {
+            instance.focus();
+          });
+      }
+    }
+  }
+}
+
+function zmiRichtextOnSubmitEventHandler(fm) {
+  for (var id in CKEDITOR.instances) {
+    var elName = id.substr(id.indexOf('_')+1);
+    var el = document.getElementById('zmiRichtextEditor'+elName);
+    if ( el != null && el.style.display != 'none' && el.style.visibility != 'hidden') {
+      // Get value from editor.
+      var data = CKEDITOR.instances['editor_'+elName].getData();
+      // Decode HTML-Entities.
+      data = $ZMI.HTMLDecode(data);
+      // Relativate urls.
+      data = $ZMI.relativateUrls(data);
+      // Assign value to textarea.
+      $('#'+elName).val( data);
+    }
+  }
+}
+
+var CKEDITOR_BASEPATH = '/++resource++zms_/ckeditor/';
+var CKEDITOR_LOADED = {};
+
+function pluginCkeditor(s, c) {
+  $.plugin('ckeditor',{
+      cache: false,
+      files: ['/++resource++zms_/ckeditor/ckeditor.js']
+    });
+  $.plugin('ckeditor').get(s,c);
+}
+
+function loadCkeditor(id, opt) {
+  var instance = CKEDITOR.instances[id];
+  if(instance){
+    CKEDITOR.remove(instance);
+    instance.destroy();
+  }
+  CKEDITOR.replace(id, opt);
+}
+
+function zmiRichtextResize(id) {
+  var instance = CKEDITOR.instances['editor_'+id];
+  if(instance){
+    var newHeight = $("div#zmiRichtextEditor"+id).height()-100;
+    $(".cke_contents").css("height",newHeight);
+    // Ticket #132: hide image-button
+    $('.cke_button__image').hide();
+  }
+}
+
+function zmiRichtextInit(id) {
+  pluginCkeditor('#editor_'+id,function() {
+    $('#editor_'+id).parents("form").submit(function() {
+        zmiRichtextOnSubmitEventHandler();
+        return true;
+      });
+    ZMI.prototype.CKEDITOR_editorConfig = function( config ) {
+        var language = {'eng':'en','fra':'fr','ger':'de','ita':'it','ned':'nl'};
+        config.height = $ZMI.getConfProperty('plugin.rte.ckeditor.Height',400);
+        config.language = language[getZMILang()];
+
+////////////////////////////////////////////////////////////////////////////////
+// Spell Check As You Type (SCAYT)
+////////////////////////////////////////////////////////////////////////////////
+        if ($ZMI.getConfProperty('plugin.rte.ckeditor.Scayt',1)==1) {
+          var scayt_sLang = {'eng':'en_GB','fra':'fr_FR','ger':'de_DE','ita':'it_IT','ned':'nl_NL'};
+          if (typeof scayt_sLang[getZMILang()]!="undefined") {
+            config.scayt_sLang = scayt_sLang[getZMILang()];
+            config.scayt_autoStartup = false;
+          }
+        }
+
+////////////////////////////////////////////////////////////////////////////////
+// Import Custom/XStandard styles
+////////////////////////////////////////////////////////////////////////////////
+        config.format_tags = 'p';
+<tal:block tal:define="global config_format_tags python:True"></tal:block>
+<tal:block tal:define="formats python:[x for x in here.format_manager.getTextFormats(request) if 'wysiwyg' in x.getUsage()]" tal:condition="python:len(formats)>0">
+<tal:block tal:define="global config_format_tags python:False" tal:repeat="format formats">
+<tal:block tal:define="global
+    style_id      python:format.getId();
+    style_name    python:format.getDisplay();
+    style_element python:format.getTag();
+    style_attrs   python:format.parseAttrs();">
+        config.format_tags += ';<tal:block tal:content="style_id"></tal:block>';
+        config.format_<tal:block tal:content="style_id"></tal:block> = {
+                name : '<tal:block tal:content="style_name"></tal:block>',
+                element : '<tal:block tal:content="style_element"></tal:block>' ,
+                attributes : { <tal:block tal:content="python:' , '.join(['%s:\'%s\''%(x[0],x[1]) for x in style_attrs])"></tal:block> } };
+</tal:block>
+</tal:block>
+</tal:block>
+<tal:block tal:condition="config_format_tags">
+        config.format_tags = $ZMI.getConfProperty('plugin.rte.ckeditor.FormatTags','p;h1;h2;h3;h4;pre;address;div');
+</tal:block>
+
+////////////////////////////////////////////////////////////////////////////////
+// Contents-CSS
+////////////////////////////////////////////////////////////////////////////////
+        config.contentsCss = [];
+        $("link[rel=stylesheet]").each(function() {
+            config.contentsCss.push($(this).attr("href"));
+          });
+        config.contentsCss.push('/++resource++zms_/ckeditor/contents.css');
+<tal:block tal:repeat="contentsCss python:[x for x in here.getConfProperty('plugin.rte.ckeditor.config.contentsCss','').split(',')+request.get('CKEDITOR_config_contentsCss',[]) if len(x.strip()) > 0]">
+        config.contentsCss.push('<tal:block tal:content="contentsCss">the contents-css</tal:block>');
+</tal:block>
+
+////////////////////////////////////////////////////////////////////////////////
+
+<tal:block tal:condition="python:'CKEDITOR_config_toolbar' in request">
+// Toolbar
+        config.toolbar_ZMSConfigToolbar = <tal:block tal:content="python:here.str_json(request['CKEDITOR_config_toolbar'])"></tal:block>;
+</tal:block>
+
+<tal:block tal:condition="python:'CKEDITOR_config_removeButtons' in request">
+// RemoveButtons
+        config.removeButtons = '<tal:block tal:content="python:request['CKEDITOR_config_removeButtons']"></tal:block>';
+</tal:block>
+
+      };
+
+    loadCkeditor( 'editor_'+id, {
+<tal:block define="toolbar python:['ZMSBasicToolbar']">
+  <tal:block tal:condition="python:here.getConfProperty('plugin.rte.ckeditor.Config','')">
+        customConfig:'<tal:block tal:content="python:'%s/%s'%(here.getHome().absolute_url(),here.getConfProperty('plugin.rte.ckeditor.Config',''))"></tal:block>',
+    <tal:block tal:define="dummy0 python:toolbar.insert(0,'ZMSCustomToolbar')"></tal:block>
+  </tal:block>
+  <tal:block tal:condition="python:'CKEDITOR_config_toolbar' in request">
+    <tal:block tal:define="dummy0 python:toolbar.insert(0,'ZMSConfigToolbar')"></tal:block>
+  </tal:block>
+        toolbar:'<tal:block tal:content="python:toolbar[0]"></tal:block>',
+</tal:block>
+        on:{
+          instanceReady: function(ev) {
+              zmiRichtextResize(id);
+              $('span.cke_button_label.cke_button__source_label').html('');
+            }
+          }
+      });
+    zmiRichtextSyncDataToView(id);
+  });
+}
+
+function zmiRichtextSyncDataToView(id) {
+  $( '#editor_'+id).val( $('#'+id).val());
+  $( '#editor_'+id).prop('defaultValue',$( '#editor_'+id).val());
+  var data = $('#'+id).val();
+  var instance = CKEDITOR.instances['editor_'+id];
+  if (instance){
+    instance.setData(data,function() {
+        instance.focus();
+      });
+  }
+}
+
+<tal:block tal:content="structure python:'</script>'"></tal:block>
+
+<tal:block tal:define="dummy0 python:request.set('f_zmiRichtextOnSubmitEventHandler',False)"></tal:block>
+</tal:block>

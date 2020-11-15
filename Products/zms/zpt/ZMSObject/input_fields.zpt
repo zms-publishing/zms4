@@ -1,0 +1,281 @@
+<!-- ZMSObject/input_fields -->
+
+	<tal:block tal:define="
+			standard modules/Products.zms/standard;
+			action options/action;
+			meta_id options/meta_id;
+			dummy0 python:request.set('ZMS_HIDE_ELEMENTS',[]);
+			metaObj python:here.getMetaobj(meta_id);
+			metaObjIds python:here.getMetaobjIds();
+			metaObjAttrIds python:here.getMetaobjAttrIds(metaObj['id']);
+			objAttrs python:here.getObjAttrs(metaObj['id'])">
+	<div class="card">
+		<div class="card-header attr_last_modified clearfix btn-collapse">
+				<div class="btn-group">
+					<a id="zmi-toggle-activity-btn" class="btn card-toggle" data-toggle="collapse" href="#attrActivity"
+						tal:attributes="href python:'#attrActivity%s'%(request.get('ZMS_INSERT',False) and '_insert' or '')"
+						><i class="fas fa-invisible"></i> <tal:block tal:content="python:here.getZMILangStr('ATTR_ACTIVITY')">Activity</tal:block></a>
+					<div class="btn zmi-changes"
+							tal:condition="not:python:request.get('ZMS_INSERT',False)" 
+							tal:define="change_uid python:here.attr('change_uid');change_dt python:here.attr('change_dt')">
+							<tal:block tal:content="python:here.getZMILangStr('ATTR_LAST_MODIFIED')">changed by</tal:block>
+						<span class="zmi-change-dt" tal:content="structure python:here.getLangFmtDate(change_dt,request['manage_lang'],'DATETIME_FMT')">the change-dt</span>
+						<tal:block tal:content="python:here.getZMILangStr('BY')">by</tal:block>
+						<span class="zmi-change-uid" tal:content="change_uid">the change-uid</span>
+						<tal:block tal:content="structure python:here.zmi_version_object_state(here,request)">zmi_version_object_state</tal:block>
+					</div>
+			</div>
+			<div class="zmi-action btn-group pull-right dropleft" tal:condition="not:python: request.get('ZMS_INSERT',False)">
+				<tal:block tal:define="
+						metaCmds python:[x for x in here.getMetaCmds(here,'') if x['stereotype'] == ''];
+						actions python:[[],[(here.getZMILangStr('BTN_UNDO'),'../manage_undoObjs?ids:list=%s'%here.id,'icon-undo')]][here.inObjStates(['STATE_NEW','STATE_MODIFIED','STATE_DELETED'],request)] + [[x['name'],'manage_executeMetacmd?id=%s'%x['id'],x.get('icon_clazz'),x.get('title')] for x in metaCmds] + here.filtered_workflow_actions()"
+					><tal:block tal:condition="python:len(actions)>0">
+						<button class="btn split-right dropdown-toggle" data-toggle="dropdown"><i class="fas fa-bars"></i></button>
+						<div class="dropdown-menu dropdown-menu-right">
+							<tal:block tal:repeat="action actions">
+								<div tal:condition="python:action[0].startswith('-----') and action[0].endswith('-----')" class="dropdown-header">
+									<i class="fas fa-caret-down"></i>
+									<tal:block tal:content="structure python:action[0][5:-5].strip()">the title</tal:block>
+								</div>
+								<tal:block tal:condition="not:python:action[0].startswith('-----') and action[0].endswith('-----')">
+									<a class="dropdown-item" tal:attributes="href python:'javascript:$ZMI.actionList.exec($(\'.attr_last_modified\'),\'%s\',\'%s\')'%(action[0],action[1])">
+										<tal:block tal:condition="python:len(action)>=3 and action[2] is not None"><i tal:attributes="class python:action[2]"></i></tal:block>
+										<tal:block tal:content="structure python:action[0]">the title</tal:block>
+									</a>
+								</tal:block>
+							</tal:block>
+						</div>
+					</tal:block>
+				</tal:block>
+			</div>
+		</div><!-- .card-header -->
+		<div id="attrActivity" class="collapse"
+			tal:attributes="id python:'attrActivity%s'%(request.get('ZMS_INSERT',False) and '_insert' or '')">
+			<div class="card-body">
+				<tal:block tal:condition="not:python:request.get('ZMS_INSERT',False)">
+				<div class="form-group row">
+					<label class="control-label col-sm-2">
+						<span>Info</span>
+					</label>
+					<div class="col-sm-10">
+					<span class="btn pl-0" style="white-space: normal;text-align: left;">
+						<tal:block tal:condition="python:here.attr('created_dt') and here.attr('created_uid')">
+							<tal:block tal:content="python:here.getZMILangStr('ATTR_CREATED')+':'">created:</tal:block>
+							<span class="zmi-created-dt" tal:content="python:here.getLangFmtDate(here.attr('created_dt'),request['manage_lang'],'DATETIME_FMT')">the created_dt</span>
+							<tal:block tal:content="python:here.getZMILangStr('BY')">by</tal:block>
+							<span class="zmi-created-uid" tal:content="python:here.attr('created_uid')">the created_uid</span>,
+						</tal:block>
+						<span title="This Node Contains ..." tal:content="python:'%i %s'%(len(here.getChildNodes(request)),here.getZMILangStr('ATTR_OBJECTS'))">%i Objects</span>,
+						<span title="Data Size" class="get_size" tal:content="python:here.getDataSizeStr(here.get_size())">%i Bytes</span>,
+						<span title="Unique ID: Click to Clipboard Copy" class="get_uid"
+							tal:define="
+								cataloged python:here.getLinkObj('{$%s}'%here.get_uid()) is not None;"
+							tal:attributes="
+								onclick python:'$ZMI.CopyToClipboard(\'{$%s}\')'%(here.get_uid());
+								class python:' '.join(['get_uid']+[['text-danger'],[]][cataloged]);">
+							<tal:block tal:condition="not:cataloged">
+								<tal:block tal:define="dummy0 python:standard.triggerEvent(here,'*.ObjectAdded')">
+									<i class="text-danger fas fa-ambulance"></i>
+								</tal:block>
+							</tal:block>
+							<tal:block tal:content="python:'ID:%s'%(here.get_uid())">unique-id</tal:block></span>
+					</span>
+					</div><!-- .col-sm-8 -->
+				</div><!-- .form-group -->
+				<div class="form-group row activity" tal:condition="python:'active' in objAttrs">
+					<label class="col-sm-2 control-label" tal:attributes="for python:here.getObjAttrName(here.getObjAttr('active'),request['lang'])"><span tal:content="python:here.getZMILangStr('ATTR_ACTIVE')">the label</span></label>
+					<div class="col-sm-10"><tal:block tal:content="structure python:here.getObjInput('active',request)">the control</tal:block></div>
+				</div>
+				<div class="form-group row activity_start" tal:condition="python:'attr_active_start' in objAttrs">
+					<label class="col-sm-2 control-label" tal:attributes="for python:here.getObjAttrName(here.getObjAttr('attr_active_start'),request['lang'])"><span tal:content="structure python:here.getZMILangStr('ATTR_START_DAT')">the label</span></label>
+					<div class="input-group" tal:content="structure python:here.getObjInput('attr_active_start',request)">the control</div>
+				</div>
+				<div class="form-group row activity_end" tal:condition="python:'attr_active_end' in objAttrs">
+					<label class="col-sm-2 control-label" tal:attributes="for python:here.getObjAttrName(here.getObjAttr('attr_active_end'),request['lang'])"><span tal:content="structure python:here.getZMILangStr('ATTR_END_DAT')">the label</span></label>
+					<div class="input-group" tal:content="structure python:here.getObjInput('attr_active_end',request)">the control</div>
+				</div>
+				</tal:block>
+				<tal:block tal:define="global options python:[]">
+					<tal:block tal:condition="python:request.get('ZMS_INSERT')" tal:define="global
+							parent_coverage python:here.getDCCoverage(request)">
+						<tal:block tal:condition="python:parent_coverage.startswith('local')">
+							<tal:block tal:define="global
+								dummy0 python:request.set('coverage',parent_coverage);
+								dummy0 python:options.append(parent_coverage)"></tal:block>
+						</tal:block>
+						<tal:block tal:condition="not:python:parent_coverage.startswith('local')">
+							<tal:block tal:define="global
+								dummy0 python:request.set('coverage','global.'+request['lang']);
+								dummy0 python:options.append('global.'+request['lang']);
+								dummy0 python:options.append('local.'+request['lang'])"></tal:block>
+						</tal:block>
+					</tal:block>
+					<tal:block tal:condition="not:python:request.get('ZMS_INSERT',False)" tal:define="global
+							coverage python:here.getDCCoverage(request);
+							coverage_lang python:coverage[coverage.find('.')+1:];">
+						<tal:block tal:condition="not:python:request['lang']==coverage_lang">
+							<tal:block tal:define="global
+								dummy0 python:request.set('coverage',coverage);
+								dummy0 python:options.append(coverage)"></tal:block>
+						</tal:block>
+						<tal:block tal:condition="python:request['lang']==coverage_lang">
+							<tal:block tal:define="global
+								dummy0 python:request.set('coverage',coverage);
+								dummy0 python:options.append('global.'+coverage_lang);
+								dummy0 python:options.append('local.'+coverage_lang)"></tal:block>
+						</tal:block>
+					</tal:block>
+					<tal:block tal:condition="not:python:len(options)>1">
+						<tal:block tal:define="global
+							dummy0 python:request.set('coverage',options[0])"></tal:block>
+					</tal:block>
+					<tal:block tal:define="global
+							coverage request/coverage;
+							seq_lang python:coverage[coverage.find('.')+1:];
+							seq_desc_langs python:here.getDescendantLanguages(seq_lang)">
+						<tal:block tal:condition="python:len(seq_desc_langs)>=1">
+							<div class="form-group row coverage" tal:condition="python:'attr_dc_coverage' in objAttrs">
+								<label class="col-sm-2 control-label" for="attr_dc_coverage"><span tal:content="structure python:here.getZMILangStr('ATTR_DC_COVERAGE')">the label</span></label>
+								<div class="col-sm-10">
+									<tal:block tal:condition="python:request['lang']==seq_lang">
+										<input type="hidden" name="attr_dc_coverage" tal:attributes="value coverage"/>
+										<span class="btn btn-secondary" tal:condition="python:len(seq_desc_langs)>1 and len(options)>1"
+											><input id="attr_dc_coverage" type="checkbox"
+												tal:attributes="
+													checked python:['','checked'][int(coverage.find('global.')==0)];
+													title python:'%s: %s'%(here.getZMILangStr('ATTR_LANGS'),','.join(seq_desc_langs));"
+												onclick="if (this.checked) { $('#coverageBtn').css('opacity',1); $('input[name=attr_dc_coverage]').val('global.'+getZMILang()); } else { $('#coverageBtn').css('opacity',0.5); $('input[name=attr_dc_coverage]').val('local.'+getZMILang()); }" />
+										</span>
+										<span class="btn btn-secondary" tal:condition="not:python:len(seq_desc_langs)>1 and len(options)>1"
+											><input id="attr_dc_coverage" type="checkbox" disabled="disabled"
+												tal:attributes="
+													checked python:['','checked'][int(coverage.find('global.')==0)];
+													title python:'%s: %s'%(here.getZMILangStr('ATTR_LANGS'),','.join(seq_desc_langs));"/>
+										</span>
+									</tal:block>
+									<tal:block tal:condition="not:python:request['lang']==seq_lang">
+										<span class="btn btn-secondary"
+											><input id="attr_dc_coverage" type="checkbox" disabled="disabled"
+												tal:attributes="
+													checked python:['','checked'][int(coverage.find('global.')==0)];
+													title python:'%s: %s'%(here.getZMILangStr('ATTR_LANGS'),','.join(seq_desc_langs));"/>
+										</span>
+									</tal:block>
+									<label id="coverageBtn" for="attr_dc_coverage" class="text-muted" tal:attributes="style python:'opacity:%i.5'%int(coverage.find('global.')==0)">
+									<i tal:attributes="title python:here.getZMILangStr('ATTR_MULTILANG')"
+										class="icon icon-globe fas fa-globe icon-large fa-lg text-primary" style="margin: 0 .7em 0 .9em;"></i>
+									<tal:block tal:content="python:['local','global'][int(here.getParentLanguage(seq_lang)=='')]">the label</tal:block>
+								</label>
+								</div>
+							</div>
+						</tal:block>
+					</tal:block>
+				</tal:block>
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+		<tal:block 
+			tal:define="constraints python:here.attr('check_constraints')"
+			tal:condition="constraints">
+			<tal:block tal:on-error="nothing" tal:repeat="category python:list(constraints)">
+				<div tal:attributes="class python:'constraint constraint-%s'%category[:-1].lower()">
+					<i class="fas fa-warning-sign" tal:attributes="title python:category[:-1] + ' ' + category[:-1] + ';; '.join([ x[1] for x in constraints[category] ] )"></i>
+				</div>
+			</tal:block>
+		</tal:block>
+		<div id="tabProperties" class="collapse show">
+			<div class="card-body">
+				<tal:block tal:content="structure python:here.obj_input_elements(action=action,meta_id=meta_id)">obj_input_elements</tal:block>
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+
+		<div class="collapse show" tal:condition="not:python:request.get('ZMS_INSERT')">
+			<div class="card-body">
+				<div class="form-row">
+					<div class="controls save">
+						<div class="form-check form-check-inline align-middle" 
+							title="Menu Lock: Stay in the menu after clicking the save button.">
+							<input type="checkbox" name="menulock:int" value="1" /><i class="fas fa-lock pl-2"></i>
+						</div>
+						<button type="submit" name="btn" class="btn btn-primary" tal:attributes="value python:'BTN_%s'%action.upper()" tal:content="python:here.getZMILangStr('BTN_%s'%action.upper())">Action</button>
+						<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+					</div>
+				</div><!-- .form-row -->
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+
+	</div><!-- .card -->
+
+	<div class="card zmi-container" tal:condition="python:action.lower()!='insert'">
+		<tal:block tal:repeat="metaObjAttrId metaObjAttrIds"
+			><tal:block tal:define="global 
+					metaObjAttr python:here.getMetaobjAttr(metaObj['id'],metaObjAttrId);
+					elName python:here.getObjAttrName(metaObjAttr,request['lang']);
+					elLabel python:here.getObjAttrLabel(metaObjAttr)"
+				><tal:block tal:condition="python:not metaObjAttr['id'].startswith('_') and not (metaObjAttr['id']=='e' and metaObjAttr['type']=='*') and not (metaObjAttr['id'] in request.get('ZMS_HIDE_ELEMENTS',[]))"
+					><tal:block tal:condition="python:(metaObjAttr['type']=='*' or (metaObjAttr['type'] in metaObjIds and not here.getMetaobj(metaObjAttr['type'])['type']=='ZMSResource')) and not request.get('ZMS_INSERT')"
+						><tal:block tal:define="global
+									objChildren python:here.getObjChildren(metaObjAttr['id'],request);
+									hasChildren python:len(objChildren)>0">
+							<ul class="zmi-container" tal:condition="not:hasChildren">
+								<li class="zmi-item form-group row" tal:attributes="id python:'zmi_item_%s'%metaObjAttr['id']">
+									<label class="col-sm-2 control-label" tal:content="elLabel">the label</label>
+									<div class="col-sm-10">
+										<div class="zmi-action btn-group dropleft">
+											<span class="d-none zmi-sort-id" tal:content="python:9990">the sort-id</span>
+											<button class="btn btn-secondary split-left"></button>
+											<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown"><i class="fas fa-plus-square"></i></button>
+										</div><!-- .btn-group -->
+									</div><!-- .col-sm-10 -->
+								</li><!-- .zmi-item -->
+							</ul>
+							<tal:block tal:condition="hasChildren">
+								<div class="card-header btn-collapse">
+									<a class="btn card-toggle pull-left" data-toggle="collapse" tal:attributes="href python:'#%s'%metaObjAttr['id'];data-toggle python:['','collapse'][hasChildren]">
+										<i tal:attributes="class python:'fas fa-%s'%(['caret-down',''][hasChildren])"></i>
+										<tal:block tal:content="elLabel">the label</tal:block>
+									</a>
+									<div class="btn zmi-changes" tal:content="structure python:'&nbsp;&nbsp;(%i %s)'%(len(objChildren),here.getZMILangStr('ATTR_OBJECTS'))">%i Objects</div>
+								</div><!-- .card-header -->
+								<tal:block tal:content="structure python:'<div id=\042%s\042 class=\042%s\042>'%(metaObjAttr['id'],' '.join(['collapse','zmi-children']+[[''],['show']][hasChildren])) +'<div class=\042card-body\042>'"></tal:block>
+								<ul class="zmi-container zmi-sortable">
+									<tal:block tal:repeat="childNode objChildren">
+										<li tal:attributes="id python:'zmi_item_%s'%childNode.id; class python:' '.join([childNode.meta_id,'zmi-item','zmi-selectable']+[['pageelement'],[]][int(childNode.isPage())] + [[],['is-new']][int(childNode.inObjStates(['STATE_NEW'],request))] + [[],['is-modified']][int(childNode.inObjStates(['STATE_MODIFIED'],request))] + [[],['is-deleted']][int(childNode.inObjStates(['STATE_DELETED'],request))])">
+											<div class="center"
+												tal:on-error="structure string: <code style='display:block'>ERROR: childNode.renderShort(request)</code>"  
+												tal:attributes="class python:'center%s'%([' inactive',''][childNode.isActive(request)])"
+												tal:content="structure python:childNode.renderShort(request)">
+												the rendered child-node
+											</div><!-- .center -->
+											<div class="right">
+												<div class="zmi-action btn-group dropleft">
+													<span class="d-none zmi-sort-id" tal:content="python:childNode.getSortId()">the sort-id</span>
+													<button class="btn btn-secondary split-left">
+														<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
+														<tal:block tal:content="python:childNode.display_type(request)">the child-node</tal:block>
+													</button>
+													<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown">
+														<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
+													</button>
+													</div><!-- .btn-group -->
+												<span class="zmi-ids">
+													<input type="checkbox" name="ids:list" tal:attributes="value python:childNode.id"/>
+												</span>
+												<div class="zmi-manage-main-change" tal:content="structure python:childNode.zmi_manage_main_change(childNode,request)">
+													the info child-node
+												</div>
+											</div><!-- .right -->
+										</li><!-- .zmi-item -->
+									</tal:block>
+								</ul><!-- .zmi-container.zmi-sortable -->
+								<tal:block tal:content="structure python:'' + '</div><!-- .card-body -->' + '</div><!-- .collapse -->' "></tal:block>
+							</tal:block>
+						</tal:block>
+					</tal:block>
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</div><!-- .card -->
+
+	</tal:block>
+
+<!-- /ZMSObject/input_fields -->

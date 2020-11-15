@@ -1,0 +1,44 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    >
+
+  <!-- @see http://concisionandconcinnity.blogspot.com/2009/02/how-to-create-zope-resource-package.html -->
+  <!-- @example http://localhost:8080/++resource++zms_/jquery-1.4.2.min.js -->
+  <browser:resourceDirectory
+      name="zms_"
+      directory="plugins/www"
+      />
+  <!-- Optional Zope2/Py2 GUI Enhancement -->
+  <browser:resourceDirectory
+      name="zmi_"
+      directory="skins/zope2"
+      />
+  <!-- Zope4/Py4 GUI Resources for ZMS-ZMI -->
+  <configure
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    zcml:condition="not-installed zmi.styles">
+    <browser:resourceDirectory
+        name="zmi"
+        directory="zmi/styles/resources"
+        />
+  </configure>
+
+  <configure
+      xmlns:cmf="http://namespaces.zope.org/cmf"
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="installed Products.CMFCore"
+      >
+    <cmf:registerDirectory name="myZMStheme33" recursive="True" />
+    <cmf:registerDirectory name="myZMStheme34" recursive="True" />
+
+    <!-- cmf:registerDirectory name="mytemplateset" directory="C:\\home\\zope\\zms-skins\\mytemplateset" recursive="True" / -->
+    <!-- cmf:registerDirectory name="mytemplateset" directory="/home/zope/zms-skins/mytemplateset" recursive="True" / -->
+
+    <!-- Hint: Add your ZMS skins as a site-package like Product.zms-skins -->
+    <!-- or register them via adding a zcml file to the etc-folder of the Zope instance -->
+    <!-- include files="$INSTANCE_HOME/etc/skins.zcml"/ -->
+
+  </configure>
+
+</configure>

@@ -1,0 +1,28 @@
+<tal:block tal:define="global
+		headTitle python:getattr(here,'headTitle',None);
+		headMeta_Locale python:getattr(here,'headMeta_Locale',None);
+		headMeta_DC python:getattr(here,'headMeta_DC',None);
+		headMeta_Spec python:getattr(here,'headMeta_Spec',None);
+		">
+	<tal:block tal:condition="not:python:headTitle is None">
+		<tal:block tal:content="structure python:headTitle(here,request)">head-title</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:headTitle is None">
+		<tal:block tal:content="structure python:here.f_headTitle(here,request)">head-title</tal:block>
+	</tal:block>
+	<tal:block tal:condition="not:python:headMeta_Locale is None">
+		<tal:block tal:content="structure python:headMeta_Locale(here,request)">head-meta-locale</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:headMeta_Locale is None">
+		<tal:block tal:content="structure python:here.f_headMeta_Locale(here,request)">head-meta-locale</tal:block>
+	</tal:block>
+	<tal:block tal:condition="not:python:headMeta_DC is None">
+		<tal:block tal:content="structure python:headMeta_DC(here,request)">head-meta-dc</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:headMeta_DC is None">
+		<tal:block tal:content="structure python:here.f_headMeta_DC(here,request)">head-meta-dc</tal:block>
+	</tal:block>
+	<tal:block tal:condition="not:python:headMeta_Spec is None">
+		<tal:block tal:content="structure python:headMeta_Spec(here,request)">head-meta-spec</tal:block>
+	</tal:block>
+</tal:block>

@@ -1,0 +1,62 @@
+<tal:block tal:define="global
+		zopeutil modules/Products.zms/zopeutil;
+		name python:options['name'];
+		ob python:options['ob'];
+		text python:options.get('text');
+		height python:options.get('height','20em')">
+	<tal:block tal:condition="python:text is None"><tal:block tal:define="global text python:zopeutil.readObject(here,ob.getId())"></tal:block></tal:block>
+	<tal:block tal:on-error="structure string:<div class='alert alert-danger mx-0 alert-dismissible fade show' role='alert'>TypeError: a bytes-like object is required, not str</div>"
+		tal:condition="python:ob is not None and ob.meta_type in ['Script (Python)']" 
+		tal:define="errors python:[x.replace(' ','&nbsp\073') for x in text.split('##') if x.startswith(' ')][1:]">
+		<div class="alert alert-danger mx-0 alert-dismissible fade show" role="alert" tal:condition="python:len(errors)>0 and errors[0].find('Errors:')>=0" tal:content="structure python:'<br/>'.join(errors)">the errors</div>
+		<div class="alert alert-warning mx-0 alert-dismissible fade show" role="alert" tal:condition="python:len(errors)>0 and errors[0].find('Warnings:')>=0" tal:content="structure python:'<br/>'.join(errors)">the warnings</div>
+	</tal:block>
+	<div tal:condition="python:ob is not None" class="form-group zmi-ace-editor" tal:attributes="style python:'height:%s'%height">
+		<div class="control-label-ace-editor">
+			<a tal:attributes="href python:'%s/manage_main'%ob.absolute_url(); title ob/meta_type" target="_blank" tal:content="python:ob.getId()">id</a>
+			<tal:block tal:condition="python:text is not None">(<tal:block tal:content="python:here.getDataSizeStr(len(text))">the size</tal:block>)</tal:block>
+		</div>
+		<div>
+			<textarea class="form-control-ace-editor" tal:attributes="name name" tal:content="text">the text</textarea>
+		</div>
+		<div tal:attributes="id python:'editor_%s'%name" style="height:92%;width:100%;border:1px solid #ccc;border-radius:4px">
+			ace editor text
+		</div>
+	</div><!-- .form-group -->
+
+<style>
+	.ace_editor.fullScreen {
+		height: 768px !important;
+		width: 1280px !important;
+		border: 0;
+		margin: 0;
+		position: fixed !important;
+		top: 0;
+		bottom: 0;
+		left: -350px;
+		right: 0;
+		z-index: 10;
+		overflow: hidden;
+	}
+	.zmi.modal-open.fullScreen .modal.show {
+		padding:0 !important;
+	}
+	.zmi.modal-open.fullScreen .modal.show .modal-dialog {
+		margin: 0 !important;
+		max-width: unset !important;
+		width: unset !important;
+	}
+	.zmi.modal-open.fullScreen .modal.show .modal-dialog .ace_editor.fullScreen {
+		height: 100vh !important;
+		width: 100vw !important;
+		border: 0;
+		margin: 0;
+		top: 0;
+		left: 0;
+		border-radius:0;		
+	}
+</style>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zmi/ace.ajax.org/ace.js"></script>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/common/zmi_ace_editor.js"></script>
+
+</tal:block>

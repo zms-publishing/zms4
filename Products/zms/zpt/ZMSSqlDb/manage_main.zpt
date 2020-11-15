@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="data-path python:here.getRootElement().getRefObjPath(here);data-root python:here.getRootElement().getHome().id;data-client python:here.getHome().id;id python:'zmsid_%s'%(here.id);class python:here.zmi_body_class(id='properties')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<tal:block tal:define="global
+		entities python:here.getEntities();
+		tables python:[x for x in entities if x['type'].upper()=='TABLE'];
+		SESSION request/SESSION;
+		dummy0 python:request.set('qsize',request.get('qsize',standard.get_session_value(here,'qsize_%s'%here.id,20)));
+		dummy0 python:request.set('qfilters',request.get('qfilters',standard.get_session_value(here,'qfilters_%s'%here.id,1)));
+		dummy0 python:request.set('qindex',request.get('qindex',standard.get_session_value(here,'qindex_%s'%here.id,-1)));
+		dummy0 python:SESSION.set('qsize_%s'%here.id,request.get('qsize'));
+		dummy0 python:SESSION.set('qfilters_%s'%here.id,request.get('qfilters'));
+		dummy0 python:SESSION.set('qindex_%s'%here.id,request.get('qindex'));
+		dummy0 python:here.recordSet_Init(request);
+		dummy0 python:here.recordSet_Filter(request);
+		dummy0 python:here.recordSet_Sort(request);
+		pageSize python:request.get('qsize',20);
+		pageIndex python:request.get('pageIndex',0);
+		pageStart python:pageIndex*pageSize;
+		">
+
+<tal:block tal:condition="tables">
+
+<tal:block tal:define="global
+		sessqentitykey python:'qentity_%s'%here.id;
+		sessqfilterskey python:'qfilters_%s'%id;
+		entity python:[x for x in tables if x['id']==request['qentity']][0];
+		primary_key python:here.getEntityPK(entity['id']);
+		encoding python:getattr(here,'charset','utf-8');
+		metaObjAttrIds python:[];
+		metaObjAttrs python:[];
+		res python:[];
+		resSlctStmnt python:''.join(request.get('sqlStatement',[]))+' LIMIT %s OFFSET %s'%(str(pageSize),str(pageStart));
+		cntSlctStmnt python:standard.re_sub('^(SELECT (.*?) FROM)','SELECT COUNT(*) AS rcount FROM',resSlctStmnt[:resSlctStmnt.find('ORDER BY')]);
+		row_count python:here.query(cntSlctStmnt)['records'][0]['rcount']">
+
+	<tal:block tal:define="global
+			query python:here.query(resSlctStmnt,encoding=encoding);
+			dummy0 python:metaObjAttrIds.extend([x['id'] for x in entity['columns']]);
+			dummy0 python:metaObjAttrs.extend([here.getEntityColumn(entity['id'],x) for x in metaObjAttrIds]);
+			dummy0 python:res.extend(query['records'])">
+	</tal:block>
+
+<tal:block tal:condition="python:
+		(request.get('action') in ['delete']) or (request.get('action') in ['insert','update'] and request.get('btn')==here.getZMILangStr('BTN_SAVE'))">
+	<tal:block tal:define="
+				message python:[];
+				values python:{}">
+		<tal:block tal:repeat="column python:entity['columns']">
+			<tal:block tal:define="dummy0 python:here.operator_setitem(values,['','blob_'][int('blob' in column)]+column['id'],request.get(column['id'].lower(),None))"></tal:block>
+			<tal:block tal:condition="python:'blob' in column and int(request.get('del_%s'%column['id'].lower(),0))==1"><tal:block tal:define="dummy0 python:here.operator_setitem(values,'delete_blob_%s'%column['id'],True)"></tal:block></tal:block>
+		</tal:block>
+		<tal:block tal:condition="python:request.get('action') in ['insert']">
+			recordSet_Insert=<tal:block tal:content="python:here.recordSet_Insert(tablename=entity['id'],values=values, update_intersections=True)"
+					tal:define="dummy0 python:message.append(here.getZMILangStr('MSG_INSERTED')%here.getZMILangStr('ATTR_RECORD'))"></tal:block>
+		</tal:block>
+		<tal:block tal:condition="python:request.get('action') in ['update']">
+			recordSet_Update=<tal:block tal:content="python:here.recordSet_Update(tablename=entity['id'],rowid=request['rowid'],values=values, update_intersections=True)"
+					tal:define="dummy0 python:message.append(here.getZMILangStr('MSG_CHANGED'))"></tal:block>
+		</tal:block>
+		<tal:block tal:condition="python:request.get('action') in ['delete']">
+			<tal:block tal:repeat="rowid python:request.get('qindices',[request['qindex']])">
+				recordSet_Delete=<tal:block tal:content="python:here.recordSet_Delete(tablename=entity['id'],rowid=rowid)"
+					tal:define="dummy0 python:message.append(here.getZMILangStr('MSG_DELETED')%1)"></tal:block>
+			</tal:block>
+		</tal:block>
+		<tal:block tal:define="dummy0 python:request.RESPONSE.redirect(here.url_append_params(request['URL'],{
+					'lang':request['lang'],
+					'manage_tabs_message':'<br>'.join(message),
+				}))">
+		</tal:block>
+	</tal:block>
+</tal:block>
+
+<tal:block tal:condition="python:request.get('action') not in ['updateForm','insertForm']">
+
+<form method="get" class="form-horizontal" tal:define="filter_columns python:[x for x in entity['columns'] if len(standard.intersection_list(['blob','details','multiselect','multimultiselect'],list(x)))==0]">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<input type="hidden" name="preview" tal:attributes="value request/preview">
+	<input tal:condition="python:'qorder' in request" type="hidden" name="qorder" tal:attributes="value request/qorder">
+	<input tal:condition="python:'qorderdir' in request" type="hidden" name="qorderdir" tal:attributes="value request/qorderdir">
+	<div class="card">
+
+		<div class="card-header attr_last_modified clearfix btn-collapse">
+			<a class="btn card-toggle col-sm-2 col-lg-1 text-left" data-toggle="collapse" href="#attrActivity" aria-expanded="false"
+				><i class="fas fa-caret-right"></i> <tal:block tal:content="python:here.getZMILangStr('ATTR_ACTIVITY')">Activity</tal:block
+			></a>
+			<div class="btn zmi-changes" tal:content="python:here.getZMILangStr('ATTR_LAST_MODIFIED')+' '+here.getLangFmtDate(here.attr('change_dt'))+' '+here.getZMILangStr('BY')+' '+here.attr('change_uid')">change_dt by change_uid</div>
+		</div><!-- .card-header -->
+		<div id="attrActivity" class="collapse">
+			<div class="card-body">
+				<tal:block tal:condition="python:here.attr('created_dt') and here.attr('created_uid')">
+					<span tal:content="python:'%s: %s %s %s'%(here.getZMILangStr('ATTR_CREATED'),here.getLangFmtDate(here.attr('created_dt')),here.getZMILangStr('BY'),here.attr('created_uid'))">Createad: %d.%m.%Y by %s</span>,
+				</tal:block>
+				<span title="This Node Contains ..." tal:content="python:'%i %s'%(len(here.getChildNodes(request)),here.getZMILangStr('ATTR_OBJECTS'))">%i Objects</span>,
+				<span title="Data Size" class="get_size" tal:content="python:here.getDataSizeStr(here.get_size())">%i Bytes</span>,
+				<span title="Unique ID" class="get_uid" tal:content="python:'ID:%s'%(here.get_uid())">unique-id</span>
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+
+		<div class="card-header filters clearfix btn-collapse">
+			<a class="btn card-toggle pull-left py-2 col-sm-2 col-lg-1 text-left" data-toggle="collapse" href="#attrProperties">
+				<i class="fas fa-caret-down"></i>
+				<tal:block tal:content="structure python:here.getZMILangStr('ATTR_FILTER')">the label</tal:block>
+			</a>
+			<div class="row">
+				<div class="col-sm-8 col-md-6 col-sm-8 col-lg-4 py-2">
+					<select class="form-control form-control-sm" id="qentity" name="qentity" onchange="this.form.submit()">
+						<tal:block tal:repeat="table tables">
+							<option tal:attributes="value table/id; selected python:['','selected'][int(table['id'].upper()==entity['id'].upper())]" tal:content="table/label">table</option>
+						</tal:block>
+					</select>
+				</div>
+			</div>
+			<input type="hidden" id="qfilters" name="qfilters:int" tal:attributes="value request/qfilters" />
+		</div><!-- .card-header -->
+
+		<div id="attrProperties" class="filters collapse show">
+			<div class="card-body">
+				<tal:block tal:repeat="filterIndex python:range(request.get('qfilters',1)+1)">
+					<div tal:attributes="class python:' '.join(['form-row']+[[],['d-none']][int(filterIndex==request.get('qfilters',1))])">
+						<div class="form-group col-sm-5">
+							<select class="form-control form-control-sm" tal:attributes="name python:'filterattr%i'%filterIndex">
+								<option value="" tal:content="python:here.getZMILangStr('CAPTION_SELECT')">the option</option>
+								<tal:block tal:repeat="column python:[here.getEntityColumn(entity['id'],x['id']) for x in filter_columns]">
+									<option tal:attributes="value column/id; title column/type; selected python:['','selected'][int(column['id'].lower()==request.get('filterattr%i'%filterIndex,standard.get_session_value(here,'filterattr%i_%s'%(filterIndex,here.id),'')).lower())]" tal:content="column/label">column</option>
+								</tal:block>
+							</select>
+						</div>
+						<div class="form-group col-sm-2">
+							<select class="form-control form-control-sm" tal:attributes="name python:'filterop%i'%filterIndex">
+								<tal:block tal:repeat="op python:['LIKE','=','<','<=','>','>=','NULL','NOT NULL']">
+									<option tal:attributes="value python:op; selected python:['','selected'][op.lower()==request.get('filterop%i'%filterIndex, standard.get_session_value(here,'filterop%i_%s'%(filterIndex,here.id),'')).lower()]" tal:content="python:op">op</option>
+								</tal:block>
+							</select>
+						</div>
+						<div class="form-group col-sm-5">
+							<input class="form-control form-control-sm" type="text" tal:attributes="name python:'filtervalue%i'%filterIndex; value python:request.get('filtervalue%i'%filterIndex, standard.get_session_value(here,'filtervalue%i_%s'%(filterIndex,here.id),''))" />
+						</div>
+					</div><!-- .form-row -->
+				</tal:block>
+				<div class="controls text-left">
+					<button type="submit" id="btn-search" class="btn btn-primary" name="btn" value="BTN_REFRESH">
+						<i class="fas fa-search"></i>
+						<tal:block tal:content="python:here.getZMILangStr('BTN_SEARCH')">Search</tal:block>
+					</button>
+					<button type="submit" id="btn-reset" class="btn btn-secondary" name="btn" value="BTN_RESET">
+						<tal:block tal:content="python:here.getZMILangStr('BTN_RESET')">Reset</tal:block>
+					</button>
+					&nbsp;
+					<a href="javascript:;" onclick="$('#manage_main_div_sql').toggleClass('d-none')" title="Show SQL Code">
+						&middot;
+					</a>
+				</div><!-- .form-row -->
+				<div id="manage_main_div_sql" class="d-none well" style="padding:1em;margin: 1em 0 0 0;"><code tal:content="structure python:resSlctStmnt.replace('\n','<br>')">resSlctStmnt</code></div>
+			</div><!-- .card-body -->
+		</div><!-- .collapse -->
+	</div><!-- .card -->
+</form>
+
+<tal:block tal:define="dummy0 python:[here.operator_setitem(x,'name',x['label']) for x in metaObjAttrs]">
+	<tal:block tal:content="structure python:here.metaobj_recordset_main_grid(
+			metaObjAttrIds=metaObjAttrIds,
+			metaObjAttrs=metaObjAttrs,
+			records=res,
+			size=row_count,
+			total=row_count,
+			offset=0,
+			filtered=True,
+			form_action=request['URL'],
+			url_params={'qentity':request.get('qentity')},
+			record_handler=here.getEntityRecordHandler(entity['id'],['blob']))">
+		metaobj_recordset_main_grid
+	</tal:block>
+</tal:block>
+
+</tal:block>
+
+<tal:block tal:condition="python:request.get('action')=='updateForm'">
+	<tal:block tal:define="
+		sql python:here.recordSet_Select(tablename=entity['id'],select='*',where='%s=%s'%(primary_key,here.sql_quote__(entity['id'],primary_key,request['rowid'])));
+		row python:here.query(sql,encoding=encoding)['records'][0]">
+		<tal:block tal:content="structure 
+			python:here.manage_zmi_input_form(
+				entity=entity,
+				action='update',
+				qindex=request['qindex'],
+				rowid=request['rowid'],
+				row=row)">
+			metaobj_recordset_input_fields
+		</tal:block>
+	</tal:block>
+</tal:block>
+<tal:block tal:condition="python:request.get('action')=='insertForm'" tal:content="structure 
+		python:here.manage_zmi_input_form(
+			entity=entity,
+			action='insert',
+			qindex=-1,
+			rowid=-1,
+			row={})">
+	metaobj_recordset_input_fields
+</tal:block>
+
+</tal:block>
+</tal:block>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

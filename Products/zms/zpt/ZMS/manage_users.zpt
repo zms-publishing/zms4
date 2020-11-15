@@ -1,0 +1,664 @@
+<tal:block tal:condition="python:request.get('mode','')=='existsUser'"
+	><tal:block tal:define="
+		name request/id;
+		users python:here.searchUsers(name);
+		found python:int(len([x for x in users if x==name])==1);"
+		><tal:block tal:content="found">found</tal:block
+	></tal:block
+></tal:block
+
+><tal:block tal:condition="python:request.get('mode')=='findUser'"
+	><tal:block tal:define="
+		name request/id;
+		user python:here.findUser(name);"
+		><tal:block tal:condition="user"
+			tal:content="python:context.str_json(user['details'])">user-details
+		</tal:block
+	></tal:block
+></tal:block
+
+><tal:block tal:condition="python:request.get('mode','')=='insertUser'"
+	><tal:block tal:define="
+			dummy0 python:here.zmi_page_request();
+			userFolder python:here.getUserFolder();
+			userAdderPlugin python:here.getUserAdderPlugin();
+			userDefs python:here.getSecurityUsers();
+			roleDefs python:here.getSecurityRoles();
+			userNames python:here.sort_list(list(userDefs));"
+		><form id="insertUserForm" class="form-horizontal" onsubmit="return zmiModalInsertUserLoad();">
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+			<div class="form-group input-group btn-group mb-4"
+				tal:define="searchable_attributes python:[x for x in here.getSearchableAttrs() if not x[1].startswith('_')]"
+				><a class="btn btn-secondary" target="_blank" title="Acquired User Folder"
+					tal:attributes="href python:'%s/manage_main'%userFolder.absolute_url(); title python:'%s (%s)'%(userFolder.title_or_id(),userFolder.meta_type)">
+					<i class="far fa-folder"></i>
+				</a>
+				<select tal:condition="searchable_attributes" class="form-control" name="search_param">
+					<tal:block tal:repeat="search_param searchable_attributes">
+						<option
+							tal:define="name python:search_param[0]; label python:search_param[1]"
+							tal:attributes="value name; selected python:['','selected'][request.get('search_param',here.getConfProperty('LDAPUserFolder.uid_attr',''))==name]"
+							tal:content="python:label">
+								the search-param
+						</option>
+					</tal:block>
+				</select>
+				<input class="form-control" id="search_term" name="search_term"
+					tal:attributes="value python:request.get('search_term',''); placeholder python:here.getZMILangStr('ATTR_SEARCHTERM')" />
+				<button class="btn btn-primary btn-search" value="BTN_SEARCH" tal:attributes="title python:here.getZMILangStr('BTN_SEARCH')">
+					<i class="fas fa-search"></i>
+				</button>
+			</div><!-- .form-row -->
+			<tal:block tal:define="
+					valid_userids python:here.getValidUserids(search_term=request.get('search_term',''),search_term_param=request.get('search_param',''));
+					metaObjAttrs valid_userids/columns;
+					metaObjAttrIds python:[x['id'] for x in metaObjAttrs];
+					res valid_userids/records;
+					dummy0 python:[here.operator_setitem(x,'__id__',x['name']) for x in res]"
+				><tal:block tal:content="structure python:here.metaobj_recordset_main_grid(
+						metaObjAttrIds=metaObjAttrIds,
+						metaObjAttrs=metaObjAttrs,
+						records=res,
+						actions=['select']+[[],['insert']][int(userAdderPlugin is not None)],
+						insert='zmiModalAddUserOpen();')">
+					metaobj_recordset_main_grid
+				</tal:block
+			></tal:block>
+		</form>
+	</tal:block
+></tal:block
+><tal:block tal:condition="not:python:'mode' in request"
+><!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<!-- body tal:attributes="class python:' '.join(['zmi zms',request['lang'],'users config',here.meta_id])" -->
+<body tal:attributes="class python:here.zmi_body_class(id='users config')">
+
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[{'action':'manage_users','label':'TAB_USERS'}])">zmi_breadcrumbs</tal:block>
+<script>
+function zmiModalAddUserOpen(context) {
+	zmiModal('#addUser',{title:getZMILangStr('BTN_ADD')});
+	$("#zmiModaladdUser .modal-body #newId").val($("#zmiModalinsertUser .modal-body #search_term").val());
+}
+function zmiModalInsertUserLoad(url) {
+	var $context = $("#zmiModalinsertUser");
+	var data = {mode:'insertUser'}
+	if (typeof url=="string") {
+		var query = url.substr(url.indexOf("?")+1);
+		var vars = query.split('&');
+		for (var i = 0; i < vars.length; i++) {
+			var kv = vars[i].split('=');
+			data[kv[0]] = decodeURIComponent(kv[1]);
+		}
+	}
+	$("input:text").each(function() {
+			data[$(this).attr("name")] = $(this).val();
+		});
+	$("select option:selected").each(function() {
+			data[$(this).parent().attr("name")] = $(this).val();
+		});
+	$('#zmiModalinsertUser .modal-body').html($ZMI.icon("icon-spinner icon-spin")+'&nbsp;&nbsp;'+getZMILangStr('MSG_LOADING'));
+	$.get(self.location.href,data,function(result) {
+			$('#zmiModalinsertUser .modal-body').html(result);
+			$("#zmiModalinsertUser #insertUserForm .btn-group")
+				.mouseover( function(evt) {
+						$(this).parents(".ZMSRecordSet.main_grid").css({overflow:"visible"});
+				});
+			$("#zmiModalinsertUser #insertUserForm input:radio").change(function() {
+					self.location.href = zmiParams['base_url']
+						+'?lang='+getZMILang()
+						+'&id='+$(this).prop("value");
+				});
+			$("#zmiModalinsertUser #insertUserForm a").each(function() {
+					var href = $(this).attr("href");
+					$(this)
+						.click(function() {return zmiModalInsertUserLoad(href);})
+						.attr("href","javascript:;");
+				});
+		});
+	return false;
+}
+
+function zmiModalInsertUserOpen(context) {
+	return zmiModal('#insertUser',{title:$(context).attr('title'),open:zmiModalInsertUserLoad});
+}
+
+</script>
+
+<tal:block tal:define="
+		userFolder python:here.getUserFolder();
+		userAdderPlugin python:here.getUserAdderPlugin();
+		userDefs python:here.getSecurityUsers(request.get('show_acquired',False));
+		roleDefs python:here.getSecurityRoles();
+		userNames python:here.sort_list(list(userDefs));
+		langs_optpl python:[[x,here.getLanguageLabel(x)] for x in here.getLanguages(request)];
+		roles_optpl python:[(x,here.getRoleName(x)) for x in ['ZMSAdministrator','ZMSEditor','ZMSAuthor','ZMSSubscriber','ZMSUserAdministrator']+list(roleDefs)]">
+
+<div class="d-none">
+	<div id="importUsers" class="inner">
+		<form class="form-horizontal" action="manage_userProperties" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+			<input type="hidden" name="key" value="" />
+			<div class="form-group row">
+				<label for="file" class="col-sm-3 control-label">
+					<i class="far fa-folder"></i>
+					<span tal:content="python:here.getZMILangStr('ATTR_FILE')">File</span>
+				</label>
+				<div class="col-sm-9"><input class="btn btn-file" name="file" type="file" /></div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-9">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_IMPORT" tal:content="python:here.getZMILangStr('BTN_IMPORT')">Import</button>
+				</div>
+			</div>
+		</form>
+	</div><!-- #importUsers -->
+</div><!-- .d-none -->
+
+<tal:block tal:condition="python:request.get('id',False) not in [False,'']"
+		tal:define="editUser python:request.get('id') not in here.getRootElement().getSecurityRoles();
+		editRole python:not editUser;
+		action python: editUser and 'manage_userProperties' or 'manage_roleProperties';
+		multilang python:editUser and len(here.getLangIds())>1">
+
+<div class="d-none">
+	<div id="insertNode" class="inner">
+		<form class="form-horizontal" name="insertNodeForm" tal:attributes="action action" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="key" value="attr" />
+			<input type="hidden" name="id" tal:attributes="value request/id" />
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+			<div class="form-group row">
+				<label for="node" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_NODE')">Node</span></label>
+				<div class="col-sm-10" tal:content="structure python:here.getUrlInput(fmName='insertNodeForm',elName='node',value='{$}')">the control</div><!-- .col-sm-10 -->
+			</div>
+			<input tal:condition="python:not multilang" type="hidden" name="langs:list" tal:attributes="value python:here.getLangIds()[0]">
+			<div tal:condition="python:multilang" class="form-group row">
+				<label for="langs" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_LANGS')">Languages</span></label>
+				<div class="col-sm-10" tal:content="structure python:here.zmi_input_multiselect(here,name='langs',value=[],lang_str='ATTR_LANGS',options=langs_optpl)">the control</div><!-- .col-sm-10 -->
+			</div>
+			<div class="form-group row">
+				<label for="roles" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ROLES')">Roles</span></label>
+				<div class="col-sm-10"
+					tal:define="roles_optpl python:len([x for x in request['AUTHENTICATED_USER'].getRolesInContext(here) if x in ['Manager','ZMSAdminstrator']]) > 0 and roles_optpl or roles_optpl[1:]"
+					tal:content="structure python:here.zmi_input_multiselect(here,name='roles',value=[],lang_str='ATTR_ROLES',options=roles_optpl)">the control</div><!-- .col-sm-10 -->
+			</div>
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_INSERT" tal:content="python:here.getZMILangStr('BTN_INSERT')">Save</button>
+				</div>
+			</div>
+		</form>
+	</div><!-- .inner -->
+</div><!-- #insertNode -->
+
+<form class="form-horizontal card" name="editUserForm" tal:attributes="action action" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="key" value="obj" />
+	<input type="hidden" name="id" tal:attributes="value request/id" />
+	<input type="hidden" name="lang" tal:attributes="value request/lang" />
+
+	<tal:block tal:condition="editUser">
+		<tal:block tal:define="userName request/id; userObj python:here.findUser(userName); global nodes python:here.getUserAttr(userName,'nodes',{})">
+			<legend>
+				<a onclick="self.location.reload()">
+					<span tal:attributes="class python:userObj is None and 'text-danger' or ''; title python:here.getZMILangStr('ATTR_USER')">
+						<i class="fas fa-user" tal:attributes="class python:userObj is None and 'fas fa-user-slash' or 'fas fa-user'"></i>
+						<tal:block tal:content="userName">the user-name</tal:block>
+					</span>
+				</a>
+			</legend>
+			<div class="card-body pb-0">
+				<tal:block tal:condition="python:userObj is not None">
+					<div class="form-group row" tal:condition="python:'pluginid' in userObj">
+						<label for="source" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_SOURCE')">Source</span></label>
+						<div class="col-sm-10" tal:content="structure userObj/pluginid">the user-pluginid</div><!-- .col-sm-10 -->
+					</div>
+					<tal:block tal:repeat="userObjDetail userObj/details">
+						<tal:block tal:define="userAttr python:here.getUserAttr(userObj,userObjDetail['name'],''); hasError python:userAttr!='' and userAttr!=userObjDetail['value']">
+							<div tal:attributes="class python:' '.join(['form-group','row']+[[],['has-error']][int(hasError)]); title python:['','ERROR: %s'%str(userAttr)][int(hasError)]">
+								<label tal:attributes="for userObjDetail/name" class="col-sm-2 control-label"><span tal:content="userObjDetail/label">the label</span></label>
+								<div class="col-sm-10">
+									<input tal:attributes="name userObjDetail/name; value userObjDetail/value; class python:'form-control'" disabled="disabled"/>
+								</div>
+							</div>
+						</tal:block>
+					</tal:block>
+					<div class="form-group row activity">
+						<label class="col-sm-2 control-label" for="attrActive"><span tal:content="python:here.getZMILangStr('ATTR_ACTIVE')">the label</span></label>
+						<div class="col-sm-10">
+							<span class="btn btn-secondary">
+								<input type="checkbox" name="attrActive:int" value="1" tal:attributes="checked python:['','checked'][here.getUserAttr(request['id'],'attrActive',1)]"/>
+							</span>
+						</div>
+					</div>
+					<div class="form-group row activity_start">
+						<label class="col-sm-2 control-label" for="attrActiveStart"><span tal:content="structure python:here.getZMILangStr('ATTR_START_DAT')">the label</span></label>
+						<div class="input-group col-sm-10" tal:content="structure python:here.getDateTimeInput(fmName='userform',elName='attrActiveStart',value=here.getUserAttr(request['id'],'attrActiveStart',None),fmt_str='DATE_FMT')">the control</div>
+					</div>
+					<div class="form-group row activity_end">
+						<label class="col-sm-2 control-label" for="attrActiveEnd"><span tal:content="structure python:here.getZMILangStr('ATTR_END_DAT')">the label</span></label>
+						<div class="input-group col-sm-10" tal:content="structure python:here.getDateTimeInput(fmName='userform',elName='attrActiveEnd',value=here.getUserAttr(request['id'],'attrActiveEnd',None),fmt_str='DATE_FMT')">the control</div>
+					</div>
+					<tal:block tal:condition="python:userObj.get('password')==True">
+						<div id="tr_password" class="form-group row">
+							<label for="password" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_PASSWORD')">Password</span></label>
+							<div class="col-sm-10"><input class="form-control" type="password" id="password" name="password" size="30" value="******" placeholder=""></div><!-- .col-sm-10 -->
+						</div>
+						<div id="tr_confirm" class="form-group row">
+							<label for="confirm" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_CONFIRM')">Confirm</span></label>
+							<div class="col-sm-10"><input class="form-control" type="password" id="confirm" name="confirm" size="30" value="******" placeholder=""></div><!-- .col-sm-10 -->
+						</div>
+						<div id="tr_forceChangePassword" class="form-group row">
+							<label for="forceChangePassword" class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<input type="checkbox" name="forceChangePassword:int" value="1" tal:attributes="checked python:['','checked'][here.getUserAttr(userObj['name'],'forceChangePassword',0)]"/>
+								<span>Force user to change password after next login</span>
+							</div>
+						</div>
+					</tal:block>
+					<div id="tr_email" class="form-group row" tal:condition="python:len([x for x in userObj['details'] if x['name'] in ['mail','email']])==0">
+						<label for="email" tal:attributes="class python:' '.join(['col-sm-2 control-label']+[[],['mandatory']][int(here.getConfProperty('EmailMandatory','')!='')])"><span tal:content="python:here.getZMILangStr('ATTR_EMAIL')">Email</span></label>
+						<div class="col-sm-10"><input class="form-control" type="email" id="email" name="email" size="30" placeholder="" tal:attributes="value python:here.getUserAttr(userObj['name'],'email','')"></div><!-- .col-sm-10 -->
+					</div>
+					<div id="tr_profile" class="form-group row">
+						<label for="profile" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_PROFILE')">Profile</span></label>
+						<div class="col-sm-10" tal:content="structure python:here.getUrlInput(fmName='userform',elName='profile',value=here.getUserAttr(userObj['name'],'profile',''))">the control</div><!-- .col-sm-10 -->
+					</div>
+					<div class="form-group row mb-0 pb-4">
+						<div class="controls save">
+							<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:condition="python:userObj is not None"><i class="fas fa-ok"></i> <tal:block tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</tal:block></button>
+							<button type="submit" name="btn" class="btn btn-secondary" value="BTN_DELETE" tal:condition="python:userName in userNames"><i class="fas fa-times"></i> <tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block></button>
+							&nbsp;&nbsp;
+							<button type="submit" name="btn" class="btn btn-secondary" value="BTN_BACK" tal:content="python:here.getZMILangStr('BTN_BACK')">Back</button>
+						</div>
+					</div>
+				</tal:block>
+			</div>
+		</tal:block>
+	</tal:block>
+
+	<tal:block tal:condition="editRole">
+		<tal:block tal:define="global nodes python:here.getSecurityRoles().get(request['id'],{'nodes':{}})['nodes']">
+			<legend>
+				<a onclick="self.location.reload()">
+					<i class="fas fa-users"></i> <tal:block tal:content="python:'%s: %s'%(here.getZMILangStr('ATTR_ROLE'),request['id'])">Role: Id</tal:block>
+				</a>
+			</legend>
+			<div class="card-body">
+				<div class="form-row">
+					<div class="controls save"
+							tal:define="
+								security_roles python:here.getRootElement().getSecurityRoles().get(request['id'],{});
+								nodes python:list(security_roles.get('nodes',{}));
+								security_users python:here.getConfProperty('ZMS.security.users',{}).values();
+								is_deletable python:len(list(nodes))==0 and not len([x for x in security_users if len([y for y in x.get('nodes',{}).values() if request['id'] in y['roles']])>0])>0">
+							<button type="submit" name="btn" class="btn btn-danger" value="BTN_DELETE"
+								tal:attributes="
+								disabled python:'' if is_deletable else 'disabled';
+								title python:'' if is_deletable else 'HINT Role cannot be deleted, because it is still in use: containing declared nodes and/or given to users'"
+							><i class="fas fa-times"></i> <tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block></button>
+							&nbsp;&nbsp;
+						<button type="submit" name="btn" class="btn btn-secondary" value="BTN_BACK" tal:content="python:here.getZMILangStr('BTN_BACK')">Back</button>
+					</div>
+				</div>
+			</div>
+		</tal:block>
+	</tal:block>
+
+</form>
+
+<form class="form-horizontal" name="editNodesForm" tal:attributes="action action" method="post" enctype="multipart/form-data"
+	tal:define="
+		security_roles python:here.getRootElement().getSecurityRoles().get(request['id'],{});
+		nodelist python:[{'key':x,'value':nodes[x],'target':here.getLinkObj(x)} for x in nodes]">
+	<input type="hidden" name="btn" value="" />
+	<input type="hidden" name="key" value="attr" />
+	<input type="hidden" name="id" tal:attributes="value request/id" />
+	<input type="hidden" name="lang" tal:attributes="value request/lang" />
+	<table class="table table-sm table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>
+					<div class="btn-group">
+						<span class="btn btn-secondary" onclick="zmiToggleSelectionButtonClick(this)" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))">
+							<i class="fas fa-check-square"></i>
+						</span>
+						<button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"></button>
+						<div class="dropdown-menu">
+								<a class="dropdown-item" href="javascript:;"
+									onclick="zmiModal('#insertNode',{title:$(this).attr('title')});"
+									tal:attributes="title python:here.getZMILangStr('BTN_INSERT')"
+									><i class="fas fa-plus"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_INSERT')">Insert</tal:block>
+								</a>
+								<a class="dropdown-item" href="javascript:;"
+									onclick="var $f=$(this).closest('form');$('input[name=btn]',$f).attr('value','BTN_DELETE');$f.submit();"
+									><i class="fas fa-times"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block>
+								</a>
+								<a class="dropdown-item" href="javascript:;"
+									onclick="var $f=$(this).closest('form');$('input[name=btn]',$f).attr('value','BTN_INVITE');$f.submit();"
+									><i class="fas fa-share"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_INVITE')">Invite</tal:block>
+								</a>
+						</div><!-- .dropdown-menu -->
+					</div>
+				</th>
+				<th tal:attributes="colspan python:[2,3][int(multilang)]" tal:content="python:here.getZMILangStr('TAB_ACCESS')">Access</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="node nodelist">
+				<tal:block define="nodekey node/key; nodevalue node/value; target node/target">
+				<td>
+					<div class="btn-group">
+						<span class="btn btn-secondary">
+							<input name="nodekeys:list" type="checkbox" tal:attributes="value nodekey" />
+						</span>
+						<button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"></button>
+						<div class="dropdown-menu">
+								<a class="dropdown-item" href="javascript:;" onclick="var $f=$(this).closest('form');$('input[name=btn]',$f).attr('value','BTN_DELETE');$('input:checkbox',$(this).closest('tr')).prop('checked','checked');$f.submit();">
+									<i class="fas fa-times"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block>
+								</a>
+								<a class="dropdown-item" href="javascript:;" onclick="var $f=$(this).closest('form');$('input[name=btn]',$f).attr('value','BTN_INVITE');$('input:checkbox',$(this).closest('tr')).prop('checked','checked');$f.submit();"
+									><i class="fas fa-share"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_INVITE')">Invite</tal:block>
+								</a>
+						</div><!-- .dropdown-menu -->
+					</div><!-- .btn-group -->
+				</td>
+				<td>
+					<div class="text-danger alert-danger" tal:condition="python:target is None">
+						<i class="fas fa-warning-sign" tal_attributes="title python:'%s not found'%(nodekey)"></i>
+						<tal:block tal:content="nodekey">the node-key</tal:block>
+					</div>
+					<tal:block tal:condition="python:target is not None" tal:content="structure python:target.zmi_breadcrumbs_obj_path(middot='manage_access')">zmi_breadcrumbs_obj_path</tal:block>
+				</td>
+				<td tal:condition="python:multilang">
+					<tal:block tal:repeat="lang python:nodevalue.get('langs',[])">
+						<tal:block tal:content="python:here.getLanguageLabel(lang)">
+							Language
+						</tal:block>
+					</tal:block>
+				</td>
+				<td>
+					<tal:block tal:repeat="role python:here.sort_list([(here.getRoleName(x),x) for x in node.get('value',{}).get('roles',[])])">
+						<tal:block tal:condition="not:python:role[1] in roleDefs" tal:content="python:role[0]">the role</tal:block>
+						<a tal:condition="python:role[1] in roleDefs" tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],role[1])" tal:content="python:role[0]">the role</a>
+						<tal:block tal:condition="not:repeat/role/end">,</tal:block>
+					</tal:block>
+				</td>
+				</tal:block>
+			</tr>
+			<tr tal:condition="python:len(nodelist)==0">
+				<td tal:attributes="colspan python:[3,4][int(multilang)]" tal:content="python:here.getZMILangStr('ATTR_NONE')">None</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+
+</tal:block>
+
+<tal:block tal:condition="python:not request.get('id')">
+
+<div class="d-none">
+	<div id="addUser" class="inner" title="not request.get('id')">
+		<form id="addUserForm" class="form-horizontal" action="manage_userProperties" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="key" value="obj" />
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+			<div class="form-group row">
+				<label for="newId" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-sm-10"><input class="form-control" type="text" id="newId" name="newId" size="15" placeholder=""></div>
+			</div>
+			<div class="form-group row">
+				<label for="newPassword" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_PASSWORD')">Password</span></label>
+				<div class="col-sm-10"><input class="form-control" type="password" id="newPassword" name="newPassword" size="15" placeholder=""></div>
+			</div>
+			<div class="form-group row">
+				<label for="newConfirm" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_CONFIRM')">Confirm</span></label>
+				<div class="col-sm-10"><input class="form-control" type="password" id="newConfirm" name="newConfirm" size="15" placeholder=""></div>
+			</div>
+			<div class="form-group row">
+				<label for="newEmail" tal:attributes="class python:' '.join(['col-sm-2 control-label']+[[],['mandatory']][int(here.getConfProperty('EmailMandatory','')!='')])"><span tal:content="python:here.getZMILangStr('ATTR_EMAIL')">Email</span></label>
+				<div class="col-sm-10"><input class="form-control" type="email" id="newEmail" name="newEmail" size="15" placeholder=""></div>
+			</div>
+			<div class="row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_ADD" tal:content="python:here.getZMILangStr('BTN_ADD')">Add</button>
+				</div>
+			</div>
+		</form>
+	</div><!-- #addUser -->
+</div><!-- .d-none -->
+
+<div class="d-none">
+	<div id="insertUser" class="inner">
+	</div><!-- #insertUser -->
+</div><!-- .d-none -->
+
+<div class="row">
+
+<div class="col-sm-6 mb-3 pr-sm-0">
+
+	<div class="alert alert-success" tal:condition="python:request.get('btn')=='Purge'">
+		Purge local users<br/>
+		<tal:block tal:content="structure python:here.purgeLocalUsers()">purgeLocalUsers</tal:block>
+		(<tal:block tal:content="python:here.getLangFmtDate(DateTime())"></tal:block>)
+	</div><!-- .alert -->
+
+<form class="form-horizontal card" action="manage_userProperties" method="get">
+	<input type="hidden" name="btn" value="" />
+	<input type="hidden" name="key" value="" />
+	<input type="hidden" name="lang" tal:attributes="value python:request['lang']">
+	<legend tal:content="python:here.getZMILangStr('ATTR_USERS')">Users</legend>
+	<table class="table table-sm table-striped table-bordered table-hover mb-0">
+	<thead>
+		<tr>
+			<th>
+				<div class="btn-group">
+					<a class="btn btn-secondary" href="javascript:;" onclick="zmiModalInsertUserOpen(this)" tal:attributes="title python:'%s %s / %s '%(here.getZMILangStr('ATTR_USERS'), here.getZMILangStr('BTN_SEARCH'), here.getZMILangStr('BTN_INSERT'))"><i class="fas fa-plus"></i></a>
+					<a class="btn btn-secondary" tal:attributes="href python:'?lang=%s&show_acquired:boolean=%s'%(request['lang'],str(not request.get('show_acquired',False))); title python:'show acquired'; class python:'btn '+['btn-secondary','btn-success'][request.get('show_acquired')==True]" tal:condition="python:here.getPortalMaster() is not None"><i class="fas fa-share"></i></a>
+					<a class="btn btn-secondary" tal:attributes="href python:'manage_users_sitemap?lang=%s'%request['lang']; title python:here.getZMILangStr('TAB_SITEMAP')"><i class="fas fa-sitemap"></i></a>
+					<a class="btn btn-secondary" href="javascript:;" onclick="zmiModal('#importUsers',{title:$(this).attr('title')})" tal:attributes="title python:'%s...'%here.getZMILangStr('BTN_IMPORT')"><i class="fas fa-upload"></i></a>
+					<a class="btn btn-secondary" href="javascript:;" onclick="var $fm=$(this).closest('form');$('input[name=btn]',$fm).val('BTN_EXPORT');$fm.attr('target','_blank').submit();" tal:attributes="title python:here.getZMILangStr('BTN_EXPORT')"><i class="fas fa-download"></i></a>
+					<a class="btn btn-secondary alert-danger" tal:condition="python:request['AUTHENTICATED_USER'].has_role('Manager')" tal:attributes="href python:'?lang=%s&btn=Purge'%request['lang']" title="Purge Local Roles (WARNING: Using this function deletes the local roles of users who no longer exist. Click only if you are aware of the consequences.)"><i class="fas fa-eraser"></i></a>
+				</div><!-- .btn-group -->
+			</th>
+		</tr>
+	</thead>
+	<tbody tal:define="securityUsers python:here.getSecurityUsers(request.get('show_acquired',False))">
+	<tr tal:repeat="userName userNames" tal:attributes="id userName" class="userName">
+		<td tal:define="
+				securityUser python:securityUsers.get(userName,{});
+				lower python:securityUser.get('attrActiveStart',None);
+				upper python:securityUser.get('attrActiveEnd',None);
+				active python:standard.todayInRange(lower, upper);
+				acquired python:securityUser.get('acquired',False);
+				nodes python:securityUser.get('nodes',{});">
+			<tal:block tal:content="repeat/userName/number"></tal:block>.
+			<input type="checkbox" name="ids:list" tal:attributes="value userName"/>
+			<i class="icon-spinner icon-spin fas fa-share" tal:condition="acquired"></i>
+			<a data-placement="top"
+				tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],userName); 
+					class python:['','text-muted'][acquired or not active];"
+				><span><i class="icon-spinner icon-spin fas fa-spinner fa-spin"></i> <tal:block tal:content="userName">userName</tal:block></span>
+			</a><tal:block tal:condition="python:len(nodes)>0"
+				>&nbsp;(<tal:block tal:define="
+						all_roles python:sum([nodes[x].get('roles',[]) for x in nodes],[]);
+						distinct_roles python:standard.distinct_list(all_roles);
+						sorted_roles python:standard.sort_list([(here.getRoleName(x),x) for x in distinct_roles]);
+					"><tal:block tal:repeat="role sorted_roles"
+						><tal:block 
+							tal:condition="not:python:role[1] in roleDefs" 
+							tal:content="python:role[0]">the role</tal:block
+						><a tal:condition="python:role[1] in roleDefs" 
+								tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],role[1])" 
+								tal:content="python:role[0]"
+								>the role</a>, </tal:block
+					><tal:block tal:content="python:'%i %s'%(len(nodes),here.getZMILangStr('ATTR_NODE'))"># nodes</tal:block
+				>)</tal:block
+			></tal:block
+		></td>
+	</tr>
+	<tr tal:condition="python:len(userNames)<5" tal:repeat="i python:range(5-len(userNames))">
+		<td>&nbsp;</td>
+	</tr>
+	</tbody>
+	</table>
+</form>
+</div>
+
+<div class="d-none">
+	<div id="insertRole" class="inner">
+		<form class="form-horizontal" action="manage_roleProperties" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="key" value="obj" />
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+			<div class="form-group row">
+				<label for="newId" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-sm-10" tal:content="structure python:here.getTextInput(fmName='roleform',elName='newId',size=15,value='')">the control</div><!-- .col-sm-10 -->
+			</div>
+			<tal:block tal:define="
+					local_roles python:here.getSecurityRoles();
+					roles python:[x for x in here.getRootElement().getSecurityRoles() if x not in local_roles]">
+				<div class="form-group row" tal:condition="python:len(roles)>0">
+					<label for="newId" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('OR')">Or</span></label>
+					<div class="col-sm-10">
+						<select class="form-control" onclick="$('input#newId').val($(this).val());" onkeyup="$('input#newId').val($(this).val());">
+							<option value="">----- <tal:block tal:content="python:here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr('ATTR_ROLE')">Select option</tal:block> -----</option>
+							<tal:block tal:repeat="role roles">
+								<option tal:attributes="value role" tal:content="role">the role</option>
+							</tal:block>
+						</select>
+					</div>
+				</div>
+			</tal:block>
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_INSERT" tal:content="python:here.getZMILangStr('BTN_INSERT')" onclick="btnClick(this,'obj');">Insert</button>
+				</div>
+			</div>
+		</form>
+	</div><!-- #insertRole.inner -->
+</div><!-- .d-none -->
+
+<div class="col-sm-6 mb-3 pl-sm-0">
+	<form class="form-horizontal card">
+		<input type="hidden" name="key" value="" />
+		<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+		<legend tal:content="python:here.getZMILangStr('ATTR_ROLES')">Roles</legend>
+		<table class="table table-sm table-striped table-bordered table-hover mb-0">
+			<thead>
+				<tr>
+					<th>
+						<div class="btn-group">
+							<a class="btn btn-secondary" href="javascript:;" onclick="zmiModal('#insertRole',{title:$(this).attr('title')});" tal:attributes="title python:here.getZMILangStr('BTN_INSERT')"><i class="fas fa-plus"></i></a>
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr tal:repeat="validRole python:here.sort_list(list(roleDefs))" class="userRole">
+					<td tal:define="
+						security_users python:list(here.getConfProperty('ZMS.security.users',{}).values());
+						security_roles python:list(here.getConfProperty('ZMS.security.roles',{}).values());
+						">
+						<tal:block tal:content="repeat/validRole/number"></tal:block>.
+						<input type="checkbox" name="ids:list" tal:attributes="value validRole" />
+						<a target="" tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],validRole)"><i class="fas fa-users"></i><tal:block tal:content="validRole">validRole</tal:block></a>
+						( <tal:block tal:content="python:'%i %s'%(len(roleDefs[validRole]['nodes']),here.getZMILangStr('ATTR_NODE'))"># nodes</tal:block>
+						, <tal:block tal:content="python:'%i %s'%(len([x for x in security_users if len([y for y in x.get('nodes',{}).values() if validRole in y['roles']])>0]),here.getZMILangStr('ATTR_USERS'))"># users</tal:block>
+						, <tal:block tal:content="python:'%i %s'%(len([x for x in security_roles if len([y for y in x.get('nodes',{}).values() if validRole in y['roles']])>0]),here.getZMILangStr('ATTR_ROLES'))"># roles</tal:block>
+						)
+					</td>
+				</tr>
+				<tr tal:condition="python:len(roleDefs)<5" tal:repeat="i python:range(5-len(roleDefs))">
+					<td>&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+</div>
+
+</tal:block>
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+
+<script>
+	$(function(){
+
+		var looper = $.Deferred().resolve();
+
+		var ajaxFindUser = function(item, id, url) {
+			var $a = $(item);
+			return $.get(url,{mode:'findUser',id:id}, function(result) {
+				var details = eval("("+result+")");
+				var text = $a.text().trim();
+				var extra = [];
+				var title = [];
+				for (var i=0; i < details.length; i++) {
+					var l = details[i]["label"];
+					var v = details[i]["value"];
+					if (v!=text && l.toLowerCase().indexOf('name')>=0) {
+						extra[extra.length] = v;
+					}
+					//title[title.length] = l+"="+v;
+				}
+				if (extra.length>0) {
+					$a.append(' ( ' + extra.join(', ') + ' ) ');
+				}
+				//$a.attr("title",title.join("; ")).tooltip("show");
+				$a.attr("title", "Double-click to edit!");
+				return $.Deferred().resolve().promise();
+			});
+		}
+
+		var ajaxExistsUser = function(item) {
+			var $this = $(item);
+			var id = $this.attr("id");
+			var url = [location.protocol, '//', location.host, location.pathname].join('');
+			return $.get(url,{mode:'existsUser',id:id}, function(result) {
+				if (result!=1 && result!="1") {
+					$("td",$this).addClass("alert-danger");
+					$("a",$this).addClass("text-danger");
+					$("a>i",$this).attr("class","fas fa-user-slash");
+				}
+				else {
+					$("a i",$this).attr("class","fas fa-user");
+					$("a:first",$this).mouseover(function() {
+						 var $a = $(this);
+						 if (typeof $a.attr("title")=="undefined") {
+							 $a.attr("title","Data loading ...");
+							 $.when.apply($, $.map($a, function(item) {
+								 looper = looper.then(function() {
+									 return ajaxFindUser(item, id, url);
+								 });
+								 return looper;
+							 }));
+							 //ajaxFindUser($a, id, url);
+						 }
+					});
+				}
+				return $.Deferred().resolve().promise();
+			});
+		}
+
+		var $collection = $(".userName");
+		$.when.apply($, $.map($collection, function(item) {
+			looper = looper.then(function() {
+				return ajaxExistsUser(item);
+			});
+			return looper;
+		}));
+	});
+</script>
+
+</body>
+</html>
+</tal:block>

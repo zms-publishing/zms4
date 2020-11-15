@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+<item key="key"><![CDATA[xhtmlValidatorLib]]></item>
+<item key="value" type="dictionary"><dictionary>
+<item key="access" type="dictionary"><dictionary>
+<item key="delete" type="list"><list>
+</list>
+</item>
+<item key="delete_custom"/>
+<item key="edit" type="list"><list>
+</list>
+</item>
+<item key="edit_custom"/>
+<item key="insert" type="list"><list>
+</list>
+</item>
+<item key="insert_custom"/>
+</dictionary>
+</item>
+<item key="acquired" type="int">0</item>
+<item key="attrs" type="list"><list>
+<item type="dictionary"><dictionary>
+<item key="custom">
+<data content_type="image/png" filename="valid-xhtml10.png" type="file">89504e470d0a1a0a0000000d494844520000005e000000110802000000dbbe8c800000073b49444154789ced5779505bc71dfe494ff7856e219084052a58021286ab9c2e475c6a03338c71280909f1b48e316ee29e49139c6971d34cec2624adedbae034263349a621c6c4765c686b20d8861a831c8cb98c119200818590382474a2a37f3caa91851d6752a7ee64facd9b37bbfbfb7edf7bfbedbe7dbb18a55209ffc7064c8edfc001406262e28352c42cf6fa348d0f4aeda1a06382ae373aaff46b7068ddb1e619d12d3129c42801ddedf10eeb960938ac229c09003e1f8cce2e4f9b5609382c4aa612f1df8ee2f97c5ead568bc7e3434343ed763b9dcec0601e5a7fbe0eac5b6377797e777e884ac49ddc93ed747b8fb78fcd2dd9ceff622b00581c6b873e1d6cead590f0084ace55089bf7e7755fbe74f0602d1e8fafa979796242f574652599447a68fdf81ab06e0d93428817b35afaa76616ad2216356913e7749fc660b6f31964dda2b55f6d7c3637a6fa31f959e5d45b6dc3cf64452e18f4478efc81cbe54aa5d2dada83696969380409d455cd98ed4eb7348c4ea3e001403b67b1d8d6a4617487cb73db681372295c26096d5fb638e3a52ccdbc75d5e6f2a72308168760a3c3e9a3d32b1e8f57260e41758ccb8edb461b00c4cbd800707ddc48a3106462c657eeffaa6d8d8cc32204646368dd1a0c06be2317365e9a18d09a442c2a60c0e5f6768deacbd2a413fa15c38a7d4f5e0c9382ffc790ae38519c1f271a1dbcc666b3dfa8ab633399172f5ee672d9783c3e50f7eab0a1f2579ffdb064f38903d9639ae5b8b25329b1bc9e13c51fb6a9f61deaaefb69da4f9e8c0780f29a8efe9185d9bf3d55f8e336d58c39504111c9ba70bc30e189d300f07c79dcef7f9e0e00bb5fbdf8e9a56900f0f43fab37d9939efa242596d7fb5ec9c68e69e72ce5351d3726169d2e4feb916d05e9a220826ede5af14a67f7753d9180ecd921af7b3e35c820acbf941ac9c561314ab5d16c77f5aa169c6e6fc7c89cd7e7bb3034172762f1e8a48f7b3563732bbb7363181482cd66cbc8c86085840040f6962c854201009880c5a6629b6c479ef4dd3337cf7469cb5e6a271290c65fe7dc757050bc579bd3515f54bd530100d53b151df545270e64fba3275ac6566d6bda390bea0bf1de3a7ee010ecf7d2458559927b118e7c34dc7d5ddf7020bb6c6be4d18f862f0f198215fc25221ec98f0deb5519d40b967fde9acf8f0d1b9c5ebc75dbdc36a87b2223d2edf19eead398edae0fba55223655102a241008a817d87b2cbf475fccfc4c395bfac2050038bc3f552e65fa433d83f364220e0096cc4eb425fd1101005c1f3702804cccc849120280de640780ac84d08171e3876daa499d99cf26470869372616ef6b8d4840adad4aae6d50b674de9dd0de372be45176976c4e9673dfffeb449772167da81fd8c0cad6f8f001ada97b7c1e00aaf262664cd6739f4fbbdc9e8408363f84fcc693a9af9727ffe58abae98a9acfe74924f71c1014a11c72f97765004024207b4b1581a1964ecdbe43ddfb0e75077d4477058b41a82c8c3ef6f148fde9d1e7ca62efcbdf888db36cd5b63678cb1415ce0000918006001dfd73419c3bac8913b13874d2eb67071322385931822801fdadd6212e839412c923e191ac684175be3c5f11f6c9b529369b131111f1c52f34a6593e796e9ccf263b5d9e978ef605860eef4f5db9b8cbd5f3839458de97e9db8fca6247d54b6e8fafaa54fe65f84170ba3c412d340a9ecf26eb4d360058b5ad01805cca0ae2dc610d974e7a54c25eb43a133771585462ae22cc60766c168688d85494806031122e556b58b53b1cfe2c9fcfe772b9bc5e6f9074c52b9d00d0595f54bc45f2a7e6d1f6abb3fe100ec1d22878ffd2e37607e706412e6556ef54bc58f908fa5f0b84d5ee3ed3a5452fcf060b82f0e6fb83cf1dee41cb05e9a29979ab6ededade370b00db33c541e43bac615208e9dfe2f3e8a41cb910c16232a3f91c1ab13831a26f72e1e526e592d565b238af694c917c9a4a356930187c3e1f00a8d5eae3c7ff68b15802a55e7b7760f096e9377b93e452667dcd161683b0eb60173a3e1b81fbf766928047fcf7201cfb65666d55f2c6f651f552e90b17d06b29407f4cb38ca4bcf3ea9f070060fbfe3661c10700d0dca139796e1c25ec2a8e0180e81d4d55af5d9689198fa58607bf5560058381d4486ebc989510c106009980f1a884931d2358b43acf7d3e3d655cf5f96044b7f4dbc7934242288d8d8d1289c4e572353737e7e5e590c9e440a9678aa22bb6c93685d101209443be79fafb0ea707002ab6c90ad245fec13f5357e070ba4339ebb9655b23b7678ad12d0c9a3879b6dc5ff5a7a0b38c47274c9e2d0f0c05ce29b180faf763db3d5e1f5a45979bb77f96ee5c5b9fa13949c2d1538ff70cce33a8f8dce4b0a0a7000046a954069ea1ac4e774bbff6e92c1900b83ddea6ab9ad2944d041cf6fc80ee9dceb12993b522236a4f5e0c83841b1a1a6a6868b87973aca8b0a86aef5e1a8d86c160c074e51b73860ab6e63fc437f078d9dadafa4074314e9dd78cbd3fef7f1863d3169b030174ad2929b9cb46fbabc3b3f2a09470389adbbdfadf4c04001291e1f678a775fa7f01141a009bba376f7a0000000049454e44ae426082</data></item>
+<item key="id"><![CDATA[valid-xhtml10.png]]></item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[PNG: valid-xhtml10]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[resource]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[<dtml-comment>--// BO preview_top_zmi_col_right //--</dtml-comment>
+
+<script type="text/javascript">
+<!--//
+
+function xhtmValidatorlButtonClick( lang) {
+  var url = self.parent.partner.location.href;
+  if ( url.lastIndexOf('/') < url.length - 1) {
+    url = url.substring( 0, url.lastIndexOf('/') + 1);
+  }
+  url = url + 'valid-xhtml10.html';
+  var name = 'W3C Validator';
+  open(url,name);
+}
+
+//-->
+</script>
+<div style="border:0px;height:20px;margin:0px 3px;padding:2px;">
+<a href="#" onclick="xhtmValidatorlButtonClick('<dtml-var lang>')"><img 
+ src="metaobj_manager/xhtmlValidatorLib.valid-xhtml10.png" alt="On" title="On" 
+ style="border:0px;vertical-align:top"/></a>
+</div>
+
+
+<dtml-comment>--// EO preview_top_zmi_col_right //--</dtml-comment>
+]]></item>
+<item key="id"><![CDATA[preview_top_zmi_col_right]]></item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[Preview-Top: ZMI-Col-Right]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[DTML Method]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>The W3C Markup Validation Service</title>
+  </head>
+<body>
+  <fieldset id="validate-by-input"  class="tabset_content front"><legend class="tabset_label">Validate by direct input</legend>
+   <form method="post" enctype="multipart/form-data" action="http://validator.w3.org/check">
+    <input type="hidden" name="doctype" value="Inline"/><!-- Encoding: detect automatically -->
+    <input type="hidden" name="prefill" type="radio" value="0"/><!-- Validate Full Document -->
+    <input type="hidden" name="prefill_doctype" value="xhtml10" /><!-- Use Doctype: XHTML 1.0 -->
+    <input type="hidden" name="group" value="1" /><!-- Group Error Messages by type -->
+    <p class="instructions"><label title="Paste a complete (HTML) Document here" for="fragment">Enter the Markup (Full Document) to validate</label>:<br />
+     <textarea id="fragment" name="fragment" rows="12" cols="80"><dtml-var index_html html_quote></textarea>
+    </p>
+    <p class="submit_button">
+     <input title="Submit for validation" type="submit" value="Check" />
+    </p>
+   </form>
+  </fieldset>
+</body>
+</html>
+
+]]></item>
+<item key="id"><![CDATA[valid-xhtml10.html]]></item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">1</item>
+<item key="name"><![CDATA[HTML: W3C Validator]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[DTML Method]]></item>
+</dictionary>
+</item>
+</list>
+</item>
+<item key="enabled" type="int">0</item>
+<item key="id"><![CDATA[xhtmlValidatorLib]]></item>
+<item key="name"><![CDATA[XHTML-Validator]]></item>
+<item key="package"/>
+<item key="type"><![CDATA[ZMSLibrary]]></item>
+</dictionary>
+</item>
+</dictionary>

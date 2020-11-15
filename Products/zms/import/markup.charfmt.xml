@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<list>
+	<item type="dictionary">
+		<dictionary>
+			<item key="attrs"></item>
+			<item key="display">Insert</item>
+			<item key="icon_clazz">zmsicon-charfmt-insert</item>
+			<item key="id">charfmt_ins</item>
+			<item key="js"></item>
+			<item key="tag">ins</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="attrs"></item>
+			<item key="display">Delete</item>
+			<item key="icon_clazz">zmsicon-charfmt-delete</item>
+			<item key="id">charfmt_del</item>
+			<item key="js"></item>
+			<item key="tag">del</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="attrs"></item>
+			<item key="display">Erase ins/del-Tags</item>
+			<item key="icon_clazz">zmsicon-charfmt-erase</item>
+			<item key="id">charfmt_erase</item>
+			<item key="js"><![CDATA[function charFormatUnmark() {
+				$('#<dtml-var elName>').height(document.getElementById('<dtml-var elName>').scrollHeight);
+				var fm = document.forms['<dtml-var fmName>'];
+				var el = fm.elements['<dtml-var elName>'];
+				var v = el.value;
+				v = v.replace( /<ins>((.|\n|\r|\t)*?)<\/ins>/g, '$1');
+				v = v.replace( /<del>((.|\n|\r|\t)*?)<\/del>/g, '$1');
+				v = v.replace( /<s>((.|\n|\r|\t)*?)<\/s>/g, '$1');
+				el.value = v;
+			}]]></item>
+			<item key="tag"></item>
+		</dictionary>
+	</item>
+</list>

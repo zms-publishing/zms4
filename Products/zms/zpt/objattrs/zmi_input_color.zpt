@@ -1,0 +1,30 @@
+<!-- objattrs/zmi_input_color -->
+
+<div class="input-group color"
+		tal:define="global 
+		name      options/name;
+		lang_str  options/lang_str;
+		value     python:options.get('value');
+		opts      python:options.get('options',[]);
+		mandatory python:options.get('mandatory',False);">
+	<input class="colorvalue" type="hidden" tal:attributes="name name;id name;value value" />
+	<input type="color" class="colorpalette form-control" list="colorpalette_"
+		tal:attributes="
+			name python:'select_%s'%(name);
+			id python:'select_%s'%(name);
+			value python:value=='' and '#ffffff' or value;
+			list python:'colorpalette_%s'%(name)" 
+		onchange="$(this).parent().find('input').first().prop('value',$(this).prop('value'));$(this).parent().find('i').removeAttr('style')"
+	/>
+	<datalist id="colorpalette" tal:attributes="id python:'colorpalette_%s'%(name)">
+		<tal:block tal:repeat="opt python:[o[0] for o in opts]"><option tal:content="opt"></option></tal:block>
+	</datalist>
+	<div class="input-group-append"
+		onclick="$(this).parent().find('input.colorpalette').prop('value','#ffffff');$(this).parent().find('input.colorvalue').prop('value','')">
+		<span class="btn btn-secondary" 
+			><i class="fas fa-times" tal:attributes="style python:not value and 'opacity:.35' or None"></i>
+		</span>
+	</div>
+</div>
+
+<!-- /objattrs/zmi_input_color --> 

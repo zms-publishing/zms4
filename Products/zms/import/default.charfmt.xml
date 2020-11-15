@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="attrs"><![CDATA[title="" lang="<dtml-var lang>"]]></item>
+      <item key="display">Abbreviation</item>
+      <item key="icon_clazz">zmsicon-charfmt-abreviation</item>
+      <item key="id">charfmt_abbr</item>
+      <item key="js"></item>
+      <item key="tag">abbr</item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="attrs"><![CDATA[title="" lang="<dtml-var lang>"]]></item>
+      <item key="display">Acronym</item>
+      <item key="icon_clazz">zmsicon-charfmt-acronym</item>
+      <item key="id">charfmt_acr</item>
+      <item key="js"></item>
+      <item key="tag">acronym</item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="attrs"><![CDATA[lang="<dtml-var lang>"]]></item>
+      <item key="display">Language</item>
+      <item key="icon_clazz">zmsicon-charfmt-language</item>
+      <item key="id">charfmt_lang</item>
+      <item key="js"></item>
+      <item key="tag">span</item>
+    </dictionary>
+  </item>
+</list>

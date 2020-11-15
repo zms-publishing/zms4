@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ZMS CUSTOM DEBUG.HTML  -->
+<dtml-unless management_page_charset>
+<dtml-call "REQUEST.set('management_page_charset','utf-8')">
+</dtml-unless>
+<meta http-equiv="content-type" content="text/html;charset=&dtml-management_page_charset;" />
+<dtml-if debug_auto_reload
+><meta HTTP-EQUIV="Refresh" CONTENT="&dtml-debug_auto_reload;;URL=&dtml-URL;?debug_auto_reload=&dtml-debug_auto_reload;">
+</dtml-if>
+<dtml-call "RESPONSE and RESPONSE.setHeader('content-type','text/html;charset='+management_page_charset)">
+<title><dtml-if title_or_id><dtml-var title_or_id><dtml-else>Zope</dtml-if></title>
+
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/zmi.js"></script>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/i18n/eng.js"></script>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zmi_/bootstrap3/bootstrap-all.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="&dtml-BASEPATH1;/manage_page_style.css" />
+
+</head>
+<body>
+
+<dtml-var manage_tabs>
+
+<dtml-if update_snapshot>
+<dtml-call rcsnapshot>
+</dtml-if>
+
+<h3>Debug Information</h3>
+<form action="&dtml-URL;" method="GET">
+<p>
+<ul>
+<li>Zope version: &dtml-version_txt;
+<li>Python version: &dtml-sys_version;
+<li>System Platform: &dtml-sys_platform;
+<li>INSTANCE_HOME: &dtml-getINSTANCE_HOME;
+<li>CLIENT_HOME: &dtml-getCLIENT_HOME;
+<li>Process ID: &dtml-process_id; (&dtml-thread_get_ident;)
+<li>Running for: &dtml-process_time;
+<li>sys.path: <dtml-in manage_getSysPath><br />&nbsp;
+   &dtml-sequence-item;
+  </dtml-in>
+<li>Top Refcounts:<br><select name="foo" size="5"><dtml-in
+    "refcount(100)"><option>&dtml-sequence-item;:
+      &dtml-sequence-key;</option></dtml-in
+    ></select><br><br>
+
+<table border="1">
+<dtml-in rcdeltas mapping>
+<dtml-if sequence-start>
+<tr>
+<th class="header" align="left" valign="top">
+Class
+</th>
+<th class="header" align="left" valign="top">
+<dtml-var rcdate fmt="fCommon" null="">
+</th>
+<th class="header" align="left" valign="top">
+<dtml-var ZopeTime fmt="fCommon">
+</th>
+<th class="header" align="left" valign="top">
+Delta
+</th>
+</tr>
+</dtml-if>
+<tr>
+<td class="cell" align="left" valign="top">
+&dtml-name;
+</td>
+<td class="cell" align="left" valign="top">
+&dtml-pc;
+</td>
+<td class="cell" align="left" valign="top">
+&dtml-rc;
+</td>
+<td class="cell" align="left" valign="top">
++&dtml-delta;
+</td>
+</tr>
+</dtml-in>
+</table>
+
+<p><a href="../Database/cache_detail">Cache detail</a> |
+<a href="../Database/cache_extreme_detail">Cache extreme detail</a>
+</p>
+<p><a href="&dtml-URL;?update_snapshot=1">Update Snapshot</a> | 
+<dtml-if debug_auto_reload>
+  <a href="&dtml-URL;">Stop auto refresh</a>
+<dtml-else>
+  <a href="&dtml-URL;">Refresh</a> |
+  Auto refresh interval (seconds):
+  <input type="text" name="debug_auto_reload" size="3" value="10">
+  <input type="submit" value="Start auto refresh">
+</dtml-if>
+</p>
+
+<li>Connections:
+<table border="1">
+<tr><th>opened</th><th>info</th></tr>
+<dtml-in dbconnections mapping>
+  <tr><td>&dtml-opened;</td><td>&dtml-info;</td></tr>
+</dtml-in></table>
+
+</ul>
+</p>
+
+</form>
+
+<dtml-var manage_page_footer>

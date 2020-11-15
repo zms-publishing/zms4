@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="zmscontext python:here.getSelf(); standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='metas config')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:define="
+		execution_options python:[(0,'None'),(1,'Omit UI'),(2,'Script')];
+		action python:'manage_changeMetacmds';
+		metaCmdIds python:here.getMetaCmdIds();
+		metaCmds python:[here.getMetaCmd(x) for x in metaCmdIds]">
+
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[here.manage_sub_options()[0]]+[{'action':'?id=%s'%x['id'],'label':x['name']} for x in metaCmds if x['id']==request.get('id')])">zmi_breadcrumbs</tal:block>
+
+<div class="d-none" tal:condition="python:request.get('id') in metaCmdIds">
+	<div id="editObj" class="inner" tal:define="global metaCmd python:here.getMetaCmd(request['id'])">
+		<form class="form-horizontal" name="editForm" tal:attributes="action action" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="id" tal:attributes="value request/id" />
+			<input type="hidden" name="lang" tal:attributes="value request/lang" />
+
+			<div class="form-group row">
+				<label for="el_id" class="col-sm-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-sm-6"><input type="text" name="el_id" class="form-control form-control-sm" tal:attributes="value python:metaCmd['id']"/></div>
+				<label for="el_revision" class="col-sm-1 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_VERSION')">Version</span></label>
+				<div class="col-sm-2"><input type="text" name="el_revision" class="form-control form-control-sm" tal:attributes="value python:metaCmd.get('revision','0.0.0')"/></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="el_icon_clazz" class="col-sm-3 control-label"><span>Icon</span></label>
+				<div class="col-sm-9"><input type="text" name="el_icon_clazz" class="form-control form-control-sm zmi-input-icon-clazz" tal:attributes="value python:metaCmd.get('icon_clazz','')"/></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="el_name" class="col-sm-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_NAME')">Name</span></label>
+				<div class="col-sm-9"><input type="text" name="el_name" class="form-control form-control-sm" tal:attributes="value python:metaCmd['name']"/></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="el_title" class="col-sm-3 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_TITLE')">Title</span></label>
+				<div class="col-sm-9"><input type="text" name="el_title" class="form-control form-control-sm" tal:attributes="value python:metaCmd.get('title')"/></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="el_description" class="col-sm-3 control-label"><span tal:content="python:here.getZMILangStr('ATTR_CONFIRM')">Confirm</span></label>
+				<div class="col-sm-9"><input type="text" name="el_description" class="form-control form-control-sm" tal:attributes="value python:metaCmd.get('description','')"/></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="el_execution:int" class="col-sm-3 control-label"><span>Execution</span></label>
+				<div class="col-sm-9">
+					<select class="form-control" name="el_execution:int"
+						><tal:block tal:repeat="execution_option execution_options"
+							><option tal:attributes="value python:execution_option[0]; selected python:['','selected'][int(metaCmd['execution']==execution_option[0])]" tal:content="python:execution_option[1]">the label</option
+						></tal:block
+					></select>
+				</div>
+			</div>
+
+			<!-- ACE Editor -->
+			<tal:block tal:define="ob python:getattr(here,request['id'],None)"
+				><tal:block tal:condition="python:ob is not None"
+					><input type="hidden" name="el_method" tal:attributes="value ob/meta_type"
+					/><tal:block tal:content="structure python:here.zmi_ace_editor(here,request,name='el_data:text',ob=ob,text=metaCmd['data'])">ACE Editor</tal:block
+				></tal:block
+			></tal:block>
+			<!-- /ACE Editor -->
+
+			<div class="form-group row">
+				<table class="table-access-control">
+				<thead>
+				<tr>
+					<th tal:content="python:here.getZMILangStr('TAB_ACCESS')">Access</th>
+					<th tal:content="python:here.getZMILangStr('ATTR_NODE')">Node</th>
+					<th tal:content="python:here.getZMILangStr('ATTR_ROLES')">Roles</th>
+					<th tal:content="python:here.getZMILangStr('ATTR_OBJECTS')">Objects</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr valign="top">
+					<td tal:content="python:here.getZMILangStr('BTN_EXECUTE')">Execute</td>
+					<td>
+						<textarea class="form-control url-input" name="el_nodes" tal:content="python:metaCmd.get('nodes','{$}')"></textarea>
+					</td>
+					<td tal:define="roles python:['*']+here.getUserDefinedRoles()">
+						<select name="el_roles:list" size="10" multiple="multiple" class="form-control-sm container">
+							<tal:block tal:repeat="role roles"
+								><option tal:attributes="value role; selected python:['','selected'][int(role in metaCmd.get('roles',[]))]" tal:content="python:here.getRoleName(role)">role</option>
+							</tal:block>
+						</select>
+					</td>
+					<td>
+						<select name="el_meta_types:list" size="10" multiple="multiple" class="form-control-sm container">
+							<tal:block tal:repeat="meta_type python:['*']"
+								><option tal:attributes="value meta_type; selected python:['','selected'][int(meta_type in metaCmd.get('meta_types',[]))]" tal:content="meta_type">meta_type</option>
+							</tal:block
+							><tal:block tal:repeat="meta_type python:here.getMetaobjIds(sort=True)"
+								><option tal:attributes="value meta_type; selected python:['','selected'][int(meta_type in metaCmd.get('meta_types',[]))]" tal:content="python:here.display_type(request,meta_type)">meta_type</option>
+							</tal:block
+							><tal:block tal:repeat="objtype python:here.metaobj_manager.valid_objtypes"
+								><tal:block tal:define="global meta_type python:'type(%s)'%objtype"
+									><option tal:attributes="value meta_type; selected python:['','selected'][int(meta_type in metaCmd.get('meta_types',[]))]" tal:content="meta_type">meta_type</option>
+								</tal:block
+							></tal:block>
+						</select>
+					</td>
+				</tr>
+				</tbody>
+				</table>
+			</div><!-- .form-group -->
+			<div class="form-row">
+				<div class="controls save">
+					<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+					<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CLOSE" tal:content="python:here.getZMILangStr('BTN_CLOSE')">Close</button>
+				</div>
+			</div><!-- .form-row -->
+		</form>
+	</div><!-- #editObj.inner -->
+</div><!-- .d-none -->
+
+<div class="d-none">
+	<div id="insertObj" class="inner">
+		<form class="form-horizontal" tal:attributes="action action" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang">
+			<div class="form-group row">
+				<label class="col-sm-3 control-label mandatory" for="_id"><span tal:content="python:here.getZMILangStr('ATTR_ID')">Id</span></label>
+				<div class="col-sm-9"><input class="form-control" type="text" name="_id"></div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label" for="_icon_clazz"><span>Icon</span></label>
+				<div class="col-sm-9"><input type="text" name="_icon_clazz" class="form-control form-control-sm zmi-input-icon-clazz" value="fas fa-cogs"/></div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label mandatory" for="_name"><span tal:content="python:here.getZMILangStr('ATTR_NAME')">Name</span></label>
+				<div class="col-sm-9"><input class="form-control" type="text" name="_name"></div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label mandatory" for="_name"><span tal:content="python:here.getZMILangStr('ATTR_TITLE')">Title</span></label>
+				<div class="col-sm-9"><input class="form-control" type="text" name="_title"></div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label mandatory" for="_type"><span tal:content="python:here.getZMILangStr('ATTR_TYPE')">Type</span></label>
+				<div class="col-sm-9">
+					<select class="form-control" name="_type">
+						<option value="Script (Python)">Script (Python)</option>
+						<option value="Page Template">Page Template</option>
+						<option value="External Method">External Method</option>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label" for="_execution:int"><span>Execution</span></label>
+				<div class="col-sm-9">
+					<select class="form-control" name="_execution:int">
+						<tal:block tal:repeat="execution_option execution_options">
+							<option tal:attributes="value python:execution_option[0]" tal:content="python:execution_option[1]">the label</option>
+						</tal:block>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<div class="col-sm-9">
+					<button name="btn" type="submit" class="btn btn-primary" value="BTN_INSERT" tal:content="python:here.getZMILangStr('BTN_INSERT')">Insert</button>
+				</div>
+			</div><!-- .form-group -->
+		</form>
+	</div><!-- #insertObj.inner -->
+</div><!-- .d-none -->
+
+<div class="d-none">
+	<div id="importConf" class="inner">
+		<form class="form-horizontal" tal:attributes="action action" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="lang" tal:attributes="value request/lang">
+			<div class="form-group row">
+				<label class="col-sm-3 control-label" for="file"><i class="far fa-folder-open"></i> <tal:block tal:content="python:here.getZMILangStr('ATTR_FILE')">File</tal:block></label>
+				<div class="col-sm-9">
+					<input class="btn btn-file" name="file" type="file" />
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<label class="col-sm-3 control-label" for="file" tal:content="python:here.getZMILangStr('OR')">or</label>
+				<div class="col-sm-8">
+					<select id="init" class="form-control" name="init" onfocus="zmiExpandConfFiles(this,'.metacmd.')" onmouseover="zmiExpandConfFiles(this,'.metacmd.')">
+						<option value="">--- <tal:block tal:content="python:here.getZMILangStr('BTN_INIT')">Init</tal:block>... ---</option>
+					</select>
+				</div>
+			</div><!-- .form-group -->
+			<div class="form-group row">
+				<div class="col-sm-9">
+					<button name="btn" type="submit" class="btn btn-primary" value="BTN_IMPORT" tal:content="python:here.getZMILangStr('BTN_IMPORT')">Import</button>
+				</div>
+			</div>
+		</form>
+	</div><!-- #importConf.inner -->
+</div><!-- .d-none -->
+
+<form class="form-horizontal card" tal:attributes="action action" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<legend tal:content="python:here.getZMILangStr('TAB_METACMD')">Metacmd</legend>
+	<p class="well well-small d-none" tal:content="structure python:here.getZMILangStr('MSG_METACMD')">well</p>
+	<table class="table table-striped table-bordered table-hover mb-0">
+	<thead>
+		<tr tal:condition="python:here.meta_type=='ZMSMetacmdProvider'">
+			<th class="meta-ids">
+				<div class="btn-group">
+					<button class="btn btn-secondary" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))" onclick="zmiToggleSelectionButtonClick(this);return false"><i class="fas fa-check-square"></i></button>
+				</div>
+			</th>
+			<th colspan="3">
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group managing">
+						<button class="btn btn-primary" tal:attributes="title python:here.getZMILangStr('BTN_INSERT')+'...'" onclick="zmiModal('#insertObj',{title:$(this).attr('title')});return false"><i class="fas fa-plus"></i></button>
+						<button class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_DELETE')+'...'" onclick="zmiDeleteObjBtnClick(this,{btn:'BTN_DELETE',key:'obj'});return false"><i class="fas fa-times"></i></button>
+					</div><!-- .btn-group -->
+					<div class="btn-group packaging">
+						<button class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_ACQUIRE')+'...'" onclick="$ZMI.iframe('manage_main_acquire',{lang:getZMILang()},{iframe:true,height:'600',title:$(this).attr('title')});return false" tal:condition="python:here.getPortalMaster() is not None"><i class="fas fa-share"></i></button>
+						<button class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_IMPORT')+'...'" onclick="zmiModal('#importConf',{title:$(this).attr('title')});return false"><i class="fas fa-upload"></i></button>
+						<button class="btn btn-secondary" tal:attributes="title python:here.getZMILangStr('BTN_EXPORT')+'...'" onclick="zmiExportBtnClick(this);return false"><i class="fas fa-download"></i></button>
+					</div><!-- .btn-group -->
+				</div><!-- .btn-toolbar -->
+			</th>
+		</tr>
+		<tr>
+			<th class="meta-ids"></th>
+			<th tal:content="python:here.getZMILangStr('ATTR_NAME')">Name</th>
+			<th tal:content="python:here.getZMILangStr('ATTR_SIZE')">Size</th>
+			<th tal:content="python:here.getZMILangStr('ATTR_LAST_MODIFIED')">Last Modified</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tal:block tal:repeat="metaCmdId python:here.sort_list(metaCmdIds)">
+		<tr class="zmi-selectable" tal:define="
+				metaCmd python:here.getMetaCmd(metaCmdId);
+				ob python:getattr(here,metaCmdId,None);
+				revision python:metaCmd.get('revision','0.0.0');">
+			<td class="meta-ids">
+				<input type="checkbox" name="ids:list" tal:attributes="value metaCmd/id" />
+			</td>
+			<td>
+				<tal:block tal:condition="python:ob is not None">
+					<tal:block tal:condition="python:metaCmd.get('acquired',False)">
+						<a tal:attributes="href python:'/'.join([here.getPortalMaster().absolute_url()]+request['URL'].split('/')[-2:]); title python:'%s (%s)'%(ob.id,ob.meta_type)" target="_blank">
+							<tal:block tal:condition="python:metaCmd.get('acquired',False)"><i class="fas fa-share',extra='title=\042acquired\042"></i>acquired</tal:block>
+						</a>
+						<i tal:condition="python:metaCmd.get('icon_clazz',False)" tal:attributes="class python:metaCmd.get('icon_clazz')"></i>
+						<strong tal:content="python:metaCmd['id']">the id</strong> ( <tal:block tal:content="python:here.getZMILangStr(metaCmd['name'])">Name</tal:block> )
+					</tal:block>
+					<tal:block tal:condition="not:python:metaCmd.get('acquired',False)">
+						<a tal:attributes="href python:'?lang=%s&id=%s'%(request['lang'],metaCmd['id']); title python:'%s (%s)'%(ob.id,ob.meta_type)">
+							<i tal:condition="python:metaCmd.get('icon_clazz',False)" tal:attributes="class python:metaCmd.get('icon_clazz')"></i>
+							<strong tal:content="python:metaCmd['id']">the id</strong>
+							(<tal:block tal:content="python:here.getZMILangStr(metaCmd['name'])">the name</tal:block>)
+						</a>
+					</tal:block>
+					<tal:block tal:content="revision">the version</tal:block> 
+					(<tal:block tal:content="python:metaCmd['meta_type']">the type</tal:block>)
+				</tal:block>
+				<div class="text-danger alert-danger" tal:condition="python:ob is None">
+					<i class="fas fa-warning-sign" tal:attributes="title python:'%s not found'%metaCmd['id']"></i>
+					<tal:block tal:condition="python:metaCmd.get('acquired',False)"
+						><a tal:attributes="href python:'/'.join([here.getPortalMaster().absolute_url()]+request['URL'].split('/')[-2:])" target="_blank"
+							><i class="fas fa-share" title="acquired"></i></a>
+					</tal:block
+					><i tal:condition="python:metaCmd.get('icon_clazz',False)" tal:attributes="class python:metaCmd.get('icon_clazz')"></i>
+					<tal:block tal:content="python:metaCmd['name']">the name</tal:block>
+				</div>
+			</td>
+			<td>
+				<tal:block tal:condition="python:metaCmd.get('data') is not None"
+					><tal:block tal:content="python:here.getDataSizeStr(len(metaCmd['data']))">the size</tal:block
+				></tal:block
+				><tal:block tal:condition="python:metaCmd.get('data') is None">N/A</tal:block>
+			</td>
+			<td>
+				<tal:block tal:condition="python:metaCmd.get('bobobase_modification_time') is not None"
+					><tal:block tal:content="python:here.getLangFmtDate(metaCmd['bobobase_modification_time'])">the modification-time</tal:block
+				></tal:block
+				><tal:block tal:condition="python:metaCmd.get('bobobase_modification_time') is None">N/A </tal:block>
+			</td>
+		</tr>
+	</tal:block>
+	</tbody>
+	</table>
+</form>
+
+</tal:block>
+
+</div><!-- #zmi-tab -->
+
+<script>
+
+/**
+ * Export xml.
+ */
+function zmiExportBtnClick(sender,btn,target) {
+	if (typeof btn=="undefined") {
+		btn = 'BTN_EXPORT';
+	}
+	if (typeof target=="undefined") {
+		target="_blank";
+	}
+	var $fm = $(sender).closest("form");
+	if (target=="_blank") {
+		var href = $fm.attr('action')+'?lang='+getZMILang()+'&btn='+btn;
+		$('input[name="id"]:text,input[name="ids:list"]:checked',$fm).each(function(){
+				href += '&ids:list='+$(this).val();
+			});
+		window.open(href);
+	}
+	else {
+		$fm.attr("target",target);
+		$fm.append('<input type="hidden" name="btn" value="'+btn+'"/>');
+		$fm.submit();
+	}
+	return false;
+}
+
+/**
+ * Delete object.
+ */
+function zmiDeleteObjBtnClick(sender,d) {
+	if (confirm(getZMILangStr('MSG_CONFIRM_DELOBJ'))) {
+		var $fm = $(sender).closest("form");
+		var html = '';
+		for (var i in d) {
+			$('input[name="' + i + '"]',$fm).remove();
+			html += '<input type="hidden" name="' + i + '" value="' + d[i] +'">';
+		}
+		$fm
+			.append(html)
+			.submit();
+	}
+}
+
+$(function(){
+		zmiModal('#editObj',{title:getZMILangStr('BTN_EDIT'),minWidth:800,remove:true});
+		$('button[name=btn][value=BTN_CLOSE]').click(function() {
+				zmiModal("hide");
+				return false;
+			});
+});
+
+</script>
+
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>

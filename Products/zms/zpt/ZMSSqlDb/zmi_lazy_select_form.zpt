@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='lazy_select_form')">
+
+<tal:block tal:define="global
+			entity python:here.getEntity(request['qentity']);
+			encoding python:getattr(here,'charset','utf-8');
+			actions python:request.get('actions','select');
+			actions python:[actions,','.join(actions)][int(here.operator_gettype(actions) is list)];
+			dummy0 python:request.set('qsize',request.get('qsize',standard.get_session_value(here,'qsize_%s'%id,20)));
+			dummy0 python:request.set('qindex',request.get('qindex',standard.get_session_value(here,'qindex_%s'%id,-1)));
+			columns python:','.join(request['qcolumns']);
+			whereClause python:here.assembleFilter([{'tablename':entity['id'],'columnname':columns,'op':request.get('filterop0','LIKE'),'value':request.get('filtervalue0','%')}]);
+			pk request/primary_key;
+			resSlctStmnt python:'SELECT '+pk+' , '+columns+' AS displayvalue FROM '+entity['id']+['',' WHERE '][int(len(whereClause)>0)]+whereClause+' ORDER BY LOWER('+columns+')';
+			">
+
+<form method="get" class="form-horizontal" tal:attributes="style python:['','background:#DCE3F0'][int(request.get('action') not in ['updateForm','insertForm'])]">
+	<input type="hidden" name="id" tal:attributes="value request/id">
+	<input type="hidden" name="lang" tal:attributes="value request/lang">
+	<input type="hidden" name="preview" tal:attributes="value request/preview">
+	<input type="hidden" name="actions" tal:attributes="value actions">
+	<input type="hidden" name="qentity" tal:attributes="value request/qentity">
+	<input type="hidden" name="primary_key" tal:attributes="value request/primary_key">
+	<input type="hidden" name="qcolumns:list" tal:attributes="value columns"/>
+
+	<div class="form-group col-lg-12" tal:repeat="filterIndex python:range(len(request['qcolumns']))">
+		<div class="pull-left"><select class="form-control form-control-sm" tal:attributes="name python:'filterattr%i'%filterIndex">
+			<option tal:attributes="value python:request['qcolumns'][filterIndex]; selected python:'selected'" tal:content="entity/label">column</option>
+		</select></div>
+		<div class="pull-left"><select class="form-control form-control-sm" tal:attributes="name python:'filterop%i'%filterIndex">
+			<tal:block tal:repeat="op python:['LIKE','=','<','<=','>','>=','NULL','NOT NULL']">
+				<option tal:attributes="value python:op; selected python:['','selected'][op.lower()==request.get('filterop%i'%filterIndex,'').lower()]" tal:content="python:op">op</option>
+			</tal:block>
+		</select></div>
+		<div class="pull-left"><input class="form-control form-control-sm" type="text" tal:attributes="name python:'filtervalue%i'%filterIndex; value python:request.get('filtervalue%i'%filterIndex,'')" /></div>
+		<div class="pull-left">
+			<button type="submit" class="btn btn-primary" name="btn" value="BTN_REFRESH">
+				<i class="fas fa-search"></i>
+			</button>
+			<button class="btn btn-primary" name="btn" value="BTN_ADD"
+				tal:attributes="onclick python:'javascript:window.open(\'manage_main?lang=ger&action=insertForm&qentity=%s\',\'%s\')'%(entity['id'],here.getZMILangStr('BTN_ADD'))">
+				<i class="fas fa-plus"></i>
+			</button>
+			&nbsp;
+			<a href="javascript:;" onclick="$('#manage_main_div_sql').toggle()" title="Show SQL Code">
+				&middot;
+			</a>
+		</div>
+	</div><!-- .form-group -->
+	<div id="manage_main_div_sql" class="d-none well" style="padding:1em;margin: 1em 0 0 0;"><code tal:content="structure python:resSlctStmnt.replace('\n','<br>')">resSlctStmnt</code></div>
+
+</form>
+
+<tal:block tal:condition="python:request.get('action') not in ['updateForm','insertForm']" tal:define="global
+			query python:here.query(resSlctStmnt,encoding=encoding);
+			metaObjAttrIds python:['displayvalue'];
+			metaObjAttrs python:[for x in entity['columns'] if x['id'].upper() in [x.upper() for x in metaObjAttrIds]]+[{'id':'displayvalue','label':entity['label']}];
+			dummy0 python:[here.operator_setitem(x,'name',x['label']) for x in metaObjAttrs];
+			res python:query['records'];
+			dummy0 python:[here.operator_setitem(x,'__id__',here.operator_getitem(x,pk,ignorecase=True)) for x in res];
+			">
+	<tal:block tal:content="structure python:here.metaobj_recordset_main_grid(
+			metaObjAttrIds=metaObjAttrIds,
+			metaObjAttrs=[x for x in metaObjAttrs if x.get('id') in metaObjAttrIds or x.get('hide',0)==0],
+			filtered_records=res,
+			records=res,
+			url_params={'id':request['id'],
+					'actions':actions,
+					'qentity':request['qentity'],
+					'primary_key':request['primary_key'],
+					'qcolumns:list':','.join(request['qcolumns'])
+				},
+			actions=actions,
+			insert='return window.open(\'manage_main?lang=%s&amp;qentity=%s&amp;action=insertForm\',\'_blank\')'%(request['lang'],request['qentity']),
+			update='return window.open(\'manage_main?lang=%s&amp;qentity=%s&amp;action=updateForm&amp;rowid=\'+$(\'input\',$(this).closest(\'.btn-group\')).val(),\'_blank\')'%(request['lang'],request['qentity']),
+			)">
+		metaobj_recordset_main_grid
+	</tal:block>
+	<div class="form-row">
+		<div class="controls save">
+			<button type="submit" name="btn" class="btn btn-primary" onclick="zmiSelectBtnClick()" value="BTN_SELECT" tal:content="python:here.getZMILangStr('BTN_SELECT')">Select</button>
+			<button type="submit" name="btn" class="btn btn-secondary" onclick="zmiCloseBtnClick()" value="BTN_CLOSE" tal:content="python:here.getZMILangStr('BTN_CLOSE')">Close</button>
+		</div>
+	</div><!-- .form-row -->
+</tal:block>
+
+<tal:block tal:content="structure python:'<script>'"></tal:block>
+$(function() {
+		$(".table .checkbox input:radio").click(zmiSelectBtnClick);
+	});
+function zmiSelectBtnClick() {
+	$("input:checked").each(function() {
+			var value = $(this).val();
+			var $tr = $(this).closest("tr");
+			var label = $("td:last",$tr).text().trim();
+			window.parent.zmiLazySelect('<tal:block tal:content="request/id">the id</tal:block>',{label:label,value:value});
+		});
+	zmiCloseBtnClick();
+}
+function zmiCloseBtnClick() {
+	window.parent.zmiDialogClose();
+}
+<tal:block tal:content="structure python:'</script>'"></tal:block>
+
+</tal:block>
+
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+</body>
+</html>

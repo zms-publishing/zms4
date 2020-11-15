@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='analyze')">
+<form class="form-horizontal card"
+	tal:define="global
+		meta_id request/id;
+		res python:here.getDocumentElement().getTreeNodes(request,meta_id);
+		res python:'zcatalog_index' in here.getAbsoluteHome() and here.getAbsoluteHome().zcatalog_index({'meta_id':meta_id}) or here.getDocumentElement().getTreeNodes(request,meta_id); 
+		metaObjIds python:here.getMetaobjIds(); 
+		meta_types python:[x for x in metaObjIds if x not in ['ZMS']];
+		metaObjAttrIds python:here.getMetaobjAttrIds(request['id']);
+		attrIds python:[x for x in here.getObjAttrs(request['id']) if x in metaObjAttrIds];
+		subObjectIds python:[x['id'] for x in here.getMetaobjAttrs(meta_id) if x['type'] in meta_types+['*']];
+		stat1 python:{};
+		dummy0 python:[here.operator_setitem(stat1,x,[]) for x in attrIds+subObjectIds];
+		stat0 python:{};
+		dummy0 python:[here.operator_setitem(stat0,x,[]) for x in attrIds+subObjectIds]">
+
+	<tal:block tal:repeat="ob res"
+		><tal:block tal:on-error="structure python:'<!-- ERROR: statrec %s -->'%(ob.get_uid)" 
+				tal:define="global statrec python:[{'abs_url':'zcatalog_index' in here.getAbsoluteHome() and ob.getObject().absolute_url() or ob.absolute_url(),'titlealt':'zcatalog_index' in here.getAbsoluteHome() and ob.getObject().getTitlealt(request) or ob.getTitlealt(request)}]"
+			><tal:block tal:repeat="key attrIds" tal:on-error="nothing"
+				><tal:block tal:define="global value python:'zcatalog_index' in here.getAbsoluteHome() and ob.getObject().attr(key) or ob.attr(key)"
+					><tal:block tal:condition="python:value"><tal:block tal:define="global dummy0 python:here.operator_setitem(stat1,key,stat1[key]+statrec)"></tal:block></tal:block
+					><tal:block tal:condition="not:python:value"><tal:block tal:define="global dummy0 python:here.operator_setitem(stat0,key,stat0[key]+statrec)"></tal:block></tal:block
+				></tal:block
+			></tal:block
+			><tal:block tal:repeat="key subObjectIds"
+				><tal:block tal:define="global value python:'zcatalog_index' in here.getAbsoluteHome() and ob.getObject().getObjChildren(key,request) or ob.getObjChildren(key,request)"
+					><tal:block tal:condition="python:value"><tal:block tal:define="global dummy0 python:here.operator_setitem(stat1,key,stat1[key]+statrec)"></tal:block></tal:block
+					><tal:block tal:condition="not:python:value"><tal:block tal:define="global dummy0 python:here.operator_setitem(stat0,key,stat0[key]+statrec)"></tal:block></tal:block
+				></tal:block
+			></tal:block
+		></tal:block
+	></tal:block>
+
+	<legend class="navbar navbar-nav navbar-expand navbar-dark" 
+		tal:content="python:'%s (%s)'%(meta_id,here.display_type(request,meta_id))">the display-type</legend>
+	<table class="table">
+	<thead>
+	<tr>
+		<th class="meta_id">&nbsp;</th>
+		<th class="usage">Usage [%/Abs.]</th>
+		<th class="empty">Empty [%/Abs.]</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tal:block tal:repeat="key python:attrIds+subObjectIds">
+		<tr tal:define="global metaObjAttr python:here.getMetaobjAttr(meta_id,key)">
+			<td class="meta_id">
+				<tal:block tal:content="structure metaObjAttr/name">the name</tal:block>
+				(<tal:block tal:content="metaObjAttr/id">the id</tal:block>: <tal:block tal:content="metaObjAttr/type">the type</tal:block>)
+			</td>
+			<td class="usage">
+				<a tal:attributes="href python:'javascript:toggleElement(\'img_%s1\',\'ol_%s1\')'%(metaObjAttr['id'],metaObjAttr['id'])" style="text-decoration:none;">
+					<i tal:attributes="id python:'img_%s1'%metaObjAttr['id']" class="fas fa-caret-right toggle"></i>
+					<tal:block tal:on-error="string: 0"
+						tal:content="python:round(100*len(stat1[metaObjAttr['id']])/len(res))">perc</tal:block>% (<tal:block tal:content="python:len(stat1[metaObjAttr['id']])">abs</tal:block>)
+				</a>
+				<ol tal:attributes="id python:'ol_%s1'%metaObjAttr['id']" style="visibility:hidden;display:none;">
+					<li tal:repeat="ob python:stat1[metaObjAttr['id']]"><a tal:attributes="href python:'%s/manage_main'%ob['abs_url']" target="_blank" tal:content="python:ob['abs_url']">the url</a></li>
+				</ol>
+			</td>
+			<td class="empty">
+				<a tal:attributes="href python:'javascript:toggleElement(\'img_%s0\',\'ol_%s0\')'%(metaObjAttr['id'],metaObjAttr['id'])"  style="text-decoration:none;">
+					<i tal:attributes="id python:'img_%s1'%metaObjAttr['id']" class="fas fa-caret-right toggle"></i>
+					<tal:block tal:on-error="string: 0"
+						tal:content="python:100*len(stat0[metaObjAttr['id']])/len(res)">perc</tal:block>% (<tal:block tal:content="python:len(stat0[metaObjAttr['id']])">abs</tal:block>)
+				</a>
+				<ol tal:attributes="id python:'ol_%s0'%metaObjAttr['id']" style="visibility:hidden;display:none;">
+					<li tal:repeat="ob python:stat0[metaObjAttr['id']]"><a tal:attributes="href python:'%s/manage_main'%ob['abs_url']" target="_blank" tal:content="python:ob['abs_url']">the url</a></li>
+				</ol>
+			</td>
+		</tr>
+	</tal:block>
+	<tr>
+		<td>Total:</td>
+		<td><tal:block tal:content="python:len(res)">the total</tal:block></td>
+		<td>&nbsp;</td>
+	</tr>
+	</tbody>
+	</table>
+</form>
+
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+
+<script language="JavaScript">
+function toggleElement( sender, id) {
+	var speed = "normal";
+	var img = $('#'+sender);
+	var el = $('#'+id);
+	if ( el.css("display").toLowerCase()=="none") {
+		img.attr( { class: "fas fa-caret-down toggle", title: "-"});
+		el.css({'visibility':'visible','display':''});
+	}
+	else {
+		img.attr( { class: "fas fa-caret-right toggle", title: "+"});
+		el.css({'visibility':'hidden','display':'none'});
+	}
+}
+</script>
+<style>
+	.zmi.analyze form.card legend {
+		color:white;
+		background: #354f67;
+		padding-left:1rem;
+		height:42px;
+	}
+	table th.meta_id {
+		width:30%;
+	}
+	table th.usage {
+		width:45%;
+	}
+	table th.empty {
+		width:15%;
+	}
+	table td {
+		white-space: nowrap;
+		overflow:hidden;
+		text-overflow: ellipsis;
+	}
+</style>
+</body>
+</html>

@@ -1,0 +1,235 @@
+.navbar-container {
+	padding:0;
+}
+.navbar-header {
+	position:relative;
+	float:none;
+}
+.navbar-nav {
+	float:none;
+}
+.navbar-nav > li.first > a {
+	font-weight:bold;
+}
+.bs-docs-nav .navbar-nav > li > a {
+	color:#333!important;
+}
+.bs-docs-nav .navbar-nav > li.active > a {
+	text-decoration:underline!important;
+}
+#navbar-menu {
+	float:left;
+	position: absolute;
+	top: 4px;
+	right: 0px;
+}
+#navbar-menu button {
+	border-radius:0;
+	height: 36px;
+}
+#navbar-search.inactive {
+	width: 40px;
+	cursor:w-resize;
+}
+#navbar-search {
+	float:left;
+	position: absolute;
+	top: 4px;
+	right: 45px;
+	width: 200px;
+	height: 36px;
+	overflow:hidden;
+	padding: 0 !important;
+	margin: 0 !important;
+	border:1px solid #CCC;
+}
+#navbar-search.inactive .input-group-addon {
+	background-color:#FEFEFE;
+}
+#navbar-search .input-group-addon {
+	background-color:white;
+	border:0;
+}
+#navbar-search input {
+	background-color:#505859;
+	border:0!important;
+	box-shadow:none!important;
+	color:#FFF;
+	font-weight:bold;
+}
+.bs-docs-header {
+	padding:30px 30px 0 30px;
+	margin-bottom:20px;
+}
+.bs-docs-header h1 {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 28px;
+}
+.bs-docs-header p {
+	font-size: 16px;
+	padding-bottom:30px;
+}
+.bs-docs-footer {
+	margin-top:20px;
+}
+
+.bs-docs-sidebar h2.small-head {
+	padding-bottom:0;
+	margin-bottom:0;
+}
+.bs-docs-sidebar ul.bs-docs-sidenav {
+	padding:0;
+	margin:0;
+}
+
+.bs-docs-sidebar .nav > li > a {
+	color: #333;
+	text-decoration:underline;
+}
+@media (min-width: 768px) {
+	.col-md-9 .bs-docs-sidebar {
+		padding-left:0;
+	}
+}
+.col-md-3 .bs-docs-sidebar .back-to-top {
+	display:none;
+}
+.small-head {
+	color: #00AEE9;
+	line-height: 2;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+a {
+	color:#333;
+}
+a:hover {
+	color:#333;
+	text-decoration:underline!important;
+}
+
+/*----- Highlight (Search-Result) -----*/
+.highlight {
+	background-color: #fffccd;
+	-moz-border-radius: 3px; /* FF1+ */
+	-webkit-border-radius: 3px; /* Saf3-4 */
+	border-radius: 3px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	padding:1px;
+	margin:1px;
+}
+
+.ZMSTable.table {
+	border: 1px solid #CCC;
+}
+.ZMSTable.table caption {
+	background-color:#43C9D5;
+	color:#fff;
+	font-weight:bold;
+}
+.ZMSTable.table th {
+	background-color:#f8f8f8!important;
+}
+.ZMSTable.table td {
+	background-color:#fff!important;
+}
+
+.ZMSGraphic .graphic {
+	border:1px solid #aaa;
+	box-shadow: 6px 6px 3px #ccc;
+	-moz-box-shadow: 6px 6px 3px #ccc;
+	-webkit-box-shadow: 6px 6px 3px #ccc;
+	-khtml-box-shadow: 6px 6px 3px #ccc;
+}
+
+.ZMSGraphic .text {
+	margin-top:1em!important;
+	background-color:#fafafa;
+	padding:.5em 1em 0em 1em;
+	font-size:smaller;
+}
+
+.ZMSGraphic {
+	margin-bottom:2em!important;
+}
+
+.ZMSFile {
+	padding:10px;
+	margin:15px 0 30px 0;
+	background-color:#eee;
+	border:1px solid #aaa;
+	box-shadow: 6px 6px 3px #ccc;
+	-moz-box-shadow: 6px 6px 3px #ccc;
+	-webkit-box-shadow: 6px 6px 3px #ccc;
+	-khtml-box-shadow: 6px 6px 3px #ccc;
+}
+
+/*--------- div.zoomImg inserted by jQuery --------------*/
+div.zoomImg {
+	margin-top:-25px;
+	margin-right:-2px;
+	}
+
+#fancybox-overlay {
+	background: #000 !important;
+	opacity: 0.75 !important; /* standard: ff gt 1.5, opera, safari */
+	-ms-filter: "alpha(opacity=75)" !important; /* ie 8 */
+	filter: alpha(opacity=75) !important; /* ie lt 7 */
+	-khtml-opacity: 0.75 !important; /* safari 1.x */
+	-moz-opacity: 0.75 !important; /* ff lt 1.5, netscape */
+	}
+
+.ZMSTeaserContainer {
+	border-top: 1px solid #EEE;
+	border-right: 1px solid #EEE;
+	border-bottom: 1px solid #EEE;
+	border-left: 5px solid #00AEE9;
+	margin-bottom: 20px;
+}
+.ZMSTeaserElement {
+	padding-bottom:0.5em;
+}
+.ZMSTeaserElement .graphic {
+	float:left;
+}
+.ZMSTeaserElement .title {
+	color: #00AEE9;
+	font-weight:bold;
+	padding:4px 4px 1px 10px;
+}
+.ZMSTeaserElement .text {
+	padding:1px 4px 1px 10px;
+}
+
+.list .breadcrumb {
+	background:transparent;
+	padding:0;
+}
+
+.list a {
+	text-decoration:none;
+	font-weight:bold;
+}
+.list .line.gray {
+	background-color: #F7F7F7;
+	border-color: #DBDBDB;
+	border-style: solid;
+	border-width: 1px 0px;
+}
+.list .line {
+	position: relative;
+	min-height: 100px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.col-md-9 .back-to-top {
+	margin-left: 0;
+	padding-left: 0;
+	color: rgb(92, 127, 174);
+	display: inline-block;
+	padding: 2px 4px;
+	background: rgb(220, 235, 249);
+	float:right;
+}

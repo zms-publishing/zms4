@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[import os
+from Products.zms import _fileutil 
+
+def manage_exportZodbNative2LocalFS( self):
+  request = self.REQUEST
+  request.set('lang',request.get('lang',self.getPrimaryLanguage()))
+  zope_objects = {'DTML Method':'.dtml','Page Template':'.zpt','File':'','Image':'','Script (Python)':'.py'}
+  
+  def traverse(node,execute):
+    rtn = []
+    meta_type = node.meta_type
+    if meta_type in zope_objects.keys():
+      i = {}
+      i['node'] = node
+      i['status'] = []
+      if execute and '/'.join(node.getPhysicalPath()) in request.get('ids',[]):
+        url = node.absolute_url()
+        filepath = (request['path']+'/var'+url[url.find('/'+self.getHome().id+'/'):]+zope_objects[node.meta_type]).replace('\\','/')
+        _fileutil.exportObj(node,filepath)
+        i['status'].append('Done: '+filepath)
+      rtn.append(i)
+    if node.meta_type in ['Folder','ZMS','ZMSMetacmdProvider','ZMSMetamodelProvider','ZMSWorkflowProvider']:
+      for childNode in node.objectValues():
+        rtn.extend(traverse(childNode,execute))
+    return rtn
+  
+  execute = request.get('btn')=='execute'
+  t = traverse(self.getHome(),execute)
+  if execute:
+    return self.str_json([x['status'] for x in t if x['status']])
+    
+  html = ''
+  html += '<!DOCTYPE html>'
+  html += '<html lang="en">'
+  html += self.zmi_html_head(self,request)
+  html += """
+<script>
+  function btn_execute_click() {
+    $("input[name='ids:list']:checked").each( function() {
+        var v = $(this).attr("value");
+        var $td = $("td:last",$(this).parents("tr")[0]);
+        var p = {'btn':'execute','ids:list':v,'path':$("input[name=path]").val()};
+        $.ajax({
+          url:'manage_exportZodbNative2LocalFS',
+          data:p,
+          timeout:30000,
+          error: function (xhr, ajaxOptions, thrownError) {
+              $td.html(''
+                + getZMILangStr('CAPTION_ERROR')+'<hr/> '
+                + '<code>' + xhr.status + ': ' + thrownError + '</code>');
+            },
+          success:function(response) {
+              var l = eval('('+response+')');
+              $td.html(l.join('<br>'));
+            }
+        });
+      });
+    return false;
+  }
+</script>
+  """
+  html += '<body class="%s">'%(' '.join(['zmi',request['lang'],self.meta_id]))
+  html += self.zmi_body_header(self,request,options=[{'action':'#','label':'Export ZODB to LocalFS...'}])
+  html += '<div id="zmi-tab">'
+  html += self.zmi_breadcrumbs(self,request)
+  html += '<form class="form-horizontal" method="post" enctype="multipart/form-data">'
+  html += '<legend>Export ZODB to LocalFS</legend>'
+  
+  html += '' \
+    + '<div class="form-group row">' \
+    + '<label class="col-sm-2 control-label mandatory"><span>Path</span></label>' \
+    + '<div class="col-sm-10">' \
+    + '<input class="form-control" id="path" name="path" value="'+request.get('path',self.getINSTANCE_HOME())+'">' \
+    + '</div><!-- .col-sm-10 -->' \
+    + '</div><!-- .form-group -->' \
+    + '<div class="form-row">' \
+    + '<div class="controls save">' \
+    + '<button type="submit" name="btn" class="btn btn-secondary" value="%s">%s</button> '%(self.getZMILangStr('BTN_REFRESH'),self.getZMILangStr('BTN_REFRESH')) \
+    + '<button type="button" name="btn" class="btn btn-danger" value="return %s" onclick="btn_execute_click()">%s</button> '%(self.getZMILangStr('BTN_EXECUTE'),self.getZMILangStr('BTN_EXECUTE')) \
+    + '</div><!-- .controls.save -->' \
+    + '</div><!-- .form-row -->'
+  
+
+  html += '<table class="table">'
+  html += '<tr>'
+  html += '''<th>
+            <div class="btn-group">
+              <span class="btn btn-secondary" title="%s/%s" onclick="zmiToggleSelectionButtonClick(this)"><i class="fas fa-check-square"></i></span>
+            </div>
+          </th>'''%( self.getZMILangStr('BTN_SLCTALL'), self.getZMILangStr('BTN_SLCTNONE') )
+  html += '<th>Objekt</th>'
+  html += '<th>Status</th>'
+  html += '</tr>'
+  html += '\n'.join(['<tr><td align="center"><input type="checkbox" name="ids:list" value="%s" checked="checked"/></td><td><a href="%s/manage_main" target="_blank">%s%s</a> (%s)</td><td>%s</td></tr>'%(
+      '/'.join(x['node'].getPhysicalPath()),
+      '/'.join(x['node'].getPhysicalPath()),
+      '/'.join(x['node'].getPhysicalPath()),
+      zope_objects[x['node'].meta_type],
+      x['node'].meta_type,
+      '<br>'.join(x['status']),
+      ) for x in t])
+  html += '</table><!-- .table -->'
+  
+  # ---------------------------------
+  
+  html += '</form><!-- .form-horizontal -->'
+  html += '</div><!-- #zmi-tab -->'
+  html += self.zmi_body_footer(self,request)
+  html += '</body>'
+  html += '</html>'
+  
+  return html]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[icon-download text-danger]]></item>
+      <item key="id"><![CDATA[manage_exportZodbNative2LocalFS]]></item>
+      <item key="meta_type"><![CDATA[External Method]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[ZMS]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[Export ZODB to LocalFS]]></item>
+      <item key="revision"><![CDATA[0.0.0]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[ZMSAdministrator]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[Export ZODB to LocalFS]]></item>
+    </dictionary>
+  </item>
+</list>

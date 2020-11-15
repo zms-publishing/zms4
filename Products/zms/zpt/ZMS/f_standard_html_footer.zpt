@@ -1,0 +1,5 @@
+<tal:block tal:condition="python:request.get('op')=='print' or 'printversion' in request">
+	<tal:block tal:content="structure python:'</body><!-- .print -->'"></tal:block>
+</tal:block>
+<tal:block tal:condition="not:python:request.get('op')=='print' or 'printversion' in request" tal:content="structure python:here.standard_html_footer(here,request)">standard_html_footer</tal:block>
+<tal:block tal:content="structure python:'</html>'"></tal:block>

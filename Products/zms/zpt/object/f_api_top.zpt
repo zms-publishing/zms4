@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard; Std modules/Products/PythonScripts/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='preview_top')">
+<script>
+	function open_partner(sender,href) {
+		var elems = document.getElementsByClassName("zmi-top-active");
+		for (var i=elems.length-1;i>=0;i--) {
+			var elem=elems[i];
+			var classes=elem.className.split(" ");
+			var newClass = classes.splice(classes.indexOf("zmi-top-active"),1).join(" ");
+			elem.className=classes;
+		}
+		sender.className="zmi-top-active";
+		self.parent.partner.location.href = href;
+	}
+</script>
+<header class="navbar navbar-nav navbar-expand navbar-dark flex-row justify-content-between bd-navbar">
+	<tal:block tal:content="structure python:here.zmi_navbar_brand(here,request)">zmi_navbar_brand</tal:block>
+	<div class="text-right">
+		&nbsp;|&nbsp;<a tal:attributes="href python:'manage_main?lang=%s'%request['lang']" target="_parent">
+			<tal:block tal:content="python:'%s %s %s'%(here.getZMILangStr('BACK'),here.getZMILangStr('TO'),here.display_type(request))">back to display_type</tal:block>
+			<tal:block tal:condition="python:here.display_type(request)!=here.getTitlealt(request)" tal:content="python:': %s'%standard.string_maxlen(here.getTitlealt(request),25)">: titlealt</tal:block>
+		</a>
+		&nbsp;|&nbsp;<a class="zmi-top-active" href="javascript:;" tal:attributes="onclick python:'open_partner(this,\'%s/$ZMS_HOME/doc/index.html\')'%here.getDocumentElement().absolute_url()">
+			ZMS API
+		</a>
+		&nbsp;|&nbsp;<a href="javascript:;" tal:attributes="onclick python:'open_partner(this,\'http://docs.jquery.com\')'">
+			jQuery API
+		</a>
+		&nbsp;|&nbsp;<a href="javascript:;" tal:attributes="onclick python:'open_partner(this,\'http://getbootstrap.com\')'">
+			Bootstrap API
+		</a>&nbsp;&nbsp;
+	</div><!-- .pull-right -->
+</header>
+</body>
+</html>

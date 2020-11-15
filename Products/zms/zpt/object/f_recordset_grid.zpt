@@ -1,0 +1,42 @@
+<form class="form-horizontal" method="get">
+	<tal:block tal:define="qres request/res">
+		<tal:block tal:condition="python:len(qres)>0" tal:define="global
+				size python:len(qres);
+				pageSize python:10;
+				pageIndex python:request.get('pageIndex',0);
+				pageStart python:pageIndex*pageSize;
+				pageEnd python:min(pageStart+pageSize,size)">
+			<tal:block tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">zmi_pagination</tal:block>
+			<table class="table table-striped table-bordered">
+			<thead>
+			<tr>
+			<tal:block tal:repeat="grid_col options/grid_cols">
+				<th><tal:block tal:content="grid_col/label">the label</tal:block></th>
+			</tal:block>
+			</tr>
+			</thead>
+			<tbody>
+			<tal:block tal:repeat="pageIndex python:range(pageEnd-pageStart)">
+				<tal:block tal:define="global node python:qres[pageStart+pageIndex]">
+					<tr valign="top">
+						<tal:block tal:repeat="grid_col options/grid_cols">
+							<td class="data" tal:define="global data python:node.get(grid_col['key'])">
+								<tal:block tal:condition="python:data is not None">
+									<tal:block tal:condition="python:grid_col['type']=='datetime'" tal:content="python:here.getLangFmtDate(data,'SHORTDATETIME_FMT')">the data</tal:block>
+									<tal:block tal:condition="python:grid_col['type']=='object'">
+										<tal:block tal:content="structure python:data.zmi_breadcrumbs()">zmi_breadcrumbs</tal:block>
+										<div class="zmi-container"><div class="zmi-item"><div class="center"><tal:block tal:content="structure python:data.renderShort(request)">the data</tal:block></div></div></div>
+									</tal:block>
+									<tal:block tal:condition="python:grid_col['type'] not in ['datetime','object']" tal:content="python:data">the data</tal:block>
+								</tal:block>
+							</td>
+						</tal:block>
+					</tr>
+				</tal:block>
+			</tal:block>
+			</tbody>
+			</table>
+			<tal:block tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">zmi_pagination</tal:block>
+		</tal:block>
+	</tal:block>
+</form>

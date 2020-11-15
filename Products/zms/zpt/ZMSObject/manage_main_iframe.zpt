@@ -1,0 +1,57 @@
+<tal:block tal:define="global
+	dummy0 python:here.f_standard_html_request(here,request);
+	lurl python:request['URL'].replace('?','/').split('/');
+	bnobody python:int(request.get('ZMS_NO_BODY','')!='');
+  bcontainer python:( 'e' in [x['id'] for x in here.getMetaobjAttrs(here.meta_id,types=['*'])] or not here.meta_id in here.getMetaobjIds()) and ('manage' in lurl or 'manage_main' in lurl or 'manage_workspace' in lurl or 'manage_copyObjects' in lurl or 'manage_cutObjects' in lurl)"
+><tal:block tal:condition="bcontainer" tal:content="structure python:here.manage_container(here,request)">manage_container</tal:block
+><tal:block tal:condition="not:bcontainer"
+><!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<script tal:condition="not:bnobody">
+	$(function(){
+			if (self.location.href.indexOf('manage_tabs_message=') > 0) {
+				if (parent.$.fancybox) {
+					parent.$.fancybox.close();
+				}
+				parent.location.reload();
+			}
+		});
+</script>
+<style type="text/css">
+	#zmi-header {display:none;}
+	.main-nav.nav.nav-tabs {display:none;}
+	ul.breadcrumb {display:none;}
+	form.form-horizontal {margin:0;}
+	#zmi-footer {display:none;}
+</style>
+<body tal:attributes="class python:here.zmi_body_class(id='properties')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<tal:block tal:condition="python:here.getType()=='ZMSRecordSet'" tal:content="structure python:here.metaobj_recordset_main(meta_id=request.get('ZMS_INSERT',here.meta_id))">
+	metaobj_recordset_main
+</tal:block>
+
+<tal:block tal:condition="python:not here.getType()=='ZMSRecordSet'" tal:define="global dummy0 python:request.set('fmName',request.get('fmName','form0'))">
+<form class="form-horizontal" id="form0" tal:attributes="name request/fmName" action="manage_changeProperties" method="post" enctype="multipart/form-data">
+	<input type="hidden" id="lang" name="lang" tal:attributes="value python:request['lang']" />
+	<input type="hidden" id="preview" name="preview" tal:attributes="value python:request['preview']" />
+	<input type="hidden" name="form_id" tal:attributes="value python:request['ZMI_TIME']" />
+	<input type="hidden" id="id_prefix" name="id_prefix" value="e" />
+	<input type="hidden" id="_sort_id" name="_sort_id:int" value="0" />
+	<input type="hidden" id="custom" name="custom" value="" />
+	<tal:block tal:define="global dummy0 python:here.initObjChildren(request)"></tal:block>
+	<tal:block tal:content="structure python:here.obj_input_fields(action='Save',meta_id=request.get('ZMS_INSERT',here.meta_id))">
+		the input-fields
+	</tal:block>
+</form>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>
+</tal:block>
+</tal:block>

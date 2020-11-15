@@ -1,0 +1,46 @@
+{
+	"folders": [
+		{
+			"path": "../"
+		},
+//		{
+//			"path": "/home/dev/workspace/ZMS3"
+//		},
+//		{
+//			"path": "/home/dev/workspace/zopefoundation/Zope"
+//		}
+	],
+	"settings": {
+		"python.pythonPath": "/home/zope/vpy37/bin/",
+		"window.zoomLevel": 0,
+		"git.ignoreMissingGitWarning": true,
+		"editor.minimap.enabled": false,
+		"editor.renderWhitespace": "all",
+		"editor.renderControlCharacters": false,
+		"team.showWelcomeMessage": false,
+		"svn.enabled":true,
+		"svn.default.encoding":"utf-8",
+		"svn.enableProposedApi": "product",
+		"svn.defaultCheckoutDirectory": "https://zmslabs.org/svn/zmslabs/ZMS/branches/zms4/",
+		"workbench.iconTheme": "vs-minimal",
+		"files.associations": {
+			"*.zpt": "html",
+			"*.zcml": "xml"
+		},
+		"scm.alwaysShowProviders": true,
+		"scm.alwaysShowActions": true,
+		"svn.autorefresh": false,
+		"files.exclude": {
+			"*.pyc": true
+		},
+		"python.workspaceSymbols.exclusionPatterns": [
+			"**/site-packages/**",
+			"*.pyc"
+		],
+		"files.eol": "\n",
+		"files.autoSave": "afterDelay",
+		"workbench.colorTheme": "Visual Studio Light",
+		"python.linting.enabled": true
+	},
+	"remoteAuthority": "wsl+Ubuntu-18.04"
+}

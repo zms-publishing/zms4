@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<dictionary>
+  <item key="activities" type="list">
+    <list>
+      <item><![CDATA[AC_CHANGED]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="icon"></item>
+          <item key="icon_clazz"><![CDATA[fas fa-pencil-alt text-primary wf-icon]]></item>
+          <item key="id"><![CDATA[AC_CHANGED]]></item>
+          <item key="name"><![CDATA[Changed]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[AC_REQUESTED]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="icon"></item>
+          <item key="icon_clazz"><![CDATA[far fa-bell text-primary wf-icon]]></item>
+          <item key="id"><![CDATA[AC_REQUESTED]]></item>
+          <item key="name"><![CDATA[Commit requested]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[AC_REJECTED]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="icon"></item>
+          <item key="icon_clazz"><![CDATA[far fa-thumbs-down text-danger wf-icon]]></item>
+          <item key="id"><![CDATA[AC_REJECTED]]></item>
+          <item key="name"><![CDATA[Commit rejected]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[AC_COMMITTED]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="icon"></item>
+          <item key="icon_clazz"><![CDATA[far fa-thumbs-up text-success wf-icon]]></item>
+          <item key="id"><![CDATA[AC_COMMITTED]]></item>
+          <item key="name"><![CDATA[Committed]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[AC_ROLLEDBACK]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="icon"></item>
+          <item key="icon_clazz"><![CDATA[icon-reply text-danger wf-icon]]></item>
+          <item key="id"><![CDATA[AC_ROLLEDBACK]]></item>
+          <item key="name"><![CDATA[Rolled back]]></item>
+        </dictionary>
+      </item>
+    </list>
+  </item>
+  <item key="transitions" type="list">
+    <list>
+      <item><![CDATA[TR_ENTER]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_ENTER]]></item>
+          <item key="name"><![CDATA[Enter Workflow]]></item>
+          <item key="performer" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_CHANGED]]></item>
+            </list>
+          </item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_EXPRESSCOMMIT]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_CHANGED]]></item>
+              <item><![CDATA[AC_REQUESTED]]></item>
+              <item><![CDATA[AC_REJECTED]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_EXPRESSCOMMIT]]></item>
+          <item key="name"><![CDATA[Express commit!]]></item>
+          <item key="ob"><![CDATA[<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:define="global zmscontext options/zmscontext" tal:content="structure python:zmscontext.zmi_html_head(zmscontext,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='transition')">
+<tal:block tal:content="structure python:zmscontext.zmi_body_header(zmscontext,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:zmscontext.zmi_breadcrumbs(zmscontext,request)">zmi_breadcrumbs</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  F o r m
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')==''">
+<form class="form-horizontal" name="form0" method="post">
+	<input type="hidden" name="preview" value="preview"/>
+	<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+	<input type="hidden" name="custom" tal:attributes="value request/custom"/>
+	<legend tal:content="request/custom">the headline</legend>
+	<div class="control-group">
+	<label class="control-label mandatory" for="comment"><span>Comment</span></label>
+		<div class="controls"><input type="text" name="comment" class="form-control form-control-sm" /><br /></div><!-- .controls -->
+	</div><!-- .control-group -->
+	<div class="control-group">
+		<div class="controls">
+			<button name="btn" class="btn btn-primary" value="BTN_SEND" tal:content="python:here.getZMILangStr('BTN_SEND')">Send</button>
+			<button name="btn" class="btn" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+		</div><!-- .controls -->
+	</div><!-- .control-group -->
+</form>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  E x e c u t e
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_SEND'">
+	<tal:block tal:define="global
+			dummy0 python:zmscontext.setObjProperty( 'change_dt' ,standard.getDateTime( context.ZopeTime()) ,zmscontext.get('lang','ger'));
+			dummy0 python:zmscontext.commitObj(request);
+			message python:'Changes were express-committed.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  C a n c e l
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_CANCEL'">
+	<tal:block tal:define="global
+			message python:'Operation cancelled.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:zmscontext.zmi_body_footer(zmscontext,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+              <item><![CDATA[ZMSEditor]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_COMMITTED]]></item>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Page Template]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_REQUEST]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_CHANGED]]></item>
+              <item><![CDATA[AC_REJECTED]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_REQUEST]]></item>
+          <item key="name"><![CDATA[Request commit]]></item>
+          <item key="ob"><![CDATA[<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:define="global zmscontext options/zmscontext" tal:content="structure python:zmscontext.zmi_html_head(zmscontext,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='transition')">
+<tal:block tal:content="structure python:zmscontext.zmi_body_header(zmscontext,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:zmscontext.zmi_breadcrumbs(zmscontext,request)">zmi_breadcrumbs</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  F o r m
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')==''">
+<form class="form-horizontal" name="form0" method="post">
+	<input type="hidden" name="preview" value="preview"/>
+	<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+	<input type="hidden" name="custom" tal:attributes="value request/custom"/>
+	<legend tal:content="request/custom">the headline</legend>
+	<div class="control-group">
+	<label class="control-label mandatory" for="comment"><span>Comment</span></label>
+		<div class="controls"><input type="text" name="comment" class="form-control form-control-sm" /><br /></div><!-- .controls -->
+	</div><!-- .control-group -->
+	<div class="control-group">
+		<div class="controls">
+			<button name="btn" class="btn btn-primary" value="BTN_SEND" tal:content="python:here.getZMILangStr('BTN_SEND')">Send</button>
+			<button name="btn" class="btn" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+		</div><!-- .controls -->
+	</div><!-- .control-group -->
+</form>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  E x e c u t e
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_SEND'">
+	<tal:block tal:define="
+			global mto python:zmscontext.getRecipientsByRole(['ZMSEditor'],request);
+			global msubject python:'[ZMS-Workflow::%s - %s]: Request for committing my changes'%(zmscontext.getDocumentElement().getTitlealt(request),zmscontext.getTitlealt(request));
+			global mbody python:[];
+			dummy0 python:mbody.append(''
+				+ 'Request for committing my changes:\n'
+				+ '%s: \t'%zmscontext.display_type(request)
+				+ '>> '.join([x.getTitlealt(request) for x in zmscontext.breadcrumbs_obj_path()]) + '\n'
+				+ 'URL: \t%s/manage\n\n'%zmscontext.absolute_url()
+			)">
+	</tal:block>
+	<tal:block tal:repeat="childNode python:[x for x in [zmscontext]+zmscontext.getChildNodes(request) if x.isObjModified(request)]">
+		<tal:block tal:define="global
+				dummy0 python:mbody.append(''
+					+ '- %s '%(zmscontext.display_type(request))
+					+ '[' + ','.join([here.getZMILangStr(x) for x in ['STATE_NEW','STATE_MODIFIED','STATE_DELETED'] if childNode.inObjStates(x,request)]) + '] '
+					+ '%s '%(childNode.getLangFmtDate(childNode.attr('change_dt')))
+					+ '%s %s '%(childNode.getZMILangStr('BY'),childNode.attr('change_uid'))
+					+ '\n'
+				)">
+		</tal:block>
+	</tal:block>
+	<tal:block tal:define="global
+			dummy0 python:mbody.append(''
+				+ 'Comment by %s:\n'%request['AUTHENTICATED_USER'].getId()
+				+ '========================\n'
+				+ '%s\n'%request.get('work_desc')
+				+ '========================\n\n\n'
+				+ 'With best regards,\n'
+				+ '%s\n'%request['AUTHENTICATED_USER'].getId()
+				+ '------------------------\n'
+				+ 'Message generated by ZMS\n'
+			);
+			dummy0 python:zmscontext.sendMail(mto, msubject, ''.join(mbody), request);
+			message python:'Sent request for committing your changes.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_wfTransitionFinalize',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  C a n c e l
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_CANCEL'">
+	<tal:block tal:define="global
+			message python:'Operation cancelled.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:zmscontext.zmi_body_footer(zmscontext,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+              <item><![CDATA[ZMSAuthor]]></item>
+              <item><![CDATA[ZMSEditor]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_REQUESTED]]></item>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Page Template]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_REJECT]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_REQUESTED]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_REJECT]]></item>
+          <item key="name"><![CDATA[Reject commit]]></item>
+          <item key="ob"><![CDATA[<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:define="global zmscontext options/zmscontext" tal:content="structure python:zmscontext.zmi_html_head(zmscontext,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='transition')">
+<tal:block tal:content="structure python:zmscontext.zmi_body_header(zmscontext,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:zmscontext.zmi_breadcrumbs(zmscontext,request)">zmi_breadcrumbs</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  F o r m
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')==''">
+<form class="form-horizontal" name="form0" method="post">
+	<input type="hidden" name="preview" value="preview"/>
+	<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+	<input type="hidden" name="custom" tal:attributes="value request/custom"/>
+	<legend tal:content="request/custom">the headline</legend>
+	<div class="control-group">
+	<label class="control-label mandatory" for="comment"><span>Comment</span></label>
+		<div class="controls"><input type="text" name="comment" class="form-control form-control-sm" /><br /></div><!-- .controls -->
+	</div><!-- .control-group -->
+	<div class="control-group">
+		<div class="controls">
+			<button name="btn" class="btn btn-primary" value="BTN_SEND" tal:content="python:here.getZMILangStr('BTN_SEND')">Send</button>
+			<button name="btn" class="btn" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+		</div><!-- .controls -->
+	</div><!-- .control-group -->
+</form>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  E x e c u t e
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_SEND'">
+	<tal:block tal:define="
+			global mto python:zmscontext.getRecipientsByRole(['ZMSEditor'],request);
+			global msubject python:'[ZMS-Workflow::%s - %s]: Committing your changes was rejected'%(zmscontext.getDocumentElement().getTitlealt(request),zmscontext.getTitlealt(request));
+			global mbody python:[];
+			dummy0 python:mbody.append(''
+				+ 'Committing your changes was rejected.\n'
+				+ '%s: \t'%zmscontext.display_type(request)
+				+ '>> '.join([x.getTitlealt(request) for x in zmscontext.breadcrumbs_obj_path()]) + '\n'
+				+ 'URL: \t%s/manage\n\n'%zmscontext.absolute_url()
+			)">
+	</tal:block>
+	<tal:block tal:repeat="childNode python:[x for x in [zmscontext]+zmscontext.getChildNodes(request) if x.isObjModified(request)]">
+		<tal:block tal:define="global
+				dummy0 python:mbody.append(''
+					+ '- %s '%(zmscontext.display_type(request))
+					+ '[' + ','.join([here.getZMILangStr(x) for x in ['STATE_NEW','STATE_MODIFIED','STATE_DELETED'] if childNode.inObjStates(x,request)]) + '] '
+					+ '%s '%(childNode.getLangFmtDate(childNode.attr('change_dt')))
+					+ '%s %s '%(childNode.getZMILangStr('BY'),childNode.attr('change_uid'))
+					+ '\n'
+				)">
+		</tal:block>
+	</tal:block>
+	<tal:block tal:define="global
+			dummy0 python:mbody.append(''
+				+ 'Comment by %s:\n'%request['AUTHENTICATED_USER'].getId()
+				+ '========================\n'
+				+ '%s\n'%request.get('work_desc')
+				+ '========================\n\n\n'
+				+ 'With best regards,\n'
+				+ '%s\n'%request['AUTHENTICATED_USER'].getId()
+				+ '------------------------\n'
+				+ 'Message generated by ZMS\n'
+			);
+			dummy0 python:zmscontext.sendMail(mto, msubject, ''.join(mbody), request);
+			message python:'Changes have been rejected.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_wfTransitionFinalize',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  C a n c e l
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_CANCEL'">
+	<tal:block tal:define="global
+			message python:'Operation cancelled.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:zmscontext.zmi_body_footer(zmscontext,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+              <item><![CDATA[ZMSEditor]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_REJECTED]]></item>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Page Template]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_COMMIT]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_CHANGED]]></item>
+              <item><![CDATA[AC_REQUESTED]]></item>
+              <item><![CDATA[AC_REJECTED]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_COMMIT]]></item>
+          <item key="name"><![CDATA[Commit]]></item>
+          <item key="ob"><![CDATA[## Script (Python) "TR_COMMIT"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=zmscontext
+##title=Commit
+##
+from Products.zms import standard
+request = zmscontext.REQUEST
+
+##### Notification ####
+# Recipient
+name = zmscontext.attr('work_uid')
+mto = zmscontext.getRecipientWf(request)
+# Subject
+msubject = '[ZMS::%s]: Your changes were committed'%zmscontext.getDocumentElement().getTitle(request)
+# Body
+mbody = []
+mbody.append('Your changes were committed.\n')
+mbody.append('\nWith best regards\n')
+mbody.append('%s\n'%request['AUTHENTICATED_USER'].getId())
+mbody.append('------------------------\n')
+mbody.append('Message generated by ZMS\n')
+# Send notification via MailHost
+zmscontext.sendMail(mto, msubject, ''.join(mbody), request)
+
+##### Commit ####
+zmscontext.setObjProperty( 'change_dt' ,standard.getDateTime( context.ZopeTime()) ,zmscontext.get('lang','ger'))
+zmscontext.commitObj(request)
+
+# Return with message
+message = 'Changes were committed.'
+return request.RESPONSE.redirect(zmscontext.url_append_params('manage_wfTransitionFinalize',{
+    'lang':request['lang'],
+    'custom': request['custom'],
+    'manage_tabs_message':message}))
+]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+              <item><![CDATA[ZMSEditor]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_COMMITTED]]></item>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Script (Python)]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_ROLLBACK]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_CHANGED]]></item>
+              <item><![CDATA[AC_REQUESTED]]></item>
+              <item><![CDATA[AC_REJECTED]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_ROLLBACK]]></item>
+          <item key="name"><![CDATA[Rollback]]></item>
+          <item key="ob"><![CDATA[## Script (Python) "TR_ROLLBACK"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=zmscontext
+##title=Rollback
+##
+request = zmscontext.REQUEST
+
+##### Notification ####
+# Recipient
+name = zmscontext.attr('work_uid')
+mto = zmscontext.getRecipientWf(request)
+# Subject
+msubject = '[ZMS::%s]: Your changes were rolled back'%zmscontext.getDocumentElement().getTitle(request)
+# Body
+mbody = []
+mbody.append('Your changes were rolled back.\n')
+mbody.append('\nWith best regards\n')
+mbody.append('%s\n'%request['AUTHENTICATED_USER'].getId())
+mbody.append('------------------------\n')
+mbody.append('Message generated by ZMS\n')
+# Send notification via MailHost
+zmscontext.sendMail(mto, msubject, ''.join(mbody), request)
+
+##### Rollback ####
+zmscontext.rollbackObj(request)
+
+# Return with message
+message = 'Changes were rolled back.'
+return request.RESPONSE.redirect(zmscontext.url_append_params('manage_wfTransitionFinalize',{
+    'lang':request['lang'],
+    'custom': request['custom'],
+    'manage_tabs_message':message}))
+]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+              <item><![CDATA[ZMSAuthor]]></item>
+              <item><![CDATA[ZMSEditor]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+              <item><![CDATA[AC_ROLLEDBACK]]></item>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Script (Python)]]></item>
+        </dictionary>
+      </item>
+      <item><![CDATA[TR_LEAVE]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+              <item><![CDATA[AC_COMMITTED]]></item>
+              <item><![CDATA[AC_ROLLEDBACK]]></item>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[TR_LEAVE]]></item>
+          <item key="name"><![CDATA[Leave Workflow]]></item>
+          <item key="performer" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+            </list>
+          </item>
+        </dictionary>
+      </item>
+      <item><![CDATA[createMasterVersion]]></item>
+      <item type="dictionary">
+        <dictionary>
+          <item key="from" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="icon_clazz"></item>
+          <item key="id"><![CDATA[createMasterVersion]]></item>
+          <item key="name"><![CDATA[Create Master Version]]></item>
+          <item key="ob"><![CDATA[<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:define="global zmscontext options/zmscontext" tal:content="structure python:zmscontext.zmi_html_head(zmscontext,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='transition')">
+<tal:block tal:content="structure python:zmscontext.zmi_body_header(zmscontext,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:zmscontext.zmi_breadcrumbs(zmscontext,request)">zmi_breadcrumbs</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  F o r m
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')==''">
+<form class="form-horizontal" name="form0" method="post">
+	<input type="hidden" name="preview" value="preview"/>
+	<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+	<input type="hidden" name="custom" tal:attributes="value request/custom"/>
+	<legend tal:content="request/custom">the headline</legend>
+	<div class="control-group">
+	<label class="control-label mandatory" for="version_nr"><span>Master-Version</span></label>
+		<div class="controls"><input type="text" name="version_nr" tal:attributes="value python:'%i.*.*'%(zmscontext.attr('master_version')+1)" class="form-control form-control-sm" /><br /></div><!-- .controls -->
+	</div><!-- .control-group -->
+	<div class="control-group">
+		<div class="controls">
+			<button name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+			<button name="btn" class="btn" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
+		</div><!-- .controls -->
+	</div><!-- .control-group -->
+</form>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  E x e c u t e
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_SAVE'">
+	<tal:block tal:define="global
+			dummy0 python:zmscontext.tagObjVersions(zmscontext.attr('master_version')+1,request);
+			message python:'Created Master Version %s.*.* .'%zmscontext.attr('master_version');
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))"
+		tal:on-error="python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':'ERROR: New Master Version can not be created.'}))">			>
+	</tal:block>
+</tal:block>
+
+<!-- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+     +-  C a n c e l
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -->
+<tal:block tal:condition="python:request.get('btn','')=='BTN_CANCEL'">
+	<tal:block tal:define="global
+			message python:'Operation cancelled.';
+			dummy0 python:request.RESPONSE.redirect(here.url_append_params('manage_main',{'lang':request['lang'],'custom':request['custom'],'manage_tabs_message':message}))">
+	</tal:block>
+</tal:block>
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:zmscontext.zmi_body_footer(zmscontext,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+          </item>
+          <item key="performer" type="list">
+            <list>
+              <item><![CDATA[ZMSAdministrator]]></item>
+            </list>
+          </item>
+          <item key="to" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="type"><![CDATA[Page Template]]></item>
+        </dictionary>
+      </item>
+    </list>
+  </item>
+</dictionary>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+  <item key="data"><![CDATA[<!DOCTYPE html>
+<html lang="en">
+<tal:block tal:replace="nothing">
+################################################################################
+2013-07-29 [zmsdev] zpt reimplementation 
+2011-09-19 [zmsdev] applied fix 
+2011-09-16 [zmsdev] applied fix 
+2011-07-06 [fhoffmann] SESSION based lang settings
+2011-06-09 [fhoffmann] Save Automatic Pre-Translation
+2011-06-07 [fhoffmann] Google Translator Element added
+2011-04-11 [zmsdev] Replaced fancybox by jquery ui dialog.
+2011-28-01 [fhoffmann] Revised for fancybox transparency css
+2011-21-01 [fhoffmann] Revised for maximize css
+2011-01-17 [zmsdev] Revised table-structure: one row per object
+2010-12-02 [zmsdev] Initial revision
+################################################################################
+</tal:block>
+<tal:block tal:define="global zmscontext here" tal:content="structure python:zmscontext.zmi_html_head(zmscontext,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='translate')">
+<tal:block tal:content="structure python:zmscontext.zmi_body_header(zmscontext,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:zmscontext.zmi_breadcrumbs(zmscontext,request)">zmi_breadcrumbs</tal:block>
+
+<style type="text/css">
+.zmi-translate-left {
+	padding:4px;
+	background-color:#FFFFE8;
+}
+.zmi-translate-left .zmi-translate-element {
+	margin:5px 10px 5px 0px;
+	border: 1px solid darkgreen;
+}
+.zmi-translate-left .zmi-translate-element-id {
+	color:white;
+	background-color: darkgreen;
+}
+.zmi-translate-right {
+	padding:4px;
+	background-color:#FFFFFF;
+}
+.zmi-translate-right .zmi-translate-element {
+	margin:5px 10px 5px 0px;
+	border: 1px solid red;
+}
+.zmi-translate-right .zmi-translate-element-id {
+	color:white;
+	background-color: red;
+}
+.zmiRenderShort {
+	width:350px!important;
+}
+.zmiRenderShort {
+	width:350px!important;
+}
+body.maximized .zmiRenderShort {
+	width:auto !important;
+}
+.ui-widget-overlay {
+	opacity: 0.2;
+}
+</style>
+
+<script>
+
+function save(sender) {
+	var $container_div = $($(sender).parents("div")[0]);
+	var $rendershort_div = $("div.zmiRenderShort div.contentEditable",$container_div);
+	var id = $rendershort_div.attr("id");
+	id = id.substr(id.indexOf("_")+1);
+	id = id.substr(0,id.lastIndexOf("_"));
+	var lang = $rendershort_div.attr("id");
+	lang = lang.substr(lang.lastIndexOf("_")+1);
+	var html = $rendershort_div.html();
+	var text = html;
+	text = text.replace(/<font(.*?)>/gi,'');
+	text = text.replace(/<\/font(.*?)>/gi,'');
+	// Handle start-tag.
+	var startTag = text.split(">")[0].toLowerCase();
+	startTag = startTag.substr(startTag.indexOf("<")+1);
+	if (startTag.indexOf(" ")>0) {
+		startTag = startTag.substr(0,startTag.indexOf(" "));
+	}
+	var sre = '<'+startTag+'(.*?)>((.|\n|\r|\t)*?)<\/'+startTag+'(.*?)>';
+	var re = new RegExp(sre,'gi');
+	text = text.replace(re,'$2');
+	text = text.replace(/<span class=\"unicode\">(.*?)<\/span>/g,'');
+	// Handle sub-tag.
+	var subTag = text.split(">")[0].toLowerCase();
+	subTag = subTag.substr(subTag.indexOf("<")+1);
+	if (subTag.indexOf(" ")>0) {
+		startTag = subTag.substr(0,subTag.indexOf(" "));
+	}
+	if (subTag == 'br') {
+		re = new RegExp('<'+subTag+'>','gi');
+		text = text.replace(re,'\n');
+	}
+	else {
+		re = new RegExp('<'+subTag+'(.*?)>','gi');
+		text = text.replace(re,'');
+		re = new RegExp('<\/'+subTag+'>','gi');
+		text = text.replace(re,'\n');
+	}
+	if (confirm("Save Automatic Pre-Translation?\n\n"+text)) {
+		$container_div.addClass('zmiTeaserColor');
+		var params = {};
+		params['lang'] = lang;
+		params['text_'+lang] = text;
+		$.post(id+'/manage_changeProperties',params,function(data){
+			$container_div.removeClass('zmiTeaserColor');
+		},'html');
+	}
+}
+</script>
+
+<tal:block tal:define="global
+		lang_options python:{'left':here.getLangTree(here.getDCCoverage(request)[len('global.'):]),'right':here.getLangTree(here.getDCCoverage(request)[len('global.'):])}">
+	<tal:block tal:condition="python:request.SESSION.get('lang1','')==''">
+		<tal:block tal:define="global
+				dummy0 python:request.SESSION.set('lang1',request.get('lang1',lang_options['left'][0][0]));
+				dummy0 python:request.set('lang1',request.SESSION.get('lang1'))">
+		</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request.get('lang1','')==''">
+		<tal:block tal:define="global dummy0 python:request.set('lang1',request.get('lang1',lang_options['left'][0][0]))"></tal:block>
+	</tal:block>
+	<tal:block tal:define="global dummy0 python:request.SESSION.set('lang1',request.SESSION.get('lang1'))"></tal:block>
+	<tal:block tal:condition="python:request.SESSION.get('lang2','')==''">
+		<tal:block tal:define="global
+				dummy0 python:request.SESSION.set('lang2',request.get('lang2',lang_options['right'][0][0]));
+				dummy0 python:request.set('lang2',request.SESSION.get('lang2'))">
+		</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request.get('lang2','')==''">
+		<tal:block tal:define="global dummy0 python:request.set('lang2',request.SESSION.get('lang2',lang_options['right'][0][0]))"></tal:block>
+	</tal:block>
+	<tal:block tal:define="global dummy0 python:request.SESSION.set('lang2',request.get('lang2'))"></tal:block>
+	<tal:block tal:define="global 
+		dummy0 python:request.set('lang1_bk',request['lang1']);
+		dummy0 python:request.set('lang2_bk',request['lang2'])"></tal:block>
+</tal:block>
+
+<form name="form0" method="get">
+<legend class="well"><a tal:attributes="href python:'%s?lang=%s'%(request['URL'],request['lang'])">Translate</a></legend>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr valign="top">
+	<tal:block tal:repeat="si python:['left','right']">
+		<tal:block tal:define="global lang_req_key python:{'left':'lang1','right':'lang2'}[si]">
+			<td tal:attributes="class python:'zmi-translate-%s'%si; translate python:['','translate'][int(si!='left')]; notranslate python:['','notranslate'][int(si=='left')]" width="50%">
+				<select class="notranslate" tal:attributes="name lang_req_key" onchange="$(this.form).submit();">
+				<tal:block tal:repeat="option python:lang_options[si]">
+					<option tal:attributes="value python:option[0]; selected python:['','selected'][int(request[lang_req_key]==option[0])]" tal:content="python:option[1]['label']">the label</option>
+				</tal:block>
+				</select>
+				<div tal:attributes="id python:here.id" class="zmi-translate-element center" tal:define="global 
+						dummy0 python:request.set(lang_req_key+'_bk',request.get(lang_req_key));
+						dummy0 python:request.set('lang',request.get(lang_req_key))">
+					<span class="zmi-translate-element-id notranslate" tal:content="python:here.id">the id</span>
+					<div class="zmiRenderShort" tal:attributes="id python:'contentEditable_%s_%s'%(here.id,request.get('lang'))">
+						<h1 tal:content="python:here.getTitle(request)">the title</h1>
+						<small tal:content="python:here.getDCDescription(request)">the description</small>
+					</div><!-- .zmiRenderShort -->
+				</div>
+			</td>
+		</tal:block>
+	</tal:block>
+</tr>
+<tr valign="top" tal:repeat="childNode python:[x for x in here.getObjChildren('e',request) if x.isPageElement()]">
+	<tal:block tal:repeat="si python:['left','right']">
+		<tal:block tal:define="global lang_req_key python:{'left':'lang1','right':'lang2'}[si]">
+			<td tal:attributes="class python:'zmi-translate-%s'%si; translate python:['','translate'][int(si!='left')]; notranslate python:['','notranslate'][int(si=='left')]" width="50%">
+				<div tal:attributes="id python:childNode.id" class="zmi-translate-element center" tal:define="global
+						dummy0 python:request.set(lang_req_key+'_bk',request.get(lang_req_key));
+						dummy0 python:request.set('lang',request.get(lang_req_key))">
+					<span class="zmi-translate-element-id notranslate" tal:content="python:childNode.id">the id</span>
+					<div class="zmiRenderShort" tal:attributes="id python:'contentEditable_%s_%s'%(childNode.id,request.get('lang'))">
+						<tal:block tal:content="structure python:childNode.renderShort(request)">the body-content</tal:block>
+					</div><!-- .zmiRenderShort -->
+				</div>
+			</td>
+		</tal:block>
+	</tal:block>
+</tr>
+</table>
+</form>
+
+
+
+<!-- Google Translate Element -->
+<div id="google_translate_element" style="display:block"></div><script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: "de"}, "google_translate_element");
+};</script>
+<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- /Google Translate Element -->
+
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:zmscontext.zmi_body_footer(zmscontext,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+  </item>
+  <item key="description"/>
+  <item key="execution" type="int">0</item>
+  <item key="icon_clazz"><![CDATA[icon-globe text-primary]]></item>
+  <item key="id"><![CDATA[manage_translate]]></item>
+  <item key="meta_type"><![CDATA[Page Template]]></item>
+  <item key="meta_types" type="list">
+    <list>
+      <item><![CDATA[ZMSDocument]]></item>
+      <item><![CDATA[ZMSFolder]]></item>
+      <item><![CDATA[ZMS]]></item>
+    </list>
+  </item>
+  <item key="name"><![CDATA[Translate...]]></item>
+  <item key="roles" type="list">
+    <list>
+      <item><![CDATA[ZMSAdministrator]]></item>
+      <item><![CDATA[ZMSAuthor]]></item>
+      <item><![CDATA[ZMSEditor]]></item>
+    </list>
+  </item>
+</dictionary>

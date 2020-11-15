@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="custom"/>
+      <item key="data"><![CDATA[request = container.REQUEST
+RESPONSE =  request.RESPONSE
+lang = request['lang']
+
+new_active = 1
+
+ids = request.get('ids',[])
+target = context.getSelf(context.PAGES)
+for ob in target.getChildNodes(request):
+  if ob.id in ids:
+    ob.setObjStateModified(request)
+    ob.setObjProperty('active',new_active,lang,forced=True)
+    ob.onChangeObj(request)
+print('%i Objects activated'%len(ids))
+
+return target,printed
+]]>
+      </item>
+      <item key="description"/>
+      <item key="execution" type="int">1</item>
+      <item key="icon_clazz"><![CDATA[far fa-check-square]]></item>
+      <item key="id"><![CDATA[manage_activate]]></item>
+      <item key="meta_type"><![CDATA[Script (Python)]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[type(ZMSDocument)]]></item>
+          <item><![CDATA[type(ZMSObject)]]></item>
+          <item><![CDATA[type(ZMSTeaserElement)]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[Activate]]></item>
+      <item key="revision">4.0.0</item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[ZMSAdministrator]]></item>
+          <item><![CDATA[ZMSAuthor]]></item>
+          <item><![CDATA[ZMSEditor]]></item>
+        </list>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="custom"/>
+      <item key="data"><![CDATA[request = container.REQUEST
+RESPONSE =  request.RESPONSE
+lang = request['lang']
+
+new_active = 0
+
+ids = request.get('ids',[])
+target = context.getSelf(context.PAGES)
+for ob in target.getChildNodes(request):
+  if ob.id in ids:
+    ob.setObjStateModified(request)
+    ob.setObjProperty('active',new_active,lang,forced=True)
+    ob.onChangeObj(request)
+print('%i Objects deactivated'%len(ids))
+
+return target,printed
+]]>
+      </item>
+      <item key="description"/>
+      <item key="execution" type="int">1</item>
+      <item key="icon_clazz"><![CDATA[far fa-square]]></item>
+      <item key="id"><![CDATA[manage_deactivate]]></item>
+      <item key="meta_type"><![CDATA[Script (Python)]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[type(ZMSDocument)]]></item>
+          <item><![CDATA[type(ZMSObject)]]></item>
+          <item><![CDATA[type(ZMSTeaserElement)]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[Deactivate]]></item>
+      <item key="revision">4.0.0</item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[ZMSAdministrator]]></item>
+          <item><![CDATA[ZMSAuthor]]></item>
+          <item><![CDATA[ZMSEditor]]></item>
+        </list>
+      </item>
+    </dictionary>
+  </item>
+</list>

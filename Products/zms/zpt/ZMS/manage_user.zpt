@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" tal:define="
+	dummy0 python:here.zmi_page_request(here,request);
+	zmscontext python:here.getSelf();
+	standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:' '.join(['zms',request['lang'],'user config',here.meta_id])">
+
+<form name="form0" class="form-horizontal" action="manage_user" target="_parent" method="post" onsubmit="return form0Submit(this);">
+
+<tal:block tal:content="structure python:here.zmi_manage_tabs_message(here,request)">zmi_manage_tabs_message</tal:block>
+
+<input type="hidden" name="lang" tal:attributes="value request/lang"/>
+
+<tal:block tal:define="global userObj python:here.findUser(request['AUTHENTICATED_USER'].getId())">
+<tal:block tal:condition="python:userObj is not None">
+	<legend><i class="fas fa-user"></i> <tal:block tal:content="python:'%s: %s'%(here.getZMILangStr('ATTR_USER'),userObj['name'])">User: Id</tal:block></legend>
+	<div class="form-group row" tal:repeat="userObjDetail userObj/details">
+				<label tal:attributes="for userObjDetail/name" class="col-sm-2 control-label"><span tal:content="userObjDetail/label">the label</span></label>
+				<div class="col-sm-10" tal:content="structure python:here.getTextInput(fmName='userform',elName='newId',size=30,value=userObjDetail['value'],enabled=False)">the value</div><!-- .col-sm-10 -->
+	</div><!-- .form-group -->
+	<tal:block tal:condition="python:userObj.get('password')==True">
+		<div class="form-group row">
+			<label for="password" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_PASSWORD')">Password</span></label>
+			<div class="col-sm-10" tal:content="structure python:here.getPasswordInput(fmName='userform',elName='password',value='******')">the control</div><!-- .col-sm-10 -->
+		</div><!-- .form-group -->
+		<div class="form-group row">
+			<label for="confirm" class="col-sm-2 control-label mandatory"><span tal:content="python:here.getZMILangStr('ATTR_CONFIRM')">Confirm</span></label>
+			<div class="col-sm-10" tal:content="structure python:here.getPasswordInput(fmName='userform',elName='confirm',value='******')">the control</div><!-- .col-sm-10 -->
+		</div><!-- .form-group -->
+	</tal:block>
+	<div id="tr_email" class="form-group row" tal:condition="python:len([x for x in userObj['details'] if x['name'] in ['mail','email']])==0">
+		<label for="email" tal:attributes="class python:' '.join(['col-sm-2 control-label']+[[],['mandatory']][int(here.getConfProperty('EmailMandatory','')!='')])"><span tal:content="python:here.getZMILangStr('ATTR_EMAIL')">Email</span></label>
+		<div class="col-sm-10" tal:content="structure python:here.getTextInput(fmName='userform',elName='email',size=30,value=here.getUserAttr(userObj['name'],'email',''))">the control</div><!-- .col-sm-10 -->
+	</div><!-- .form-group -->
+	<div id="tr_profile" class="form-group row">
+		<label for="profile" class="col-sm-2 control-label"><span tal:content="python:here.getZMILangStr('ATTR_PROFILE')">Profile</span></label>
+		<div class="col-sm-10" tal:content="structure python:here.getUrlInput(fmName='userform',elName='profile',value=here.getUserAttr(userObj['name'],'profile',''),enabled=False)">the control</div><!-- .col-sm-10 -->
+	</div><!-- .form-group -->
+	<div class="form-row">
+		<div class="controls save">
+			<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE" tal:content="python:here.getZMILangStr('BTN_SAVE')">Save</button>
+		</div>
+	</div><!-- .form-row -->
+</tal:block>
+</tal:block>
+
+</form>
+
+<script>
+function form0Submit(fm) {
+	var b = true;
+	$(".has-error",fm).removeClass("has-error");
+	if (self.btnClicked=='BTN_SAVE') {
+		if (fm.elements['password'] && fm.elements['confirm']) {
+			var $password = $("input[name=password]",fm);
+			var $confirm = $("input[name=confirm]",fm);
+			if ($password.val()!=$confirm.val()) {
+				var $controlGroup = $confirm.parents(".form-group");
+				$controlGroup.addClass("has-error");
+				alert(getZMILangStr('ATTR_PASSWORD')+'<>'+getZMILangStr('ATTR_CONFIRM')+'!');
+				b = false;
+			}
+			var password_regexp = $ZMI.getConfProperty('ZMS.password.regexp','');
+			var password_hint = $ZMI.getConfProperty('ZMS.password.hint','');
+			if (password_regexp.length>0) {
+				var re = new RegExp(password_regexp,"g");
+				if (!$password.val().match(re)) {
+					var $controlGroup = $password.parents(".form-group");
+					$controlGroup.addClass("has-error");
+					alert(password_hint);
+					b = false;
+				}
+			}
+		}
+	}
+	return b;
+}
+
+$(function(){
+	var password_regexp = $ZMI.getConfProperty('ZMS.password.regexp','');
+	var password_hint = $ZMI.getConfProperty('ZMS.password.hint','');
+	$('.form-control[name=password]:password')
+		.attr('title',password_hint)
+		.tooltip({html:true,placement:'bottom'});
+	$('.form-control:password')
+		.val('******')
+		.focus(function() {
+				if ($(this).val()=='******') {
+					$(this).val('');
+				}
+			})
+		.blur(function() {
+				if ($(this).val()=='') {
+					$(this).val('******');
+				}
+			});
+});
+
+</script>
+
+<tal:block tal:content="structure python:here.zmi_html_foot(here,request)">zmi_html_foot</tal:block>
+</body>
+</html>

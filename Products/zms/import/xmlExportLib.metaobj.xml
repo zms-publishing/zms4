@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+<item key="dtml"><![CDATA[<!-- BO bodyContentZMSCustom_xmlExportLib -->
+
+
+<!-- EO bodyContentZMSCustom_xmlExportLib -->
+]]></item>
+<item key="enabled" type="int">1</item>
+<item key="key"><![CDATA[xmlExportLib]]></item>
+<item key="value" type="dictionary"><dictionary>
+<item key="__obj_attrs__" type="list"><list>
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[# --// BO getObjToXml_ZMSTextarea //--
+
+REQUEST=context.REQUEST
+xml = []
+xml.append( '<text>%s</text>'%context.getObjProperty('text',REQUEST))
+return ''.join(xml)
+
+# --// EO getObjToXml_ZMSTextarea //--
+]]></item>
+<item key="default"/>
+<item key="id"><![CDATA[getObjToXml_ZMSTextarea]]></item>
+<item key="keys" type="list"><list>
+</list>
+</item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[myXML: Textarea]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[Script (Python)]]></item>
+</dictionary>
+</item>
+
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[# --// BO getObjToXml_ZMSDocument //--
+
+REQUEST=context.REQUEST
+tagname = 'document'
+xml = []
+xml.append( '<%s>'%(tagname) )
+xml.append( '<%s>%s</%s>'%('title',context.getObjProperty('title',REQUEST),'title'))
+xml.append( '<%s>%s</%s>'%('teaser',context.getObjProperty('attr_dc_description',REQUEST),'teaser'))
+xml.append( context.getObjChildrenToXml())
+xml.append( '</%s>\n'%(tagname) )
+return '\n'.join(xml)
+
+# --// EO getObjToXml_ZMSDocument //--
+]]></item>
+<item key="default"/>
+<item key="id"><![CDATA[getObjToXml_ZMSDocument]]></item>
+<item key="keys" type="list"><list>
+</list>
+</item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[IndesignXML: Document]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[Script (Python)]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[# --// BO getObjToXml_ZMSGraphic //--
+
+REQUEST=context.REQUEST
+tagname = 'image'
+xml = []
+if context.getObjProperty('attr_noprint',REQUEST)==False:
+  xml.append( '<%s>'%(tagname) )
+  xml.append( '<file>%s</file>'%context.getObjProperty( 'img' ,REQUEST).getFilename())
+  xml.append( '<caption>%s</caption>'%context.getObjProperty('text',REQUEST))
+  xml.append( '</%s>'%(tagname) )
+return '\n'.join(xml)
+
+# --// EO getObjToXml_ZMSGraphic //--
+]]></item>
+<item key="default"/>
+<item key="id"><![CDATA[getObjToXml_ZMSGraphic]]></item>
+<item key="keys" type="list"><list>
+</list>
+</item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[IndesignXML: Graphic]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[Script (Python)]]></item>
+</dictionary>
+</item>
+
+
+
+
+
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[# --// BO getObjToXml_ZMSFolder //--
+
+REQUEST=context.REQUEST
+tagname = 'folder%i'%context.getLevel()
+xml = []
+xml.append( '<%s>%s</%s>'%(tagname,context.getObjProperty('title',REQUEST),tagname))
+xml.append( context.getObjChildrenToXml())
+return ''.join(xml)
+
+# --// EO getObjToXml_ZMSFolder //--
+]]></item>
+<item key="default"/>
+<item key="id"><![CDATA[getObjToXml_ZMSFolder]]></item>
+<item key="keys" type="list"><list>
+</list>
+</item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[myXML: Folder]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[Script (Python)]]></item>
+</dictionary>
+</item>
+<item type="dictionary"><dictionary>
+<item key="custom"><![CDATA[# --// BO getObjToXml_DocElmnt //--
+
+REQUEST=context.REQUEST
+tagname = 'document'
+xml = []
+xml.append( '<%s>%s</%s>'%(tagname,context.getObjToXml(),tagname))
+return ''.join(xml)
+
+# --// EO getObjToXml_DocElmnt //--
+]]></item>
+<item key="default"/>
+<item key="id"><![CDATA[getObjToXml_DocElmnt]]></item>
+<item key="keys" type="list"><list>
+</list>
+</item>
+<item key="mandatory" type="int">0</item>
+<item key="multilang" type="int">0</item>
+<item key="name"><![CDATA[myXML: Document-Element]]></item>
+<item key="repetitive" type="int">0</item>
+<item key="type"><![CDATA[Script (Python)]]></item>
+</dictionary>
+</item>
+</list>
+</item>
+<item key="acquired" type="int">0</item>
+<item key="name"><![CDATA[XML-Export Library]]></item>
+<item key="package"/>
+<item key="type"><![CDATA[ZMSLibrary]]></item>
+</dictionary>
+</item>
+</dictionary>

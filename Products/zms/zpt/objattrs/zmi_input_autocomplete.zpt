@@ -1,0 +1,11 @@
+<tal:block tal:condition="python:options['type']=='multiautocomplete'">
+	<select tal:attributes="id options/name; name options/name; data-ajax-url options/ajax_url; data-attr-id options/attr_id; data-obj-id options/obj_id" multiple="multiple" class="form-control form-multiautocomplete">
+		<tal:block tal:repeat="value options/value">
+			<option tal:attributes="value value" selected="selected" tal:content="value">the value</option>
+		</tal:block>
+	</select>
+</tal:block>
+
+<tal:block tal:condition="python:options['type']=='autocomplete'">
+  <input type="text" tal:attributes="id options/name; name options/name; value options/value; data-ajax-url options/ajax_url; data-attr-id options/attr_id; data-obj-id options/obj_id" class="form-control form-autocomplete"/>
+</tal:block>

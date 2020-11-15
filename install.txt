@@ -1,0 +1,27 @@
+Installing the ZMS Product
+--------------------------
+
+    This product does not require any special handling after unzipping
+    and untarring it in the Zope Products directory. You should do 
+    something like:
+
+        $ cp zms-xyz.tgz <zope_root>/lib/python/Products
+        $ cd <zope_root>/lib/python/Products
+        $ tar zxvf zms-xyz.tgz
+        <watch files being decompressed>
+
+    Windows users can use WinZip or similar, it can handle tarred 
+    gzip files. Make sure to move the extracted zms folder to
+    your Zope installation's lib/python/Products-folder.
+
+    That's all. Do not forget to restart Zope afterwards.
+
+
+
+Recommended migration path for old ZMS Products
+-----------------------------------------------
+
+    Step 1. zms-2.9.4-41.tar.gz
+    Step 2. zms-2.10.3-18_1.tar.gz
+    Step 3. zms-2.10.5-24.tar.gz
+    Step 4. zms-2.13.4-1555.tar.gz

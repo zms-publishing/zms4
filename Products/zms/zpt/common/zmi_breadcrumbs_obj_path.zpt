@@ -1,0 +1,44 @@
+<!-- common/zmi_breadcrumbs_obj_path -->
+
+<tal:block tal:condition="not:python:'zmi_breadcrumbs_ref_obj_path' in request.form">
+	<tal:block tal:define="global zmscontext here"></tal:block>
+</tal:block>
+<tal:block tal:condition="python:'zmi_breadcrumbs_ref_obj_path' in request.form">
+	<tal:block tal:define="global
+		zmscontext python:here.getLinkObj(request.form['zmi_breadcrumbs_ref_obj_path']);
+		charsetter python:request.RESPONSE.setHeader('Content-Type','text/html;; charset=utf-8')"></tal:block>
+</tal:block>
+<tal:block tal:condition="python:zmscontext is not None">
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb" tal:define="
+		dummy0 python:request.set('lang',zmscontext.get_request_context(request,'lang',request['lang']));
+		middot python:options.get('middot','metaobj_manager/manage_main?lang=%s&id=%s'%(request['lang'],zmscontext.meta_id));
+		childNodes python:zmscontext.breadcrumbs_obj_path()"
+	><li tal:repeat="childNode childNodes"
+		tal:attributes="class python:' '.join(['breadcrumb-item']+[['','active'][int(childNode==childNodes[-1])]])"
+		><span tal:omit-tag="python:not request['AUTHENTICATED_USER'].has_permission('ZMS Administrator',zmscontext)"
+			tal:attributes="onclick python:'javascript:window.open(\'%s/%s\',\'MetaObjectManagerWindow\')'%(zmscontext.getDocumentElement().absolute_url(),middot)"
+			><i tal:condition="python:childNode==childNodes[-1]"
+				tal:on-error="structure python:'<i class=\042fas fa-warning\042></i>'"
+				tal:attributes="class python:childNode.zmi_icon()"></i
+		></span>&nbsp;<a tal:define="
+				titlealt python:childNode.getTitlealt(request);
+				title python:childNode.getTitle(request);
+				accesskey repeat/childNode/number;"
+				tal:attributes="href python:'%s/manage_main?lang=%s'%(childNode.absolute_url(),request['lang']);title title;accesskey accesskey" 
+			tal:content="structure titlealt">titlealt
+	</a></li>
+	<li class="breadcrumb-item" tal:repeat="extra python:options.get('extra',[])">
+		<a tal:attributes="href extra/action" tal:content="python:here.getZMILangStr(extra['label'])">label</a>
+	</li>
+</ol>
+</nav>
+</tal:block>
+<tal:block tal:define="ref python:request.form.get('zmi_breadcrumbs_ref_obj_path', '')"
+			tal:condition="python:zmscontext is None and ref.startswith('{') and ref.endswith('}')">
+	<div class="breadcrumb" style="color:red;font-size:inherit;display:block;padding:0;">
+		<i class="fas fa-exclamation-triangle"></i> <tal:block tal:content="ref"></tal:block>
+	</div>
+</tal:block>
+
+<!-- /common/zmi_breadcrumbs_obj_path -->

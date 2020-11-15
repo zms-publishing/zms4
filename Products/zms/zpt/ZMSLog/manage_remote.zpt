@@ -1,0 +1,86 @@
+<tal:header replace="structure here/manage_page_header" />
+
+<tal:tabs replace="structure here/manage_tabs" />
+
+<main class="container-fluid">
+
+<form class="form-horizontal" action="manage_remote" method="get" enctype = "multipart/form-data" tal:define="standard modules/Products.zms/standard; path python:here.getPath(request)">
+
+<script language="JavaScript">
+
+function uploadBtnClick() {
+	fm = document.forms[0];
+	fm.action = "manage_submit";
+	fm.enctype = "multipart/form-data";
+	fm.method = "post";
+}
+
+</script>
+
+<div class="form-group row">
+	<label class="col-sm-2 control-label" for="command"><span>Command</span></label>
+	<div class="col-sm-10">
+		<div class="input-group">
+			<input class="form-control" type="text" name="command" size="50" tal:attributes="value python:request.get('command','')"/>
+			<span class="input-group-btn"><button class="btn btn-secondary" name="btn" value="Execute" onclick="uploadBtnClick()"><i class="fas fa-cog"></i> Execute</button></span>
+		</div><!-- .input-group -->
+	</div><!-- .col-lg-10 -->
+</div><!-- .form-group -->
+
+<div class="form-group row">
+	<label class="col-sm-2 control-label" for="file"><span>Upload file</span></label>
+	<div class="col-sm-10">
+		<input class="btn btn-file" type="file" name="file" size="50" />
+		<button class="btn btn-secondary" name="btn" value="Upload" onclick="uploadBtnClick()">Upload</button>
+	</div><!-- .col-lg-10 -->
+</div><!-- .form-group -->
+
+<div class="form-group row">
+	<div class="input-group col-sm-12">
+		<select class="form-control" style="max-width:2em" onchange="$('input[name=path]').val($(this).val());$(this).val('');">
+			<option tal:attributes="value python:here.getINSTANCE_HOME()" tal:content="python:'Instance Home (%s)'%here.getINSTANCE_HOME()">Instance Home</option>
+			<option tal:attributes="value python:here.getPRODUCT_HOME()" tal:content="python:'Product Home (%s)'%here.getPRODUCT_HOME()">Product Home</option>
+			<option tal:attributes="value python:here.getPACKAGE_HOME()" tal:content="python:'Package Home (%s)'%here.getPACKAGE_HOME()">Package Home</option>
+		</select>
+		<input class="form-control" type="text" name="path" size="50" tal:attributes="value path"/>
+		<span class="input-group-btn"><button class="btn btn-secondary" name="btn" value="Chdir"><i class="fas fa-sync"></i></button></span>
+	</div><!-- .input-group -->
+</div>
+
+<table class="table table-striped">
+<tr>
+	<th colspan="3">
+		<a tal:attributes="href python:standard.url_append_params('',{'path':here.getParentDir(path)})">\.. Parent Directory</a>
+	</th>
+</tr>
+<tr tal:repeat="file python:here.readDir(path)">
+	<tal:block tal:condition="python:file['type']=='d'">
+		<td>
+			<input type="checkbox" name="ids:list" tal:attributes="value python:file['path']+file['file']"/>
+			<a tal:attributes="href python:standard.url_append_params('',{'path':file['path']+file['file']})">
+				<i class="fas fa-folder-close"></i>
+				<tal:block tal:content="file/file">the file</tal:block>
+			</a>
+		</td>
+		<td tal:content="python:here.getLangFmtDate(file['mtime'])">the modification-time</td>
+		<td>&nbsp;</td>
+	</tal:block>
+	<tal:block tal:condition="python:file['type']!='d'">
+		<td>
+			<input type="checkbox" name="ids:list" tal:attributes="value python:file['path']+file['file']"/>
+			<a tal:attributes="href python:standard.url_append_params('manage_index_html',{'path':file['path']+file['file']})" target="_blank">
+				<i class="fas fa-file-alt"></i>
+				<tal:block tal:content="file/file">the file</tal:block>
+			</a>
+		</td>
+		<td tal:content="python:here.getLangFmtDate(file['mtime'])">the modification-time</td>
+		<td tal:content="python:here.getDataSizeStr(file['size'])">the size</td>
+	</tal:block>
+</tr>
+</table>
+
+</form>
+
+</main>
+
+<tal:footer replace="structure here/manage_page_footer" />

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<list>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[body]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Textbody]]></item>
+							<item key="esp"><![CDATA[Cuerpo del texto]]></item>
+							<item key="fra"><![CDATA[Corps des textes]]></item>
+							<item key="ger"><![CDATA[Textkörper]]></item>
+							<item key="ita"><![CDATA[Corpo del testo]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[p]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[headline_2]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Headline 2]]></item>
+							<item key="esp"><![CDATA[Titular 2]]></item>
+							<item key="fra"><![CDATA[Titre 2]]></item>
+							<item key="ger"><![CDATA[Überschrift 2]]></item>
+							<item key="ita"><![CDATA[Titolo 2]]></item>
+						</dictionary>
+					</item>
+					<item key="richedit" type="int">0</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[h2]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[headline_3]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Headline 3]]></item>
+							<item key="esp"><![CDATA[Titular 3]]></item>
+							<item key="fra"><![CDATA[Titre 3]]></item>
+							<item key="ger"><![CDATA[Überschrift 3]]></item>
+							<item key="ita"><![CDATA[Titolo 3]]></item>
+						</dictionary>
+					</item>
+					<item key="richedit" type="int">0</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[h3]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[headline_4]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Headline 4]]></item>
+							<item key="esp"><![CDATA[Titular 4]]></item>
+							<item key="fra"><![CDATA[Titre 4]]></item>
+							<item key="ger"><![CDATA[Überschrift 4]]></item>
+							<item key="ita"><![CDATA[Titolo 4]]></item>
+						</dictionary>
+					</item>
+					<item key="richedit" type="int">0</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[h4]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[ordered_list]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Enumeration]]></item>
+							<item key="esp"><![CDATA[Enumeración]]></item>
+							<item key="fra"><![CDATA[Énumération]]></item>
+							<item key="ger"><![CDATA[Nummerierung]]></item>
+							<item key="ita"><![CDATA[Enumerazione]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[li]]></item>
+					<item key="tag"><![CDATA[ol]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[unordered_list]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[List]]></item>
+							<item key="esp"><![CDATA[Lista]]></item>
+							<item key="fra"><![CDATA[Liste]]></item>
+							<item key="ger"><![CDATA[Liste]]></item>
+							<item key="ita"><![CDATA[Lista]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[li]]></item>
+					<item key="tag"><![CDATA[ul]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[indented_block]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Indented block]]></item>
+							<item key="esp"><![CDATA[Bloque mellado]]></item>
+							<item key="fra"><![CDATA[Bloc dentelé]]></item>
+							<item key="ger"><![CDATA[Einzug]]></item>
+							<item key="ita"><![CDATA[Blocco rientrato]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[blockquote]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[emphasis]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"><![CDATA[class="emphasis"]]></item>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Emphasis]]></item>
+							<item key="esp"><![CDATA[Énfasis]]></item>
+							<item key="fra"><![CDATA[Emphase]]></item>
+							<item key="ger"><![CDATA[Merksatz]]></item>
+							<item key="ita"><![CDATA[Enfasi]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[p]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[caption]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"><![CDATA[class="caption"]]></item>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[Caption]]></item>
+							<item key="esp"><![CDATA[Subtítulo]]></item>
+							<item key="fra"><![CDATA[Légende]]></item>
+							<item key="ger"><![CDATA[Beschriftung]]></item>
+							<item key="ita"><![CDATA[Titolo]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"><![CDATA[br]]></item>
+					<item key="tag"><![CDATA[p]]></item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[plain_html]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[HTML]]></item>
+							<item key="esp"><![CDATA[HTML]]></item>
+							<item key="fra"><![CDATA[HTML]]></item>
+							<item key="ger"><![CDATA[HTML]]></item>
+							<item key="ita"><![CDATA[HTML]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"/>
+					<item key="tag"/>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+	<item type="dictionary">
+		<dictionary>
+			<item key="key"><![CDATA[wysiwyg]]></item>
+			<item key="value" type="dictionary">
+				<dictionary>
+					<item key="attrs"/>
+					<item key="default" type="int">1</item>
+					<item key="display" type="dictionary">
+						<dictionary>
+							<item key="eng"><![CDATA[WYSIWYG]]></item>
+							<item key="esp"><![CDATA[WYSIWYG]]></item>
+							<item key="fra"><![CDATA[WYSIWYG]]></item>
+							<item key="ger"><![CDATA[WYSIWYG]]></item>
+							<item key="ita"><![CDATA[WYSIWYG]]></item>
+						</dictionary>
+					</item>
+					<item key="subtag"/>
+					<item key="tag"/>
+					<item key="richedit">ckeditor</item>
+				</dictionary>
+			</item>
+		</dictionary>
+	</item>
+</list>

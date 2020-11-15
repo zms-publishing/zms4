@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[## Script (Python) "manage_tab_langdict"
+##bind container=container
+##bind context=context
+##bind namespace=
+##bind script=script
+##bind subpath=traverse_subpath
+##parameters=
+##title=TAB_LANGUAGES
+##
+from Products.zms import standard
+request = container.REQUEST
+RESPONSE =  request.RESPONSE
+langIds = context.getLangIds(sort=True)
+xml = context.getMetaobjManager().exportMetaobjXml(ids=[context.meta_id])
+rs = standard.distinct_list([x.split(',')[0] for x in standard.re_search('getLangStr\((.*?)\)',xml) if len(x.split(','))==2])
+rs = [x[1:-1] for x in rs if len(x)>2 and x[0] in ["'",'"'] and x[0] == x[-1]]
+rs.sort()
+
+prt = []
+prt.append('<!DOCTYPE html>')
+prt.append('<html lang="en">')
+prt.append(context.zmi_html_head(context,request))
+prt.append('<body class="%s">'%context.zmi_body_class(id='tab_languages'))
+prt.append(context.zmi_body_header(context,request))
+prt.append('<div id="zmi-tab">')
+prt.append(context.zmi_breadcrumbs(context,request))
+prt.append('<form class="form-horizontal card" method="post" enctype="multipart/form-data">')
+prt.append('<input type="hidden" name="lang" value="%s"/>'%request['lang'])
+prt.append('<legend>%s</legend>'%standard.pystr(context.getZMILangStr('ATTR_DICTIONARY')))
+prt.append('<div class="card-body">')
+
+# --- Save.
+# ---------------------------------
+if request.form.get('btn')=='BTN_SAVE':
+	message = []
+	message.append('%s (%i)'%(context.getZMILangStr('MSG_CHANGED'),c))
+	request.response.redirect(context.url_append_params('manage_main',{'lang':request['lang'],'manage_tabs_message':'<br/>'.join(message)}))
+
+# --- Display initial insert form.
+# ---------------------------------
+else:
+	prt.append('<table class="table table-sm table-striped table-bordered table-hover">')
+	prt.append('<thead>')
+	prt.append('<tr>')
+	prt.append('<th>%s</th>'%standard.pystr(context.getZMILangStr('ATTR_KEY')))
+	prt.extend(['<th>%s</th>'%standard.pystr(context.getLanguageLabel(x)) for x in langIds])
+	prt.append('</tr>')
+	prt.append('</thead>')
+	prt.append('<tbody>')
+	for ri in rs:
+		prt.append('<tr>')
+		prt.append('<td>%s</td>'%standard.pystr(ri))
+		prt.extend(['<td><div class="single-line"><textarea class="form-control form-control-sm" name="%s" placeholder="%s">%s</textarea></div></td>'%(ri+'_'+x[0],x[1],[x[1],''][int(ri==x[1])]) for x in [(y,standard.pystr(context.getLangStr(standard.pybytes(ri),y))) for y in langIds]])
+		prt.append('</tr>')
+	prt.append('</tbody>')
+	prt.append('</table>')
+	prt.append('<div class="form-row">')
+	prt.append('<div class="controls save">')
+	prt.append('<button type="submit" name="btn" class="btn btn-primary" value="BTN_SAVE">%s</button> '%standard.pystr(context.getZMILangStr('BTN_SAVE')))
+	prt.append('<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL">%s</button> '%standard.pystr(context.getZMILangStr('BTN_CANCEL')))
+	prt.append('</div><!-- .controls.save -->')
+	prt.append('</div><!-- .form-group -->')
+
+# ---------------------------------
+
+prt.append('</div><!-- .card-body -->')
+prt.append('</form><!-- .form-horizontal -->')
+prt.append('</div><!-- #zmi-tab -->')
+prt.append(context.zmi_body_footer(context,request))
+prt.append('</body>')
+prt.append('</html>')
+
+return '\n'.join(prt)
+]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[fas fa-cogs]]></item>
+      <item key="id"><![CDATA[manage_tab_langdict]]></item>
+      <item key="meta_type"><![CDATA[Script (Python)]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[*]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[TAB_LANGUAGES]]></item>
+      <item key="revision"><![CDATA[0.0.0]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[*]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[TAB_LANGUAGES]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[<!-- Page Template Diagnostics
+ Compilation failed
+ zope.tal.taldefs.TALError: Python expression error:
+invalid syntax (PythonExpr, line 1) in expression u"python:[[x,here.display_type(request,x)] for x in here.getMetaobjIds(excl_ids=['ZMS']])", at line 26, column 4
+-->
+<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='search')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab" class="pb-4">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<form class="card form-horizontal" name="searchform" method="get">
+	<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+	<input type="hidden" name="preview" tal:attributes="value python:request['preview']" />
+	<legend tal:content="python:here.getZMILangStr('SEARCH_HEADER')">Search header</legend>
+	<div class="card-body">
+		<div class="form-group row">
+			<div class="col-md-12">
+				<div class="input-group">
+					<tal:block tal:content="structure python:here.getTextInput(fmName='searchform',elName='search',value=request.get('search',''))">the value</tal:block>
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+					</div>
+				</div>
+			</div>
+		</div><!-- .form-group -->
+
+		<tal:comment replace="nothing">
+			<div class="form-group row" tal:define="global optpl python:[[x,here.display_type(request,x)] for x in here.getMetaobjIds(excl_ids=['ZMS']])">
+				<div class="col-sm-9 col-md-10" tal:content="structure python:here.zmi_input_multiselect(here,name='search_meta_types',value=request.get('search_meta_types',[]),type='multiselect',lang_str='ATTR_TYPE',options=optpl)">the control</div>
+			</div><!-- .form-group -->
+		</tal:comment>
+
+		<div id="search_results" class="form-group row" style="display:none">
+			<div class="col-sm-10">
+				<h4 tal:content="python:here.getZMILangStr('SEARCH_HEADERRESULT')">Result</h4>
+				<div class="header">
+					<span class="small-head">
+						<i class="fas fa-spinner fa-spin"></i>
+						<tal:block tal:content="python:here.getZMILangStr('MSG_LOADING')">loading</tal:block>
+					</span>
+					<div class="meta-info col-sm-12"> </div>
+				</div><!-- .header.row -->
+				<div class="line row"></div><!-- .row -->
+				<div class="pull-right">
+					<ul class="pagination"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<tal:block tal:condition="python:'raw' in request or request.get('search_meta_types')" tal:define="global
+			qs python:here.getCatalogQueryString(request.get('raw',''),request.get('option',''));
+			qres python:[]">
+
+	<form class="card form-horizontal" method="get">
+		<legend tal:content="python:here.getZMILangStr('SEARCH_HEADERRESULT')">Result</legend>
+		<div class="card-body"
+			tal:content="structure python:here.getZMILangStr('SEARCH_YOURQUERY')%('<b>%s</b>'%qs)+' '+here.getZMILangStr('SEARCH_RETURNEDRESULTS')+':'"
+		></div>
+
+		<!-- @TODO: ZMSIndex-based -->
+		<tal:block tal:condition="python:not request.get('raw') and request.get('search_meta_types')">
+			<tal:block tal:define="global dummy0 python:qres.extend([{ \
+					'ob':x, \
+					'title':x.getTitle(request), \
+					'raw':x.renderShort(request), \
+					'score':1, \
+					'time':x.attr('change_dt'), \
+					'url':'%s/manage_main'%x.absolute_url(), \
+					} for x in here.getTreeNodes(request,request.get('search_meta_types'))])">
+			</tal:block>
+			<tal:block tal:define="global obs python:[x['ob'] for x in qres]">
+				<tal:block tal:content="structure python:here.zmi_manage_main_grid(obs=obs)">
+					zmi_manage_main_grid
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</form>
+</tal:block>
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+<script type="text/javascript" charset="UTF-8" src="/++resource++zms_/ZMS/zmi_body_content_search.js"></script>
+</body>
+</html>]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[fas fa-cogs]]></item>
+      <item key="id"><![CDATA[manage_tab_search]]></item>
+      <item key="meta_type"><![CDATA[Page Template]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[type(ZMSDocument)]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[TAB_SEARCH]]></item>
+      <item key="revision"><![CDATA[0.0.0]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[*]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[TAB_SEARCH]]></item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="data"><![CDATA[<!DOCTYPE html>
+<html lang="en" tal:define="standard modules/Products.zms/standard">
+<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<body tal:attributes="class python:here.zmi_body_class(id='tasks')">
+<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<div id="zmi-tab">
+<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
+
+<tal:block tal:define="global ids python:['TASK_ZMSNOTE', 'TASK_UNTRANSLATED', 'TASK_CHANGED_BY_DATE']">
+
+
+<form class="form-horizontal card" role="form" name="form0" method="get">
+	<legend><span tal:replace="python:here.getZMILangStr('TAB_TASKS')">the task-type</span></legend>
+	<div class="card-body">
+		<div class="form-group row task_type">
+			<div class="col-sm-2">
+				<button type="submit" class="btn btn-primary" tal:content="python:here.getZMILangStr('BTN_DISPLAY')">Display</button>
+			</div>
+			<div class="col-sm-10">
+				<select class="form-control" id="task_type" name="task_type">
+					<option value="" tal:content="python:'----- %s -----'%(here.getZMILangStr('ACTION_SELECT')%here.getZMILangStr('ATTR_DISPLAY'))">--- ACTION_SELECT%ATTR_DISPLAY ---</option>
+					<option tal:repeat="wfActivity python:here.getWfActivities()" tal:attributes="value python:wfActivity['id']; selected python:['','selected'][int(request.get('task_type','')==wfActivity['id'])]" tal:content="python:wfActivity['name']">the name</option>
+					<option tal:repeat="id ids" tal:attributes="value id; selected python:['','selected'][int(request.get('task_type','')==id)]" tal:content="python:here.getZMILangStr(id)">the name</option>
+				</select>
+			</div>
+		</div><!-- .form-group -->
+	</div>
+</form>
+
+<div class="form-horizontal card mt-4" tal:condition="python:'task_type' in request.form" tal:define="obs python:[]">
+	<div class="card-body">
+	<tal:block tal:condition="python:request['task_type']=='TASK_ZMSNOTE'">
+		<tal:block tal:define="dummy0 python:obs.extend(here.getTreeNodes(request,'ZMSNote'))"></tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request['task_type']=='TASK_UNTRANSLATED'">
+		<tal:block tal:repeat="lang python:[request['lang']]+[[],here.getDescendantLanguages(request['lang'],request)][int('descendant_langs' in request.form)]">
+			<tal:block tal:repeat="ob python:[here]+here.getTreeNodes(request,here.PAGES)">
+				<tal:block tal:condition="python:not ob.isTranslated(lang,request) or ob.isModifiedInParentLanguage(lang,request)">
+					<tal:block tal:define="global dummy0 python:obs.append(ob)"></tal:block>
+				</tal:block>
+				<tal:block tal:condition="not:python:not ob.isTranslated(lang,request) or ob.isModifiedInParentLanguage(lang,request)">
+					<tal:block tal:repeat="subob python:ob.getChildNodes(request,[here.PAGEELEMENTS,'ZMSTeaserElement'])">
+						<tal:block tal:condition="python:not subob.isTranslated(lang,request) or subob.isModifiedInParentLanguage(lang,request)">
+							<tal:block tal:define="global dummy0 python:obs.append(subob)"></tal:block>
+						</tal:block>
+					</tal:block>
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request['task_type']=='TASK_CHANGED_BY_DATE'">
+		<tal:block tal:define="
+				unsorted python:[(x.attr('change_dt'),x) for x in [here]+here.getTreeNodes(request)];
+				dummy0 python:unsorted.sort(reverse=True);
+				dummy0 python:obs.extend(map(lambda x:x[1],unsorted))"></tal:block>
+	</tal:block>
+	<tal:block tal:condition="python:request['task_type'] not in ids">
+		<tal:block tal:repeat="lang python:[request['lang']]+[[],here.getDescendantLanguages(request['lang'],request)][int('descendant_langs' in request.form)]">
+			<tal:block tal:repeat="ob python:[here]+here.getTreeNodes(request,here.PAGES)">
+				<tal:block tal:condition="python:ob.inObjStates([request['task_type']],request) and
+						(ob.inObjStates(['STATE_NEW','STATE_MODIFIED','STATE_DELETED'],request) or
+						(len(ob.getWfStates(request))>0 and ob.isVersionContainer() and ob.hasObjModifiedChildren(request)))">
+					<tal:block tal:define="global dummy0 python:obs.append(ob)"></tal:block>
+				</tal:block>
+			</tal:block>
+		</tal:block>
+	</tal:block>
+	<form class="form-horizontal" method="get" tal:content="structure python:here.zmi_manage_main_grid(obs=obs)">
+		zmi_manage_main_grid
+	</form>
+</div>
+</div>
+</tal:block>
+</div><!-- #zmi-tab -->
+<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+</body>
+</html>]]>
+      </item>
+      <item key="description"></item>
+      <item key="execution" type="int">0</item>
+      <item key="icon_clazz"><![CDATA[fas fa-cogs]]></item>
+      <item key="id"><![CDATA[manage_tab_tasks]]></item>
+      <item key="meta_type"><![CDATA[Page Template]]></item>
+      <item key="meta_types" type="list">
+        <list>
+          <item><![CDATA[type(ZMSDocument)]]></item>
+        </list>
+      </item>
+      <item key="name"><![CDATA[TAB_TASKS]]></item>
+      <item key="revision"><![CDATA[4.0.0]]></item>
+      <item key="roles" type="list">
+        <list>
+          <item><![CDATA[*]]></item>
+        </list>
+      </item>
+      <item key="title"><![CDATA[TAB_TASKS]]></item>
+    </dictionary>
+  </item>
+</list>

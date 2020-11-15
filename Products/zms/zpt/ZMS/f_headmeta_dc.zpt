@@ -1,0 +1,19 @@
+<meta name="generator" content="ZMS http://www.zms-publishing.com" />
+<meta name="robots" content="noindex,nofollow" tal:condition="python:request.get('op','') in ['search','sitemap','print']"/>
+<tal:block tal:condition="not:python:request.get('op','') in ['search','sitemap','print']">
+<link rel="schema.DC" href="http://purl.org/DC/elements/1.1/" title="http://purl.org/DC/elements/1.1/" />
+<tal:block tal:repeat="metaObjAttrId python:here.getObjAttrs()"
+><tal:block tal:define="global objAttr python:here.getMetaobjAttr(here.meta_id,metaObjAttrId);"
+><tal:block tal:condition="python:objAttr is not None and 'name' in objAttr"
+><tal:block tal:define="global objAttrValue python:here.attr(metaObjAttrId); objAttrType python:here.operator_gettype(objAttrValue)"
+><tal:block tal:condition="python:objAttrType is here.operator_gettype('') or objAttrType is here.operator_gettype(0) or objAttrType is here.operator_gettype(0.1)"
+><meta tal:attributes="name objAttr/name; content objAttrValue"/>
+</tal:block
+><tal:block tal:condition="python:objAttrType is here.operator_gettype([])"
+><meta tal:attributes="name objAttr/name; content python:','.join(objAttrValue)"/>
+</tal:block
+></tal:block
+></tal:block
+></tal:block
+></tal:block
+></tal:block>

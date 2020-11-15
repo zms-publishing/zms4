@@ -1,0 +1,20 @@
+<div tal:condition="python:options.get('img') not in ['',None]"
+		class="graphic"
+		tal:attributes="style python:'\073'.join([]
+					+['text-align:right']
+					+[[],['width:%s'%str(options.get('width'))]][int(options.get('width') not in ['',None])]
+				);"
+		tal:content="structure python:options.get('img')">
+	the img
+</div>
+<div tal:condition="python:options.get('text') not in ['',None]"
+		tal:attributes="style python:'\073'.join([]
+					+['float:none']
+					+[[],['text-align:%s'%str(options.get('textalign'))]][int(options.get('textalign') not in ['',None])]
+					+[[],['width:%s'%str(options.get('width'))]][int(options.get('width') not in ['',None] and options.get('float') not in ['',None])]
+					+[[],['margin:auto']][int(options.get('align')=='' or str(options.get('align')).lower().find('center')>=0)]
+				);
+			class python:['',options.get('textclass')][int(options.get('textclass') not in ['',None])];"
+		tal:content="structure python:options.get('text')">
+	the text
+</div>
