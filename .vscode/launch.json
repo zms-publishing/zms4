@@ -12,7 +12,7 @@
             "args": [
                 "-d",
                 "-v",
-                "/home/zope/instance/zms4_dev/etc/zope.ini"
+                "/home/zope/instance/zms5_dev/etc/zope.ini"
             ],
             "env": {
                 "PYTHONUNBUFFERED":"1",

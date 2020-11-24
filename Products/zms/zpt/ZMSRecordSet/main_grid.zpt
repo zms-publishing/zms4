@@ -20,16 +20,16 @@
 	pageEnd python:min(pageStart+pageSize,size);
 	offset python:options.get('offset',pageStart);">
 
-<form method="get" tal:attributes="action form_action">
 <div class="d-flex justify-content-between pagination-pre">
 	<div class="pull-left" tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">
 		zmi_pagination
 	</div>
-	<div class="pull-right btn-group form-group mb-0">
+	<form method="get" class="pull-right btn-group form-group mb-0">
 		<label class="control-label pt-2" for="qsize" style="min-width:4em" tal:content="python:here.getZMILangStr('ATTR_ROWS')" tal:define="global dummy0 python:request.set('qsize',request.get('qsize',10))">Rows</label>
-		<input class="form-control form-control-sm" size="2" id="qsize" type="text" name="qsize:int" tal:attributes="value request/qsize" onchange="this.form.submit()"/>
-	</div>
+		<input class="form-control form-control-sm" size="6" id="qsize" type="number" name="qsize:int" tal:attributes="value request/qsize" onchange="this.form.submit()"/>
+	</form>
 </div>
+<form method="get" tal:attributes="action form_action">
 <input type="hidden" name="lang" tal:condition="python:'lang' in request" tal:attributes="value request/lang" />
 <input type="hidden" name="preview" tal:condition="python:'preview' in request" tal:attributes="value request/preview" />
 <input type="hidden" name="action" value="" />
@@ -209,12 +209,12 @@
 	</tal:block>
 </tbody>
 </table>
-<div class="pagination-post clearfix"
+</form>
+<div class="pagination-post"
 	tal:define="pagination python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)"
 	tal:condition="python:request.get('has_pagination',True)">
 	<div class="pull-left" tal:content="structure pagination">zmi_pagination</div>
 </div>
-</form>
 
 </div>
 

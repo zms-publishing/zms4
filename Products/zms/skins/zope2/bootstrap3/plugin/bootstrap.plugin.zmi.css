@@ -1427,9 +1427,9 @@ table.table.table-striped.table-bordered.table-hover.zmi-sortable.zmi-selectable
 .pagination > .active > a {
 	font-weight:bold;
 }
-.ZMSRecordSet form {
-	margin-left:2em;
-	margin-right:2em;
+.ZMSRecordSet.main_grid {
+	margin-left:1.5em;
+	margin-right:1.5em;
 }
 .ZMSRecordSet a.thumbnail {
 	max-width:3.0em!important;

@@ -2128,7 +2128,7 @@ li#manage_addProduct .center i.fa-plus-sign:before {
 .pagination-pre, 
 .pagination-post {
 	padding:1rem .5rem;
-	background:white;
+	background:unset;
 }
 ul.pagination {
 	margin-bottom:0;
@@ -2388,4 +2388,12 @@ ul.pagination {
 .ZMSRecordSet.main_grid table thead th input.form-control.form-control-sm::-ms-input-placeholder {
 	color: white;
 	opacity: 1;
+}
+.ZMSRecordSet.main_grid .btn-group .checkbox.btn.btn-secondary {
+	min-width:4.25rem;
+}
+.ZMSRecordSet.main_grid .btn-group .checkbox.btn.btn-secondary span.index {
+	min-width: 1.75rem;
+	display: inline-block;
+	text-align: right !important;
 }
