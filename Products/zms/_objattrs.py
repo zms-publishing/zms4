@@ -684,11 +684,15 @@ class ObjAttrs(object):
             if value is not None:
               dt = datetime.datetime.fromtimestamp(time.mktime(value))
               b = b and now > dt
+              if dt > now and self.REQUEST.get('ZMS_CACHE_EXPIRE_DATETIME', dt) >= dt:
+                self.REQUEST.set('ZMS_CACHE_EXPIRE_DATETIME',dt)
           # End time.
           elif key == 'attr_active_end':
             if value is not None:
               dt = datetime.datetime.fromtimestamp(time.mktime(value))
-              b = b and now < dt
+              b = b and dt > now
+              if dt > now and self.REQUEST.get('ZMS_CACHE_EXPIRE_DATETIME', dt) >= dt:
+                self.REQUEST.set('ZMS_CACHE_EXPIRE_DATETIME',dt)
           if not b: break
       return b
 
